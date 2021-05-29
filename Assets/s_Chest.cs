@@ -1,0 +1,115 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class s_Chest : MonoBehaviour
+{
+    //入力関連
+    private float inputHorizontal;
+    private float inputVertical;
+    private float inputHorizontalCamera;
+    private float inputVerticalCamera;
+
+    public GameObject objChestOpen;
+    public GameObject objChestClose;
+    public bool isOpen = false;
+    public GameObject objTargetCursor;
+    private GameObject Hierarchy_UnTargetObject;
+    private bool isDestroying = false;
+    private float DestroyCounter = 0;
+    private float DestroyStartTime = 5;
+    private float DestroyingTime = 1;
+
+    public GameObject objPlayer;
+    public GameObject objMainControl;
+    public GameObject objField;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        objChestClose = this.transform.GetChild(0).gameObject;
+        objChestOpen = this.transform.GetChild(1).gameObject;
+        objTargetCursor = GameObject.Find("TargetCursor");
+        Hierarchy_UnTargetObject = GameObject.Find("UnTargetObject");
+        objPlayer = GameObject.Find("Player");
+        objMainControl = GameObject.Find("MainControl");
+        objField = GameObject.Find("Field");
+
+        objChestOpen.SetActive(false);
+
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (isDestroying == false)
+        {
+            if (Input.GetButtonDown("Circle") == true)
+            {
+                GameObject objTarget = objTargetCursor.GetComponent<s_TargetCursor>().objTarget;
+                if (objTarget == this.gameObject)
+                {
+                    objChestClose.SetActive(false);
+                    objChestOpen.SetActive(true);
+                    isOpen = true;
+                    this.transform.parent = Hierarchy_UnTargetObject.transform;
+                    isDestroying = true;
+                    DestroyCounter = 0;
+                    DropControl();
+                    //Destroy(this.gameObject, 5f);
+                }
+            }
+
+        }
+        else
+        {
+            DestroyCounter += 1 * Time.deltaTime;
+            if (DestroyCounter > DestroyStartTime)
+            {
+                Vector3 Scale = this.transform.localScale;
+                Scale.x = (DestroyingTime - (DestroyCounter - DestroyStartTime)) / DestroyingTime;
+                Scale.y = (DestroyingTime - (DestroyCounter - DestroyStartTime)) / DestroyingTime;
+                Scale.z = (DestroyingTime - (DestroyCounter - DestroyStartTime)) / DestroyingTime;
+                this.transform.localScale = Scale;
+                if (DestroyCounter > DestroyingTime + DestroyStartTime)
+                {
+                    Destroy(this.gameObject);
+                }
+
+            }
+
+
+        }
+
+    }
+
+    private void DropControl()
+    {
+        //ストック番号の採番
+        int Cnt = 1;
+        int Numbering = 0;
+
+        for (int Index = 0; Index < objField.transform.GetChildCount(); Index++)
+        {
+            string NameSearch = objField.transform.GetChild(Index).name;
+            if (NameSearch.Substring(0, 5) == "Stock")
+            {
+                int Num = int.Parse(NameSearch.Substring(6, NameSearch.Length - "Stock_".Length));
+                if ((Cnt != Num)&&(Numbering==0))
+                {
+                    Numbering = Cnt;
+                }
+                Cnt++;
+            }
+        }
+        if (Numbering == 0) Numbering = Cnt + 1;
+        string StockName = "Stock_" + Numbering.ToString();
+
+        //ストックの作成
+        s_Main ScriptMain = objMainControl.GetComponent<s_Main>();
+        ScriptMain.LoadFieldParts(StockName, "Road2", 0, 0, 0, 0);
+
+
+    }
+}
