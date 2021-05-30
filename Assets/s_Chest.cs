@@ -114,46 +114,195 @@ public class s_Chest : MonoBehaviour
 
         //ƒXƒgƒbƒN‚Ìì¬
         s_Main ScriptMain = objMainControl.GetComponent<s_Main>();
-        int Rnd = Random.Range(0, 11);
-        switch (Rnd)
+        int Rnd = 0;
+        Rnd= Random.Range(0, 100);
+
+        //—Î’nŒn
+        if (0<= Rnd && Rnd < 60)
         {
-            case 0:
+            Rnd = Random.Range(0, 100);
+            if (0<=Rnd&&Rnd < 50)
+            {
                 ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 0, 0);
-                break;
-            case 1:
-                ScriptMain.LoadFieldParts(StockName, "Road0", 0, 0, 0, 0);
-                break;
-            case 2:
-                ScriptMain.LoadFieldParts(StockName, "Road1", 0, 0, 0, 0);
-                break;
-            case 3:
-                ScriptMain.LoadFieldParts(StockName, "Road2", 0, 0, 0, 0);
-                break;
-            case 4:
-                ScriptMain.LoadFieldParts(StockName, "Road3", 0, 0, 0, 0);
-                break;
-            case 5:
-                ScriptMain.LoadFieldParts(StockName, "Road4", 0, 0, 0, 0);
-                break;
-            case 6:
-                ScriptMain.LoadFieldParts(StockName, "River1", 0, 0, 0, 0);
-                break;
-            case 7:
-                ScriptMain.LoadFieldParts(StockName, "River2", 0, 0, 0, 0);
-                break;
-            case 8:
-                ScriptMain.LoadFieldParts(StockName, "River3", 0, 0, 0, 0);
-                break;
-            case 9:
-                ScriptMain.LoadFieldParts(StockName, "RiverBridge", 0, 0, 0, 0);
-                break;
-            case 10:
+            }
+            if (50 <= Rnd && Rnd < 70)
+            {
+                ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 0, 0);
+                ScriptMain.LoadFieldParts(StockName, "Green", 1, 0, 0, 0);
+            }
+            if (70 <= Rnd && Rnd < 80)
+            {
+                ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 0, 0);
+                ScriptMain.LoadFieldParts(StockName, "Green", 1, 0, 0, 0);
+                ScriptMain.LoadFieldParts(StockName, "Green", -1, 0, 0, 0);
+            }
+            if (80 <= Rnd && Rnd < 85)
+            {
                 ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 0, 0);
                 ScriptMain.LoadFieldParts(StockName, "Green", 1, 0, 0, 0);
                 ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 1, 0);
+            }
+            if (85 <= Rnd && Rnd < 88)
+            {
+                ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 0, 0);
+                ScriptMain.LoadFieldParts(StockName, "Green", 1, 0, 0, 0);
+                ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 1, 0);
+                ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 2, 0);
+            }
+            if (88 <= Rnd && Rnd < 91)
+            {
+                ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 0, 0);
+                ScriptMain.LoadFieldParts(StockName, "Green", -1, 0, 0, 0);
+                ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 1, 0);
+                ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 2, 0);
+            }
+            if (91 <= Rnd && Rnd < 100)
+            {
+                ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 0, 0);
                 ScriptMain.LoadFieldParts(StockName, "Green", 1, 0, 1, 0);
-                break;
+                ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 1, 0);
+                ScriptMain.LoadFieldParts(StockName, "Green", 1, 0, 0, 0);
+            }
+
+
         }
+
+        //“¹˜HŒn
+        if (60 <= Rnd && Rnd < 90)
+        {
+            Rnd = Random.Range(0, 100);
+            if (0 <= Rnd && Rnd < 70)
+            {
+                Rnd = Random.Range(0, 100);
+                if (0 <= Rnd && Rnd < 50)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "Road1", 0, 0, 0, 0);
+                }
+                if (50 <= Rnd && Rnd < 60)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "Road0", 0, 0, 0, 0);
+                }
+                if (60 <= Rnd && Rnd < 80)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "Road2", 0, 0, 0, 0);
+                }
+                if (80 <= Rnd && Rnd < 95)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "Road3", 0, 0, 0, 0);
+                }
+                if (95 <= Rnd && Rnd < 100)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "Road4", 0, 0, 0, 0);
+                }
+
+            }
+            if (70 <= Rnd && Rnd < 100)
+            {
+                if (0 <= Rnd && Rnd < 50)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "Road1", 0, 0, 0, 0);
+                    ScriptMain.LoadFieldParts(StockName, "Road1", 1, 0, 0, 0);
+                }
+                if (50 <= Rnd && Rnd < 70)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "Road2", 0, 0, 0, 0);
+                    ScriptMain.LoadFieldParts(StockName, "Road1", 1, 0, 0, 1);
+                }
+                if (70 <= Rnd && Rnd < 90)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "Road2", 0, 0, 0, 2);
+                    ScriptMain.LoadFieldParts(StockName, "Road1", -1, 0, 0,1);
+                }
+                if (90 <= Rnd && Rnd < 94)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "Road3", 0, 0, 0, 0);
+                    ScriptMain.LoadFieldParts(StockName, "Road1", -1, 0, 0, 1);
+                }
+                if (94 <= Rnd && Rnd < 98)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "Road3", 0, 0, 0, 0);
+                    ScriptMain.LoadFieldParts(StockName, "Road1", 1, 0, 0, 1);
+                }
+                if (98 <= Rnd && Rnd < 100)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "Road3", 0, 0, 0, 0);
+                    ScriptMain.LoadFieldParts(StockName, "Road1", 0, 0, 1, 0);
+                }
+            }
+
+
+        }
+
+        //‰ÍìŒn
+        if (90 <= Rnd && Rnd < 100)
+        {
+            Rnd = Random.Range(0, 100);
+            if (0 <= Rnd && Rnd < 60)
+            {
+                Rnd = Random.Range(0, 100);
+                if (0 <= Rnd && Rnd < 60)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "River1", 0, 0, 0, 0);
+
+                }
+                if (60 <= Rnd && Rnd < 80)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "River2", 0, 0, 0, 0);
+
+                }
+                if (80 <= Rnd && Rnd < 90)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "RiverBridge", 0, 0, 0, 0);
+
+                }
+                if (90 <= Rnd && Rnd < 100)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "River3", 0, 0, 0, 0);
+
+                }
+
+            }
+            if (60 <= Rnd && Rnd < 100)
+            {
+                Rnd = Random.Range(0, 100);
+                if (0 <= Rnd && Rnd < 60)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "River1", 0, 0, 0, 0);
+                    ScriptMain.LoadFieldParts(StockName, "River1", 0, 0, 1, 0);
+                }
+                if (60 <= Rnd && Rnd < 80)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "River1", 0, 0, 1, 0);
+                    ScriptMain.LoadFieldParts(StockName, "River2", 0, 0, 0, 3);
+
+                }
+                if (80 <= Rnd && Rnd < 90)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "River1", 0, 0, 1, 0);
+                    ScriptMain.LoadFieldParts(StockName, "River2", 0, 0, 0, 2);
+                }
+                if (90 <= Rnd && Rnd < 94)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "River3", 0, 0, 0, 0);
+                    ScriptMain.LoadFieldParts(StockName, "River1", -1, 0, 0, 0);
+                }
+                if (94 <= Rnd && Rnd < 98)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "River3", 0, 0, 0, 0);
+                    ScriptMain.LoadFieldParts(StockName, "River1", 1, 0, 0, 0);
+                }
+                if (98 <= Rnd && Rnd < 100)
+                {
+                    ScriptMain.LoadFieldParts(StockName, "River3", 0, 0, 0, 0);
+                    ScriptMain.LoadFieldParts(StockName, "River1", 0, 0, 1, 0);
+                }
+
+            }
+
+        }
+
+
+
 
 
 
