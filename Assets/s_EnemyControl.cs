@@ -27,6 +27,8 @@ public class s_EnemyControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+
         SpawnCounter += Time.deltaTime;
         if (SpawnCounter > NextSpawn)
         {

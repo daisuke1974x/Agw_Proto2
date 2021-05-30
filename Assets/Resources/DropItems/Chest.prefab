@@ -51,6 +51,11 @@ MonoBehaviour:
   objChestOpen: {fileID: 5724647485335421054}
   objChestClose: {fileID: 3171512707789885853}
   isOpen: 0
+  objTargetCursor: {fileID: 0}
+  objPlayer: {fileID: 0}
+  objMainControl: {fileID: 0}
+  objField: {fileID: 0}
+  FragmentCapsule: {fileID: 39587174879507149, guid: 2c902e8cdcdec834b952d7a9f7b6079a, type: 3}
 --- !u!114 &6066956434953165990
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,6 +71,7 @@ MonoBehaviour:
   nameAxis: []
   nameDS4: []
   configController: []
+  flgAction: 0
 --- !u!54 &8997501090600996862
 Rigidbody:
   m_ObjectHideFlags: 0

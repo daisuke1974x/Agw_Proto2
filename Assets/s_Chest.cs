@@ -23,6 +23,7 @@ public class s_Chest : MonoBehaviour
     public GameObject objPlayer;
     public GameObject objMainControl;
     public GameObject objField;
+    public GameObject FragmentCapsule;
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +35,7 @@ public class s_Chest : MonoBehaviour
         objPlayer = GameObject.Find("Player");
         objMainControl = GameObject.Find("MainControl");
         objField = GameObject.Find("Field");
+        //FragmentCapsule = GameObject.Find("FragmentCapsule");
 
         objChestOpen.SetActive(false);
 
@@ -57,7 +59,11 @@ public class s_Chest : MonoBehaviour
                     isDestroying = true;
                     DestroyCounter = 0;
                     DropControl();
+                    GameObject objInstance = Instantiate(FragmentCapsule );
+                    objInstance.transform.position = this.transform.position + new Vector3(0, 1f, 0);
                     //Destroy(this.gameObject, 5f);
+
+                    //+ new Vector3(0, 0.5f, 0)
                 }
             }
 
@@ -96,14 +102,14 @@ public class s_Chest : MonoBehaviour
             if (NameSearch.Substring(0, 5) == "Stock")
             {
                 int Num = int.Parse(NameSearch.Substring(6, NameSearch.Length - "Stock_".Length));
-                if ((Cnt != Num)&&(Numbering==0))
+                if ((Cnt != Num) && (Numbering == 0))
                 {
                     Numbering = Cnt;
                 }
                 Cnt++;
             }
         }
-        if (Numbering == 0) Numbering = Cnt + 1;
+        if (Numbering == 0) Numbering = Cnt;
         string StockName = "Stock_" + Numbering.ToString();
 
         //ストックの作成

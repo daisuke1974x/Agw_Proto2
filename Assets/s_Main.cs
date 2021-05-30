@@ -156,17 +156,17 @@ public class s_Main : MonoBehaviour
 
         CurrentWorld  = GameObject.Find("World_001");
 
-        LoadFieldParts("Stock_001", "Green", 0, 0, 0, 0);
-        LoadFieldParts("Stock_002", "Road0", 0, 0, 0, 0);
+        LoadFieldParts("Stock_1", "Green", 0, 0, 0, 0);
+        LoadFieldParts("Stock_2", "Road0", 0, 0, 0, 0);
 
-        LoadFieldParts("Stock_003", "Road2", 0, 0, 0, 1);
-        LoadFieldParts("Stock_003", "RiverBridge", 1, 0, 0, 0);
+        LoadFieldParts("Stock_3", "Road2", 0, 0, 0, 1);
+        LoadFieldParts("Stock_3", "RiverBridge", 1, 0, 0, 0);
 
-        LoadFieldParts("Stock_004", "Road3", 0, 0, 0, 2);
-        LoadFieldParts("Stock_004", "Road2", 1, 0, 0, 3);
-        LoadFieldParts("Stock_004", "Road1", 1, 0, 1, 2);
-        LoadFieldParts("Stock_004", "Road1", 0, 0, -1,0);
-        LoadFieldParts("Stock_004", "Road1", -1, 0, 0, 1);
+        LoadFieldParts("Stock_4", "Road3", 0, 0, 0, 2);
+        LoadFieldParts("Stock_4", "Road2", 1, 0, 0, 3);
+        LoadFieldParts("Stock_4", "Road1", 1, 0, 1, 2);
+        LoadFieldParts("Stock_4", "Road1", 0, 0, -1,0);
+        LoadFieldParts("Stock_4", "Road1", -1, 0, 0, 1);
 
 
 
