@@ -144,11 +144,11 @@ public class s_Main : MonoBehaviour
 
 
         //テストデータ
-        LoadFieldParts("World_001", "Green", 0, 0, 0, 0);
-        LoadFieldParts("World_001", "Road2", 0, 0, 1, 1);
-        LoadFieldParts("World_001", "Green", 0, 0, 2, 0);
+        LoadFieldParts("World_001", "Road2", 0, 0, 0, 0);
+        LoadFieldParts("World_001", "RiverBridge", 0, 0, 1, 1);
+        LoadFieldParts("World_001", "Road1", 0, 0, 2, 0);
         LoadFieldParts("World_001", "Green", 1, 0, 2, 0);
-        LoadFieldParts("World_001", "Road0", 1, 0, 0, 1);
+        LoadFieldParts("World_001", "Road1", 1, 0, 0, 1);
         LoadFieldParts("World_001", "Road1", 2, 0, 0, 1);
         LoadFieldParts("World_001", "River1", 1, 0, 1, 1);
         LoadFieldParts("World_001", "Green", 0, 0, -1, 0);
@@ -156,17 +156,17 @@ public class s_Main : MonoBehaviour
 
         CurrentWorld  = GameObject.Find("World_001");
 
-        LoadFieldParts("Stock_1", "Green", 0, 0, 0, 0);
-        LoadFieldParts("Stock_2", "Road0", 0, 0, 0, 0);
+        //LoadFieldParts("Stock_1", "Green", 0, 0, 0, 0);
+        //LoadFieldParts("Stock_2", "Road0", 0, 0, 0, 0);
 
-        LoadFieldParts("Stock_3", "Road2", 0, 0, 0, 1);
-        LoadFieldParts("Stock_3", "RiverBridge", 1, 0, 0, 0);
+        //LoadFieldParts("Stock_3", "Road2", 0, 0, 0, 1);
+        //LoadFieldParts("Stock_3", "RiverBridge", 1, 0, 0, 0);
 
-        LoadFieldParts("Stock_4", "Road3", 0, 0, 0, 2);
-        LoadFieldParts("Stock_4", "Road2", 1, 0, 0, 3);
-        LoadFieldParts("Stock_4", "Road1", 1, 0, 1, 2);
-        LoadFieldParts("Stock_4", "Road1", 0, 0, -1,0);
-        LoadFieldParts("Stock_4", "Road1", -1, 0, 0, 1);
+        //LoadFieldParts("Stock_4", "Road3", 0, 0, 0, 2);
+        //LoadFieldParts("Stock_4", "Road2", 1, 0, 0, 3);
+        //LoadFieldParts("Stock_4", "Road1", 1, 0, 1, 2);
+        //LoadFieldParts("Stock_4", "Road1", 0, 0, -1,0);
+        //LoadFieldParts("Stock_4", "Road1", -1, 0, 0, 1);
 
 
 

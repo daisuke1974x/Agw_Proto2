@@ -114,7 +114,47 @@ public class s_Chest : MonoBehaviour
 
         //ストックの作成
         s_Main ScriptMain = objMainControl.GetComponent<s_Main>();
-        ScriptMain.LoadFieldParts(StockName, "Road2", 0, 0, 0, 0);
+        int Rnd = Random.Range(0, 11);
+        switch (Rnd)
+        {
+            case 0:
+                ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 0, 0);
+                break;
+            case 1:
+                ScriptMain.LoadFieldParts(StockName, "Road0", 0, 0, 0, 0);
+                break;
+            case 2:
+                ScriptMain.LoadFieldParts(StockName, "Road1", 0, 0, 0, 0);
+                break;
+            case 3:
+                ScriptMain.LoadFieldParts(StockName, "Road2", 0, 0, 0, 0);
+                break;
+            case 4:
+                ScriptMain.LoadFieldParts(StockName, "Road3", 0, 0, 0, 0);
+                break;
+            case 5:
+                ScriptMain.LoadFieldParts(StockName, "Road4", 0, 0, 0, 0);
+                break;
+            case 6:
+                ScriptMain.LoadFieldParts(StockName, "River1", 0, 0, 0, 0);
+                break;
+            case 7:
+                ScriptMain.LoadFieldParts(StockName, "River2", 0, 0, 0, 0);
+                break;
+            case 8:
+                ScriptMain.LoadFieldParts(StockName, "River3", 0, 0, 0, 0);
+                break;
+            case 9:
+                ScriptMain.LoadFieldParts(StockName, "RiverBridge", 0, 0, 0, 0);
+                break;
+            case 10:
+                ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 0, 0);
+                ScriptMain.LoadFieldParts(StockName, "Green", 1, 0, 0, 0);
+                ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 1, 0);
+                ScriptMain.LoadFieldParts(StockName, "Green", 1, 0, 1, 0);
+                break;
+        }
+
 
 
     }
