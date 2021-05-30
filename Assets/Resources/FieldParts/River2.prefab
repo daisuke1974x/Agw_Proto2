@@ -338,7 +338,7 @@ MonoBehaviour:
   ConnectionCode:
   - Grass
   - River
-  - Rvier
+  - River
   - Grass
   ConnectionCodeOpponent:
   - Grass
@@ -350,6 +350,7 @@ MonoBehaviour:
   - 0
   - 0
   - 0
+  DestroyCounter: 0
 --- !u!1 &3925931290231665121
 GameObject:
   m_ObjectHideFlags: 0

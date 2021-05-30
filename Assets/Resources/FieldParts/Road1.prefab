@@ -55,12 +55,13 @@ MonoBehaviour:
   - SandRoad
   - Grass
   - SandRoad
-  - 
+  - Grass
   ConnectionHeight:
   - 0
   - 0
   - 0
   - 0
+  DestroyCounter: 0
 --- !u!1 &2650054217668220637
 GameObject:
   m_ObjectHideFlags: 0

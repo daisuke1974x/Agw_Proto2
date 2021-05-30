@@ -269,14 +269,7 @@ public class s_Window_FieldPartsSelect : MonoBehaviour
                 GuideText.GetComponent<Text>().text = "";
             }
 
-            if (isSetCheck == false)
-            {
-                int Rc = SetCheck();
-                if (Rc == 0) GuideText.GetComponent<Text>().text = "設置できます。";
-                if (Rc == -1 || Rc == -2) GuideText.GetComponent<Text>().text = "接合面の絵柄が合っていない箇所があります。";
-                if (Rc == -3) GuideText.GetComponent<Text>().text = "一部がかさなっています。";
-                isSetCheck = true;
-            }
+
 
         }
         else
@@ -421,6 +414,20 @@ public class s_Window_FieldPartsSelect : MonoBehaviour
 
         }
 
+        if(MoveMode == EnumMoveMode.Idle)
+        {
+            if (isSetCheck == false)
+            {
+                int Rc = SetCheck();
+                if (Rc == 0) GuideText.GetComponent<Text>().text = "設置できます。";
+                if (Rc == -1 || Rc == -2) GuideText.GetComponent<Text>().text = "接合面の絵柄が合っていない箇所があります。";
+                if (Rc == -3) GuideText.GetComponent<Text>().text = "一部がかさなっています。";
+                isSetCheck = true;
+            }
+        }
+
+
+
         Text DebugText2 = DebugText.GetComponent<Text>();
         DebugText2.text = "";
         DebugText2.text += "FieldCursorPos:" + FieldCursorPos.ToString() + "\n";
@@ -521,6 +528,7 @@ public class s_Window_FieldPartsSelect : MonoBehaviour
             if (Input.GetButtonDown("Circle"))
             {
                 ScreenMode = EnumScreenMode.Set;
+                MoveMode = EnumMoveMode.Idle;
                 RotateIndexWorld = 0;
                 RotateDirectionWorld = 0;
                 RotateCounterWorld = 0;
@@ -532,7 +540,6 @@ public class s_Window_FieldPartsSelect : MonoBehaviour
                 SlideCounter = 0;
                 SlideDirection = 0;
                 StockSelected = StockList[SelectIndex];
-                //SelectIndex = SelectIndex;
                 isSetCheck = false;
             }
 
@@ -620,7 +627,7 @@ public class s_Window_FieldPartsSelect : MonoBehaviour
                     Item.NodeBlockX = SelfBlockPos.x;
                     Item.NodeBlockZ = SelfBlockPos.z;
                     Item.Direction = (dir + 2) % 4;
-                    Item.ConnectionCode = FieldPartsParameter.ConnectionCodeOpponent[(dir + 2 + SelfRotateIndex) % 4];
+                    Item.ConnectionCode = FieldPartsParameter.ConnectionCodeOpponent[(4+dir + 0 - SelfRotateIndex) % 4];
                     CheckItemWorld.Add(Item);
 
                     string LogString = scriptMain.CurrentWorld.name + ";" + FragmentPrefab.name + ";";
@@ -656,8 +663,8 @@ public class s_Window_FieldPartsSelect : MonoBehaviour
                 {
                     //隣接チェック
                     Vector3 CheckBlockPos1 = new Vector3();
-                    CheckBlockPos1.x = SelfBlockPos.x + DirectionIndexX[dir];
-                    CheckBlockPos1.z = SelfBlockPos.z + DirectionIndexZ[dir];
+                    CheckBlockPos1.x = SelfBlockPos.x + DirectionIndexX[(4 + dir + RotateIndex) % 4];
+                    CheckBlockPos1.z = SelfBlockPos.z + DirectionIndexZ[(4 + dir + RotateIndex) % 4];
                     bool isNeighbor = false;
 
                     for (int Index2 = 0; Index2 < StockSelected.transform.GetChildCount(); Index2++)
@@ -684,7 +691,7 @@ public class s_Window_FieldPartsSelect : MonoBehaviour
                         Item.SelfBlockZ = SelfBlockPos.z;
                         Item.NodeBlockX = SelfBlockPos.x + DirectionIndexX[(4 + dir + RotateIndex) % 4];
                         Item.NodeBlockZ = SelfBlockPos.z + DirectionIndexZ[(4 + dir + RotateIndex) % 4];
-                        Item.Direction = (dir + RotateIndex) % 4;
+                        Item.Direction = (4 + dir + RotateIndex) % 4;
                         Item.ConnectionCode = FieldPartsParameter.ConnectionCode[(4 + dir + RotateIndex - SelfRotateIndex) % 4];
                         CheckItemStock.Add(Item);
 
