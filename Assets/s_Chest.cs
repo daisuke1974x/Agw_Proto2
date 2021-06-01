@@ -25,6 +25,9 @@ public class s_Chest : MonoBehaviour
     public GameObject objField;
     public GameObject FragmentCapsule;
 
+
+    private s_FragmentsList FragmentsListScript;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,7 +41,7 @@ public class s_Chest : MonoBehaviour
         //FragmentCapsule = GameObject.Find("FragmentCapsule");
 
         objChestOpen.SetActive(false);
-
+        FragmentsListScript = GameObject.Find("FragmentsList").GetComponent<s_FragmentsList>();
 
     }
 
@@ -117,12 +120,14 @@ public class s_Chest : MonoBehaviour
             if (0<=Rnd&&Rnd < 50)
             {
                 ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 0, 0);
+                FragmentsListScript.AddList(StockName);
                 return;
             }
             if (50 <= Rnd && Rnd < 70)
             {
                 ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 0, 0);
                 ScriptMain.LoadFieldParts(StockName, "Green", 1, 0, 0, 0);
+                FragmentsListScript.AddList(StockName);
                 return;
             }
             if (70 <= Rnd && Rnd < 80)
@@ -130,6 +135,7 @@ public class s_Chest : MonoBehaviour
                 ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 0, 0);
                 ScriptMain.LoadFieldParts(StockName, "Green", 1, 0, 0, 0);
                 ScriptMain.LoadFieldParts(StockName, "Green", -1, 0, 0, 0);
+                FragmentsListScript.AddList(StockName);
                 return;
             }
             if (80 <= Rnd && Rnd < 85)
@@ -137,6 +143,7 @@ public class s_Chest : MonoBehaviour
                 ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 0, 0);
                 ScriptMain.LoadFieldParts(StockName, "Green", 1, 0, 0, 0);
                 ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 1, 0);
+                FragmentsListScript.AddList(StockName);
                 return;
             }
             if (85 <= Rnd && Rnd < 88)
@@ -145,6 +152,7 @@ public class s_Chest : MonoBehaviour
                 ScriptMain.LoadFieldParts(StockName, "Green", 1, 0, 0, 0);
                 ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 1, 0);
                 ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 2, 0);
+                FragmentsListScript.AddList(StockName);
                 return;
             }
             if (88 <= Rnd && Rnd < 91)
@@ -153,6 +161,7 @@ public class s_Chest : MonoBehaviour
                 ScriptMain.LoadFieldParts(StockName, "Green", -1, 0, 0, 0);
                 ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 1, 0);
                 ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 2, 0);
+                FragmentsListScript.AddList(StockName);
                 return;
             }
             if (91 <= Rnd && Rnd < 100)
@@ -161,6 +170,7 @@ public class s_Chest : MonoBehaviour
                 ScriptMain.LoadFieldParts(StockName, "Green", 1, 0, 1, 0);
                 ScriptMain.LoadFieldParts(StockName, "Green", 0, 0, 1, 0);
                 ScriptMain.LoadFieldParts(StockName, "Green", 1, 0, 0, 0);
+                FragmentsListScript.AddList(StockName);
                 return;
             }
 
@@ -177,26 +187,31 @@ public class s_Chest : MonoBehaviour
                 if (0 <= Rnd && Rnd < 50)
                 {
                     ScriptMain.LoadFieldParts(StockName, "Road1", 0, 0, 0, 0);
+                    FragmentsListScript.AddList(StockName);
                     return;
                 }
                 if (50 <= Rnd && Rnd < 60)
                 {
                     ScriptMain.LoadFieldParts(StockName, "Road0", 0, 0, 0, 0);
+                    FragmentsListScript.AddList(StockName);
                     return;
                 }
                 if (60 <= Rnd && Rnd < 80)
                 {
                     ScriptMain.LoadFieldParts(StockName, "Road2", 0, 0, 0, 0);
+                    FragmentsListScript.AddList(StockName);
                     return;
                 }
                 if (80 <= Rnd && Rnd < 95)
                 {
                     ScriptMain.LoadFieldParts(StockName, "Road3", 0, 0, 0, 0);
+                    FragmentsListScript.AddList(StockName);
                     return;
                 }
                 if (95 <= Rnd && Rnd < 100)
                 {
                     ScriptMain.LoadFieldParts(StockName, "Road4", 0, 0, 0, 0);
+                    FragmentsListScript.AddList(StockName);
                     return;
                 }
 
@@ -207,36 +222,42 @@ public class s_Chest : MonoBehaviour
                 {
                     ScriptMain.LoadFieldParts(StockName, "Road1", 0, 0, 0, 0);
                     ScriptMain.LoadFieldParts(StockName, "Road1", 1, 0, 0, 0);
+                    FragmentsListScript.AddList(StockName);
                     return;
                 }
                 if (50 <= Rnd && Rnd < 70)
                 {
                     ScriptMain.LoadFieldParts(StockName, "Road2", 0, 0, 0, 0);
                     ScriptMain.LoadFieldParts(StockName, "Road1", 1, 0, 0, 1);
+                    FragmentsListScript.AddList(StockName);
                     return;
                 }
                 if (70 <= Rnd && Rnd < 90)
                 {
                     ScriptMain.LoadFieldParts(StockName, "Road2", 0, 0, 0, 2);
                     ScriptMain.LoadFieldParts(StockName, "Road1", -1, 0, 0,1);
+                    FragmentsListScript.AddList(StockName);
                     return;
                 }
                 if (90 <= Rnd && Rnd < 94)
                 {
                     ScriptMain.LoadFieldParts(StockName, "Road3", 0, 0, 0, 0);
                     ScriptMain.LoadFieldParts(StockName, "Road1", -1, 0, 0, 1);
+                    FragmentsListScript.AddList(StockName);
                     return;
                 }
                 if (94 <= Rnd && Rnd < 98)
                 {
                     ScriptMain.LoadFieldParts(StockName, "Road3", 0, 0, 0, 0);
                     ScriptMain.LoadFieldParts(StockName, "Road1", 1, 0, 0, 1);
+                    FragmentsListScript.AddList(StockName);
                     return;
                 }
                 if (98 <= Rnd && Rnd < 100)
                 {
                     ScriptMain.LoadFieldParts(StockName, "Road3", 0, 0, 0, 0);
                     ScriptMain.LoadFieldParts(StockName, "Road1", 0, 0, 1, 0);
+                    FragmentsListScript.AddList(StockName);
                     return;
                 }
             }
@@ -254,24 +275,28 @@ public class s_Chest : MonoBehaviour
                 if (0 <= Rnd && Rnd < 60)
                 {
                     ScriptMain.LoadFieldParts(StockName, "River1", 0, 0, 0, 0);
+                    FragmentsListScript.AddList(StockName);
                     return;
 
                 }
                 if (60 <= Rnd && Rnd < 80)
                 {
                     ScriptMain.LoadFieldParts(StockName, "River2", 0, 0, 0, 0);
+                    FragmentsListScript.AddList(StockName);
                     return;
 
                 }
                 if (80 <= Rnd && Rnd < 90)
                 {
                     ScriptMain.LoadFieldParts(StockName, "RiverBridge", 0, 0, 0, 0);
+                    FragmentsListScript.AddList(StockName);
                     return;
 
                 }
                 if (90 <= Rnd && Rnd < 100)
                 {
                     ScriptMain.LoadFieldParts(StockName, "River3", 0, 0, 0, 0);
+                    FragmentsListScript.AddList(StockName);
                     return;
 
                 }
@@ -284,12 +309,14 @@ public class s_Chest : MonoBehaviour
                 {
                     ScriptMain.LoadFieldParts(StockName, "River1", 0, 0, 0, 0);
                     ScriptMain.LoadFieldParts(StockName, "River1", 0, 0, 1, 0);
+                    FragmentsListScript.AddList(StockName);
                     return;
                 }
                 if (60 <= Rnd && Rnd < 80)
                 {
                     ScriptMain.LoadFieldParts(StockName, "River1", 0, 0, 1, 0);
                     ScriptMain.LoadFieldParts(StockName, "River2", 0, 0, 0, 3);
+                    FragmentsListScript.AddList(StockName);
                     return;
 
                 }
@@ -297,24 +324,28 @@ public class s_Chest : MonoBehaviour
                 {
                     ScriptMain.LoadFieldParts(StockName, "River1", 0, 0, 1, 0);
                     ScriptMain.LoadFieldParts(StockName, "River2", 0, 0, 0, 2);
+                    FragmentsListScript.AddList(StockName);
                     return;
                 }
                 if (90 <= Rnd && Rnd < 94)
                 {
                     ScriptMain.LoadFieldParts(StockName, "River3", 0, 0, 0, 0);
                     ScriptMain.LoadFieldParts(StockName, "River1", -1, 0, 0, 0);
+                    FragmentsListScript.AddList(StockName);
                     return;
                 }
                 if (94 <= Rnd && Rnd < 98)
                 {
                     ScriptMain.LoadFieldParts(StockName, "River3", 0, 0, 0, 0);
                     ScriptMain.LoadFieldParts(StockName, "River1", 1, 0, 0, 0);
+                    FragmentsListScript.AddList(StockName);
                     return;
                 }
                 if (98 <= Rnd && Rnd < 100)
                 {
                     ScriptMain.LoadFieldParts(StockName, "River3", 0, 0, 0, 0);
                     ScriptMain.LoadFieldParts(StockName, "River1", 0, 0, 1, 0);
+                    FragmentsListScript.AddList(StockName);
                     return;
                 }
 

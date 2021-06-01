@@ -166,8 +166,8 @@ public class s_Main : MonoBehaviour
         //LoadFieldParts("Stock_1", "Green", 0, 0, 0, 0);
         //LoadFieldParts("Stock_2", "Road0", 0, 0, 0, 0);
 
-        LoadFieldParts("Stock_3", "Road2", 0, 0, 0, 1);
-        LoadFieldParts("Stock_3", "RiverBridge", 1, 0, 0, 0);
+        //LoadFieldParts("Stock_3", "Road2", 0, 0, 0, 1);
+        //LoadFieldParts("Stock_3", "RiverBridge", 1, 0, 0, 0);
 
         //LoadFieldParts("Stock_4", "Road3", 0, 0, 0, 2);
         //LoadFieldParts("Stock_4", "Road2", 1, 0, 0, 3);
