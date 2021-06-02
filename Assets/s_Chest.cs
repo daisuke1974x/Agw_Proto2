@@ -112,6 +112,7 @@ public class s_Chest : MonoBehaviour
         s_Main ScriptMain = objMainControl.GetComponent<s_Main>();
         int Rnd = 0;
         Rnd= Random.Range(0, 100);
+        FragmentsListScript.Chest = this.gameObject;
 
         //—Î’nŒn
         if (0<= Rnd && Rnd < 60)

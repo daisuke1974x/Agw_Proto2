@@ -29,7 +29,7 @@ public class s_Enemy : MonoBehaviour
         objAnimator = this.GetComponent<Animator>();
 
         EnemyStatus.IsPlayer = false;
-        EnemyStatus.HP_Max_Base = 20;
+        EnemyStatus.HP_Max_Base = 5;//20Ç≈ÇRâÒçUåÇÇÆÇÁÇ¢
         EnemyStatus.Offence_Base = 10;
         EnemyStatus.Defence_Base = 5;
         objScriptMain.RecalcStatus(ref EnemyStatus);
