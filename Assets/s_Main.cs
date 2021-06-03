@@ -102,7 +102,7 @@ public class s_Main : MonoBehaviour
     private Vector3 WaitingPlacePos = new Vector3(0, 0, 1000f);
 
     public GameObject CurrentWorld;
-
+    public GameObject FragmentsListUI;
 
 
     //モード
@@ -494,20 +494,42 @@ public class s_Main : MonoBehaviour
         //---------------------------------------------------------------------------------------------------------------------------------------
         //フィールドパーツセット
         //---------------------------------------------------------------------------------------------------------------------------------------
-        if (Input.GetButtonDown("Circle") == true && Mode == "Main" && moveDirection.x == 0 && moveDirection.z == 0)
+        //if (Input.GetButtonDown("Circle") == true && Mode == "Main" && moveDirection.x == 0 && moveDirection.z == 0)
+        //{
+        //    if (objTargetCursor.GetComponent<s_TargetCursor>().objTarget is null)
+        //    {
+        //        if (isFieldCursorSet == true)
+        //        {
+        //            Mode = "SelectFieldParts";
+        //            objWindow_FieldPartsSelect.SetActive(true);
+        //        }
+        //    }
+        //}
+
+        bool isStarted = false;
+        //if (Mode == "Main" && moveDirection.x == 0 && moveDirection.z == 0)
+        //{
+        //}
+        if (objTargetCursor.GetComponent<s_TargetCursor>().objTarget is null)
         {
-            if (objTargetCursor.GetComponent<s_TargetCursor>().objTarget is null)
+            if (Mode == "Main" && isFieldCursorSet == true)
             {
-                if (isFieldCursorSet == true)
-                {
-                    Mode = "SelectFieldParts";
-                    objWindow_FieldPartsSelect.SetActive(true);
-                    
-                }
+                FragmentsListUI.GetComponent<s_FragmentsList>().StartStockListSelect();
+                isStarted = true;
+
+
+                //Mode = "SelectFieldParts";
+                //objWindow_FieldPartsSelect.SetActive(true);
+
 
             }
-        }
 
+        }
+        if (isStarted == false)
+        {
+            FragmentsListUI.GetComponent<s_FragmentsList>().EndStockListSelect();
+
+        }
 
 
         //Debug.Log("Playerpos x:" + this.transform.position.x);

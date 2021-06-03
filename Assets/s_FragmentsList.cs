@@ -17,6 +17,7 @@ public class s_FragmentsList : MonoBehaviour
     public RenderTexture FragmentRenderTexture;
     public RawImage FragmentRawImage;
     public GameObject ParticleStar;
+    public GameObject Particles;
 
 
     public struct StStock
@@ -33,7 +34,8 @@ public class s_FragmentsList : MonoBehaviour
         Idle,
         StockListSelect,
         LargeStockHandle,
-        TransitionIdleToStockList, 
+        TransitionIdleToStockList,
+        TransitionStockListToIdle,
         TransitionSelectToLargeStockSet,
         TransitionDeployToIdle,
         AddStock,
@@ -56,6 +58,23 @@ public class s_FragmentsList : MonoBehaviour
     private Vector3 StartPos;
     private Vector3 EndPos;
 
+
+    public void StartStockListSelect()
+    {
+        if (Mode == EnumMode.Idle)
+        {
+            TimerCounter = 0;
+            Mode = EnumMode.TransitionIdleToStockList;
+        }
+    }
+    public void EndStockListSelect()
+    {
+        if (Mode == EnumMode.StockListSelect)
+        {
+            TimerCounter = 0;
+            Mode = EnumMode.TransitionStockListToIdle;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -154,6 +173,9 @@ public class s_FragmentsList : MonoBehaviour
             case EnumMode.TransitionIdleToStockList:
                 Update_TransitionIdleToStockList();
                 break;
+            case EnumMode.TransitionStockListToIdle:
+                Update_TransitionStockListToIdle();
+                break;
             case EnumMode.TransitionSelectToLargeStockSet:
                 Update_TransitionSelectToLargeStockSet();
                 break;
@@ -191,25 +213,61 @@ public class s_FragmentsList : MonoBehaviour
 
 
     void Update_Idle() {
+        TransitionIdleToStockList(0);
 
 
 
     }
     void Update_StockListSelect() {
+        TransitionIdleToStockList(1);
+
+    }
+    void Update_LargeStockHandle() { }
+    void Update_TransitionIdleToStockList() 
+    {
+        float TransitionTime = 0.2f;
+        TimerCounter += Time.deltaTime;
+
+        TransitionIdleToStockList(TimerCounter / TransitionTime);
+
+        if (TransitionTime < TimerCounter)
+        {
+            Mode = EnumMode.StockListSelect;
+        }
+    
+    
+    }
+    void Update_TransitionStockListToIdle()
+    {
+        float TransitionTime = 0.2f;
+        TimerCounter += Time.deltaTime;
+
+        TransitionIdleToStockList((TransitionTime-TimerCounter) / TransitionTime);
+
+        if (TransitionTime < TimerCounter)
+        {
+            Mode = EnumMode.Idle;
+        }
+
+
+    }
+
+    void Update_TransitionSelectToLargeStockSet() 
+    {
+    }
+    void Update_TransitionDeployToIdle() { }
+    void Update_AddStock() {
+        TransitionIdleToStockList(0);
         for (int Index = 0; Index < StockList.Count; Index++)
         {
             Vector3 pos = StockList[Index].StockRawImage.transform.position;
-            pos.x = Screen.width / 2 + (Index - StockListCursorIndex) * 100;
-            pos.y = 50;
+            pos.x = -300;
+            pos.y = -300;
             StockList[Index].StockRawImage.transform.position = pos;
 
         }
-    }
-    void Update_LargeStockHandle() { }
-    void Update_TransitionIdleToStockList() { }
-    void Update_TransitionSelectToLargeStockSet() { }
-    void Update_TransitionDeployToIdle() { }
-    void Update_AddStock() {
+
+
         float TimeStep1 = 0.75f;
         float TimeStep2 = 2.25f;
         float TimeStep3 = 2.75f;
@@ -235,7 +293,7 @@ public class s_FragmentsList : MonoBehaviour
             //パーティクルを発生させる
             if (TimeStepParticle < ParticleCounter)
             {
-                GameObject Particle = Instantiate(ParticleStar, this.transform, false);
+                GameObject Particle = Instantiate(ParticleStar, Particles.transform, false);
                 Vector3 pos2 = pos;
                 pos2.x += Random.Range(-20f, 20f);
                 pos2.y += Random.Range(-20f, 20f);
@@ -251,6 +309,7 @@ public class s_FragmentsList : MonoBehaviour
             Vector3 pos = StockList[StockIndex].StockRawImage.transform.position;
             pos = EndPos;
             StockList[StockIndex].StockRawImage.transform.position = pos;
+            StockList[StockIndex].StockRawImage.transform.localScale = new Vector3(1, 1, 1);
             StockList[StockIndex].StockRawImage.transform.rotation = Quaternion.Euler(0, 0, 0);
         }
         if (TimeStep2 < TimerCounter && TimerCounter < TimeStep3)
@@ -277,6 +336,20 @@ public class s_FragmentsList : MonoBehaviour
     void Update_LargeStockHandleRotateWorld() { }
     void Update_LargeStockDeploy() { }
 
+    void TransitionIdleToStockList(float pProgress)
+    {
+        Vector3 PorchPos = GameObject.Find("PorchImage").transform.position;
 
+        for (int Index = 0; Index < StockList.Count; Index++)
+        {
+            Vector3 pos = StockList[Index].StockRawImage.transform.position;
+            pos.x = Screen.width / 2 + (Index - StockListCursorIndex) * 100;
+            pos.y = 80;
+            pos -= (pos - PorchPos ) * (1- pProgress);
+            StockList[Index].StockRawImage.transform.position = pos;
+            StockList[Index].StockRawImage.transform.localScale = new Vector3(1, 1, 1) * pProgress;
+            StockList[Index].StockRawImage.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+        }
+    }
 
 }
