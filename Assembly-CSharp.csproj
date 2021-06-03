@@ -65,6 +65,7 @@
     <Compile Include="Assets\s_PlayerData.cs" />
     <Compile Include="Assets\s_FragmentCapsule.cs" />
     <Compile Include="Assets\FantasyCharactersLite\Scripts\AttachToBody.cs" />
+    <Compile Include="Assets\s_FragmentsList.cs" />
     <Compile Include="Assets\CharaMove.cs" />
     <Compile Include="Assets\FantasyCharactersLite\Scripts\ChangeDisplay.cs" />
     <Compile Include="Assets\s_DropItem.cs" />
@@ -80,7 +81,7 @@
     <Compile Include="Assets\s_FieldPartsParameter.cs" />
     <Compile Include="Assets\s_Effect.cs" />
     <Compile Include="Assets\Follow.cs" />
-    <Compile Include="Assets\s_FragmentsList.cs" />
+    <Compile Include="Assets\s_ParticleStar.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\FantasyCharactersLite\readme.txt" />

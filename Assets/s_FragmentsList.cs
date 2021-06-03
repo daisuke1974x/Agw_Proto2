@@ -16,6 +16,8 @@ public class s_FragmentsList : MonoBehaviour
 
     public RenderTexture FragmentRenderTexture;
     public RawImage FragmentRawImage;
+    public GameObject ParticleStar;
+
 
     public struct StStock
     {
@@ -211,19 +213,38 @@ public class s_FragmentsList : MonoBehaviour
         float TimeStep1 = 0.75f;
         float TimeStep2 = 2.25f;
         float TimeStep3 = 2.75f;
+        float ParticleCounter = 0;
+        float TimeStepParticle = 1f / 60f/8f;
         float ParabolicConstant = 2000;//放物線の山なりを決める定数。TimeStep1を変更した場合、調整が必要。
         Vector3 PorchPos = GameObject.Find("PorchImage").transform.position;
 
         TimerCounter += Time.deltaTime;
+        ParticleCounter += Time.deltaTime;
 
-        if (TimerCounter<= TimeStep1)
+        if (TimerCounter <= TimeStep1)
         {
             Vector3 pos = StockList[StockIndex].StockRawImage.transform.position;
             pos = StartPos + (EndPos - StartPos) * TimerCounter / TimeStep1;
             pos.y -= Mathf.Pow(TimerCounter - (TimeStep1 / 2), 2) * ParabolicConstant - Mathf.Pow((TimeStep1 / 2), 2) * ParabolicConstant;
             StockList[StockIndex].StockRawImage.transform.position = pos;
             StockList[StockIndex].StockRawImage.transform.localScale = new Vector3(1, 1, 1) * (TimerCounter / TimeStep1);
-            StockList[StockIndex].StockRawImage.transform.rotation = Quaternion.Euler(0, 0,- TimerCounter*720);
+            StockList[StockIndex].StockRawImage.transform.rotation = Quaternion.Euler(0, 0, -TimerCounter * 720);
+
+            
+            
+            //パーティクルを発生させる
+            if (TimeStepParticle < ParticleCounter)
+            {
+                GameObject Particle = Instantiate(ParticleStar, this.transform, false);
+                Vector3 pos2 = pos;
+                pos2.x += Random.Range(-20f, 20f);
+                pos2.y += Random.Range(-20f, 20f);
+                Particle.transform.position = pos2;
+
+
+                //ParticleCounter = 0;
+            }
+
         }
         if (TimeStep1< TimerCounter  && TimerCounter <TimeStep2)
         {
