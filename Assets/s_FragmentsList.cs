@@ -18,7 +18,7 @@ public class s_FragmentsList : MonoBehaviour
     public RawImage FragmentRawImage;
     public GameObject ParticleStar;
     public GameObject Particles;
-
+    
 
     public struct StStock
     {
@@ -32,13 +32,16 @@ public class s_FragmentsList : MonoBehaviour
     public enum EnumMode
     {
         Idle,
-        StockListSelect,
+        StockList,
         LargeStockHandle,
+
         TransitionIdleToStockList,
         TransitionStockListToIdle,
         TransitionSelectToLargeStockSet,
         TransitionDeployToIdle,
+
         AddStock,
+        StockListSelect,
         StockListRotateStock,
         StockDelete,
         StockDeploy,
@@ -49,14 +52,16 @@ public class s_FragmentsList : MonoBehaviour
     }
     public EnumMode Mode = EnumMode.Idle;
 
-    private int StockListCursorIndex = 0;
+    private int StockListCursorIndex = 0;//StockListにおける選択位置
 
-    private int StockIndex = 0;
+    private int StockIndex = 0;//AddされたときのIndex番号
 
-    private float TimerCounter =0;
+    private float TimerCounter =0;//各処理で使用するカウンター
+    private int OperationDirection;//各処理で使用する方向
 
     private Vector3 StartPos;
     private Vector3 EndPos;
+    private Vector3 PorchPos;
 
 
     public void StartStockListSelect()
@@ -69,7 +74,7 @@ public class s_FragmentsList : MonoBehaviour
     }
     public void EndStockListSelect()
     {
-        if (Mode == EnumMode.StockListSelect)
+        if (Mode == EnumMode.StockList)
         {
             TimerCounter = 0;
             Mode = EnumMode.TransitionStockListToIdle;
@@ -80,6 +85,8 @@ public class s_FragmentsList : MonoBehaviour
     void Start()
     {
         MainScript = MainControl.GetComponent<s_Main>();
+        PorchPos = GameObject.Find("PorchImage").transform.position ;
+
     }
 
     public void AddList(string pStockName)
@@ -112,7 +119,7 @@ public class s_FragmentsList : MonoBehaviour
         }
 
         StartPos = RectTransformUtility.WorldToScreenPoint(MainCamera.GetComponent<Camera>(), Chest.transform.position);
-        EndPos = GameObject.Find("PorchImage").transform.position + new Vector3(-50, 0, 0);
+        EndPos = PorchPos + new Vector3(-50, 0, 0);
 
     }
 
@@ -164,8 +171,8 @@ public class s_FragmentsList : MonoBehaviour
             case EnumMode.Idle:
                 Update_Idle();
                 break;
-            case EnumMode.StockListSelect:
-                Update_StockListSelect();
+            case EnumMode.StockList:
+                Update_StockList();
                 break;
             case EnumMode.LargeStockHandle:
                 Update_LargeStockHandle();
@@ -184,6 +191,9 @@ public class s_FragmentsList : MonoBehaviour
                 break;
             case EnumMode.AddStock:
                 Update_AddStock();
+                break;
+            case EnumMode.StockListSelect:
+                Update_StockListSelect();
                 break;
             case EnumMode.StockListRotateStock:
                 Update_StockListRotateStock();
@@ -213,26 +223,54 @@ public class s_FragmentsList : MonoBehaviour
 
 
     void Update_Idle() {
-        TransitionIdleToStockList(0);
 
+        ViewStockList(0, 0);
 
 
     }
-    void Update_StockListSelect() {
-        TransitionIdleToStockList(1);
+
+
+    void Update_StockList() {
+
+        ViewStockList(1, 0);
+        float HatLR = Input.GetAxis("HatLR");
+        if(HatLR != 0)
+        {
+            if (0 < HatLR)
+            {
+                if (StockListCursorIndex < StockList.Count-1)
+                {
+                    OperationDirection = 1;
+                    TimerCounter = 0;
+                    Mode = EnumMode.StockListSelect;
+                }
+            }
+            else
+            {
+                if (0 < StockListCursorIndex)
+                {
+                    OperationDirection = -1;
+                    TimerCounter = 0;
+                    Mode = EnumMode.StockListSelect;
+                }
+            }
+        }
 
     }
+
+
+
     void Update_LargeStockHandle() { }
     void Update_TransitionIdleToStockList() 
     {
         float TransitionTime = 0.2f;
         TimerCounter += Time.deltaTime;
 
-        TransitionIdleToStockList(TimerCounter / TransitionTime);
+        ViewStockList(TimerCounter / TransitionTime,0);
 
         if (TransitionTime < TimerCounter)
         {
-            Mode = EnumMode.StockListSelect;
+            Mode = EnumMode.StockList;
         }
     
     
@@ -242,7 +280,7 @@ public class s_FragmentsList : MonoBehaviour
         float TransitionTime = 0.2f;
         TimerCounter += Time.deltaTime;
 
-        TransitionIdleToStockList((TransitionTime-TimerCounter) / TransitionTime);
+        ViewStockList((TransitionTime-TimerCounter) / TransitionTime,0);
 
         if (TransitionTime < TimerCounter)
         {
@@ -257,7 +295,7 @@ public class s_FragmentsList : MonoBehaviour
     }
     void Update_TransitionDeployToIdle() { }
     void Update_AddStock() {
-        TransitionIdleToStockList(0);
+        ViewStockList(0,0);
         for (int Index = 0; Index < StockList.Count; Index++)
         {
             Vector3 pos = StockList[Index].StockRawImage.transform.position;
@@ -274,7 +312,6 @@ public class s_FragmentsList : MonoBehaviour
         float ParticleCounter = 0;
         float TimeStepParticle = 1f / 60f/8f;
         float ParabolicConstant = 2000;//放物線の山なりを決める定数。TimeStep1を変更した場合、調整が必要。
-        Vector3 PorchPos = GameObject.Find("PorchImage").transform.position;
 
         TimerCounter += Time.deltaTime;
         ParticleCounter += Time.deltaTime;
@@ -316,7 +353,6 @@ public class s_FragmentsList : MonoBehaviour
         {
             Vector3 pos = StockList[StockIndex].StockRawImage.transform.position;
             pos = EndPos + (PorchPos-EndPos ) * (TimerCounter-TimeStep2 ) / (TimeStep3 - TimeStep2);
-            //pos.x = EndPos.x + 50 * TimerCounter / (TimeStep3 - TimeStep2);
             StockList[StockIndex].StockRawImage.transform.position = pos;
             StockList[StockIndex].StockRawImage.transform.localScale = new Vector3(1, 1, 1) * ((TimeStep3 - TimerCounter) / (TimeStep3 - TimeStep2));
             StockList[StockIndex].StockRawImage.transform.rotation = Quaternion.Euler(0, 0,- TimerCounter * 720);
@@ -328,6 +364,40 @@ public class s_FragmentsList : MonoBehaviour
         }
 
     }
+    
+    
+    void Update_StockListSelect() {
+        float TimeStep1 = 0.2f;
+        TimerCounter += Time.deltaTime;
+
+        float Progress = OperationDirection * TimerCounter / TimeStep1;
+        ViewStockList(1, Progress);
+
+
+        
+
+        if (TimeStep1 < TimerCounter)
+        {
+
+            StockListCursorIndex += OperationDirection;
+            if (StockListCursorIndex < 0)
+            {
+                StockListCursorIndex = 0;
+            }
+            if (StockList.Count-1< StockListCursorIndex )
+            {
+                StockListCursorIndex = StockList.Count - 1;
+            }
+
+            Mode = EnumMode.StockList;
+
+        }
+
+
+
+    }
+
+
     void Update_StockListRotateStock() { }
     void Update_StockDelete() { }
     void Update_StockDeploy() { }
@@ -336,19 +406,37 @@ public class s_FragmentsList : MonoBehaviour
     void Update_LargeStockHandleRotateWorld() { }
     void Update_LargeStockDeploy() { }
 
-    void TransitionIdleToStockList(float pProgress)
+    void ViewStockList(float pPorchProgress,float pSelectProgress)
     {
-        Vector3 PorchPos = GameObject.Find("PorchImage").transform.position;
+        //PorchPos = GameObject.Find("PorchImage").transform.position;
 
         for (int Index = 0; Index < StockList.Count; Index++)
         {
             Vector3 pos = StockList[Index].StockRawImage.transform.position;
-            pos.x = Screen.width / 2 + (Index - StockListCursorIndex) * 100;
+            pos.x = Screen.width / 2 + (Index - StockListCursorIndex) * 100 - pSelectProgress * 100;
             pos.y = 80;
-            pos -= (pos - PorchPos ) * (1- pProgress);
+            pos -= (pos - PorchPos ) * (1- pPorchProgress);
             StockList[Index].StockRawImage.transform.position = pos;
-            StockList[Index].StockRawImage.transform.localScale = new Vector3(1, 1, 1) * pProgress;
             StockList[Index].StockRawImage.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+
+
+            StockList[Index].StockRawImage.transform.localScale = new Vector3(1, 1, 1) * pPorchProgress;
+            if (pPorchProgress == 1)
+            {
+                if (Index == StockListCursorIndex - 1 && Mathf.Sign(pSelectProgress)==-1)
+                {
+                    StockList[Index].StockRawImage.transform.localScale *= (1f + Mathf.Abs(pSelectProgress) / 2);
+                }
+                if (Index == StockListCursorIndex)
+                {
+                    StockList[Index].StockRawImage.transform.localScale *= (1.5f - Mathf.Abs(pSelectProgress) / 2);
+                }
+                if (Index == StockListCursorIndex + 1 && Mathf.Sign(pSelectProgress) == 1)
+                {
+                    StockList[Index].StockRawImage.transform.localScale *= (1f + Mathf.Abs(pSelectProgress) / 2);
+                }
+            }
+
         }
     }
 
