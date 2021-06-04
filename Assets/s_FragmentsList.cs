@@ -37,7 +37,8 @@ public class s_FragmentsList : MonoBehaviour
 
         TransitionIdleToStockList,
         TransitionStockListToIdle,
-        TransitionSelectToLargeStockSet,
+        TransitionStockListToLargeStockSet,
+        TransitionLargeStockSetToStockList,
         TransitionDeployToIdle,
 
         AddStock,
@@ -63,6 +64,10 @@ public class s_FragmentsList : MonoBehaviour
     private Vector3 EndPos;
     private Vector3 PorchPos;
     private Vector3 RotationBackUp;
+    private Vector3 CameraPositionBackUp;
+    private Vector3 CameraRotationBackUp;
+    private Vector3 CameraPosition;
+    private Vector3 CameraRotation;
 
     public void StartStockListSelect()
     {
@@ -185,8 +190,11 @@ public class s_FragmentsList : MonoBehaviour
             case EnumMode.TransitionStockListToIdle:
                 Update_TransitionStockListToIdle();
                 break;
-            case EnumMode.TransitionSelectToLargeStockSet:
-                Update_TransitionSelectToLargeStockSet();
+            case EnumMode.TransitionStockListToLargeStockSet:
+                Update_TransitionStockListToLargeStockSet();
+                break;
+            case EnumMode.TransitionLargeStockSetToStockList:
+                Update_TransitionLargeStockSetToStockList();
                 break;
             case EnumMode.TransitionDeployToIdle:
                 Update_TransitionDeployToIdle();
@@ -256,6 +264,7 @@ public class s_FragmentsList : MonoBehaviour
                     Mode = EnumMode.StockListSelect;
                 }
             }
+            return;
         }
 
         bool InputR1 = Input.GetButton("R1");
@@ -273,13 +282,61 @@ public class s_FragmentsList : MonoBehaviour
             {
                 OperationDirection = 1;
             }
+            return;
         }
+        if (Input.GetButtonDown("Circle"))
+        {
+            if (MainScript.isIdle == true)
+            {
+                CameraRotationBackUp = MainCamera.transform.rotation.eulerAngles;
+                CameraPositionBackUp = MainCamera.transform.position;
+
+                GameObject tempGameObject = new GameObject();
+                tempGameObject.transform.position = MainScript.objFieldCursor.transform.position + new Vector3(0, 50, 0);
+                tempGameObject.transform.LookAt(MainScript.objFieldCursor.transform.position);
+                //tempGameObject.transform.rotation = Quaternion.Euler(new Vector3(0, Mathf.Round(CameraRotationBackUp.y / 90) * 90, 0));
+                tempGameObject.transform.RotateAround(MainScript.objFieldCursor.transform.position, Vector3.right, -10f);
+
+
+                CameraRotation = tempGameObject.transform.rotation.eulerAngles;
+                CameraPosition = tempGameObject.transform.position;
+
+
+
+
+                MainScript.isControllEnabled = false;
+                MainCamera.GetComponent<s_MainCamera>().isControllEnabled = false;
+
+                Mode = EnumMode.TransitionStockListToLargeStockSet;
+                TimerCounter = 0;
+
+            }
+
+        }
+
 
     }
 
 
 
-    void Update_LargeStockHandle() { }
+    void Update_LargeStockHandle() {
+        if (Input.GetButtonDown("Cross"))
+        {
+            CameraRotation = MainCamera.transform.rotation.eulerAngles;
+            CameraPosition = MainCamera.transform.position;
+
+            //MainCamera.GetComponent<s_MainCamera>().isControllEnabled = false;
+
+            Mode = EnumMode.TransitionLargeStockSetToStockList;
+            TimerCounter = 0;
+
+
+
+        }
+
+
+
+    }
     void Update_TransitionIdleToStockList() 
     {
         float TransitionTime = 0.2f;
@@ -309,9 +366,40 @@ public class s_FragmentsList : MonoBehaviour
 
     }
 
-    void Update_TransitionSelectToLargeStockSet() 
+    void Update_TransitionStockListToLargeStockSet() 
     {
+        float TimeStep1 = 0.3f;
+        TimerCounter += Time.deltaTime;
+        MainCamera.transform.position = CameraPositionBackUp + (CameraPosition - CameraPositionBackUp) * (TimerCounter / TimeStep1);
+        MainCamera.transform.rotation = Quaternion.Euler(CameraRotationBackUp + (CameraRotation - CameraRotationBackUp) * (TimerCounter / TimeStep1));
+
+        if (TimeStep1 < TimerCounter)
+        {
+            MainCamera.transform.position = CameraPosition;
+            MainCamera.transform.rotation = Quaternion.Euler(CameraRotation);
+            Mode = EnumMode.LargeStockHandle;
+        }
+
     }
+    void Update_TransitionLargeStockSetToStockList()
+    {
+        float TimeStep1 = 0.3f;
+        TimerCounter += Time.deltaTime;
+        MainCamera.transform.position = CameraPosition + (CameraPositionBackUp - CameraPosition) * (TimerCounter / TimeStep1);
+        MainCamera.transform.rotation = Quaternion.Euler(CameraRotation + (CameraRotationBackUp - CameraRotation) * (TimerCounter / TimeStep1));
+
+        if (TimeStep1 < TimerCounter)
+        {
+            MainCamera.transform.position = CameraPositionBackUp;
+            MainCamera.transform.rotation = Quaternion.Euler(CameraRotationBackUp);
+            Mode = EnumMode.StockList;
+            MainScript.isControllEnabled = true;
+            MainCamera.GetComponent<s_MainCamera>().isControllEnabled = true;
+        }
+
+    }
+
+
     void Update_TransitionDeployToIdle() { }
     void Update_AddStock() {
         ViewStockList(0,0);

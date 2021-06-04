@@ -69,7 +69,9 @@ public class s_Main : MonoBehaviour
     public float BlockIntervalY = 2.5f;
     public float BlockIntervalZ = 10f;
 
-
+    //操作禁止フラグ（別スクリプトから操作する）
+    public bool isControllEnabled = true;
+    public bool isIdle = true;
 
     //フィールド関連
     public GameObject objFieldPath;
@@ -246,7 +248,7 @@ public class s_Main : MonoBehaviour
         //---------------------------------------------------------------------------------------------------------------------------------------
         moveDirection_Past = moveDirection;
         var cameraForward = Vector3.Scale(objCamera.transform.forward, new Vector3(1, 0, 1)).normalized;  //  カメラに向かって水平の単位ベクトルを求める。
-        if (isSliding == false && objCharController.isGrounded)
+        if (isSliding == false && objCharController.isGrounded && isControllEnabled == true)
         {
             if (Mode == "Main")
             {
@@ -268,7 +270,7 @@ public class s_Main : MonoBehaviour
         //---------------------------------------------------------------------------------------------------------------------------------------
         //移動入力(WASD,左スティック）があるときは、オブジェクトの方向を変える
         //---------------------------------------------------------------------------------------------------------------------------------------
-        if ((Input.GetAxis("LstickLR") != 0 || Input.GetAxis("LstickUD") != 0) && Mode == "Main")
+        if ((Input.GetAxis("LstickLR") != 0 || Input.GetAxis("LstickUD") != 0) && Mode == "Main" && isControllEnabled == true)
         {
             objPlayer.transform.rotation = Quaternion.LookRotation(moveDirection);
             //垂直に向ける処理をここに入れて悩んだが、LookRotationにしたら、不要になった。
@@ -310,7 +312,7 @@ public class s_Main : MonoBehaviour
             moveDirection.y = 0f;
         }
 
-        if (Input.GetButton("Triangle") == true && Mode=="Main")
+        if (Input.GetButton("Triangle") == true && Mode== "Main" && isControllEnabled == true)
         {
             if (objCharController.isGrounded && (isSliding == false))
             {
@@ -349,7 +351,7 @@ public class s_Main : MonoBehaviour
         //---------------------------------------------------------------------------------------------------------------------------------------
         // 物理攻撃処理
         //---------------------------------------------------------------------------------------------------------------------------------------
-        if (Input.GetButton("Square") == true && Mode == "Main")
+        if (Input.GetButton("Square") == true && Mode == "Main" && isControllEnabled == true)
         {
             if (buttonFlag_Skill1 == false)
             {
@@ -563,6 +565,18 @@ public class s_Main : MonoBehaviour
         objPlayer.transform.rotation = tmpQuaternion;
 
 
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        // 
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        int motionIdol = Animator.StringToHash("Base Layer.idle");
+        if (objAnimator.GetCurrentAnimatorStateInfo(0).nameHash == motionIdol)
+        {
+            isIdle = true;
+        }
+        else
+        {
+            isIdle = false;
+        }
 
         //---------------------------------------------------------------------------------------------------------------------------------------
         //UI表示

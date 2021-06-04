@@ -11,9 +11,12 @@ public class s_MainCamera : MonoBehaviour
     //カメラ関連
     float CameraDistance = 5;  //オブジェクトからカメラの距離の初期値
     float cameraRotateSpeed = 150;  //カメラを回す速さ
-    //private Quaternion tmpQuaternion;
+                                    //private Quaternion tmpQuaternion;
 
+    //操作禁止フラグ（別スクリプトから操作する）
     public bool isControllEnabled = true;
+
+
 
     // Start is called before the first frame update
     void Start()
