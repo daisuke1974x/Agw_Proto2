@@ -62,7 +62,7 @@ public class s_FragmentsList : MonoBehaviour
     private Vector3 StartPos;
     private Vector3 EndPos;
     private Vector3 PorchPos;
-
+    private Vector3 RotationBackUp;
 
     public void StartStockListSelect()
     {
@@ -71,6 +71,8 @@ public class s_FragmentsList : MonoBehaviour
             TimerCounter = 0;
             Mode = EnumMode.TransitionIdleToStockList;
         }
+
+        
     }
     public void EndStockListSelect()
     {
@@ -256,6 +258,23 @@ public class s_FragmentsList : MonoBehaviour
             }
         }
 
+        bool InputR1 = Input.GetButton("R1");
+        bool InputL1 = Input.GetButton("L1");
+        if (InputR1 || InputL1)
+        {
+            Mode = EnumMode.StockListRotateStock;
+            TimerCounter = 0;
+            RotationBackUp = StockList[StockListCursorIndex].Stock.transform.rotation.eulerAngles;
+            if (InputL1)
+            {
+                OperationDirection = -1;
+            }
+            else
+            {
+                OperationDirection = 1;
+            }
+        }
+
     }
 
 
@@ -398,7 +417,21 @@ public class s_FragmentsList : MonoBehaviour
     }
 
 
-    void Update_StockListRotateStock() { }
+    void Update_StockListRotateStock() {
+        float TimeStep1 = 0.3f;
+        TimerCounter += Time.deltaTime;
+        float Angle = OperationDirection * 90 * TimerCounter / TimeStep1;
+
+        if (TimeStep1< TimerCounter)
+        {
+            Angle = OperationDirection * 90;
+            Mode = EnumMode.StockList;
+        }
+        StockList[StockListCursorIndex].Stock.transform.rotation = Quaternion.Euler(RotationBackUp + new Vector3(0, Angle, 0));
+        ViewStockList(1, 0);
+
+
+    }
     void Update_StockDelete() { }
     void Update_StockDeploy() { }
     void Update_LargeStockHandleSlide() { }
