@@ -49,7 +49,8 @@ public class s_FragmentsList : MonoBehaviour
         LargeStockHandleSlide,
         LargeStockHandleRotate,
         LargeStockHandleRotateWorld,
-        LargeStockDeploy
+        LargeStockDeploy,
+        LargeStockDeployAfter
     }
     public EnumMode Mode = EnumMode.Idle;
 
@@ -169,12 +170,12 @@ public class s_FragmentsList : MonoBehaviour
         }
 
         StartPos = RectTransformUtility.WorldToScreenPoint(MainCamera.GetComponent<Camera>(), Chest.transform.position);
-        EndPos = PorchPos + new Vector3(-50, 0, 0);
+        EndPos = PorchPos + new Vector3(-100, 0, 0);
 
     }
 
     //============================================================================================================
-    //
+    //ストックリストの更新
     //============================================================================================================
     void RefreshList()
     {
@@ -212,7 +213,14 @@ public class s_FragmentsList : MonoBehaviour
 
 
         }
-
+        if (StockList.Count-2 < StockListCursorIndex)
+        {
+            StockListCursorIndex--;
+            if (StockListCursorIndex < 0)
+            {
+                StockListCursorIndex = 0;
+            }
+        }
 
     }
 
@@ -275,6 +283,9 @@ public class s_FragmentsList : MonoBehaviour
             case EnumMode.LargeStockDeploy:
                 Update_LargeStockDeploy();
                 break;
+            case EnumMode.LargeStockDeployAfter:
+                Update_LargeStockDeployAfter();
+                break;
 
 
         }
@@ -286,7 +297,8 @@ public class s_FragmentsList : MonoBehaviour
     //============================================================================================================
     void Update_Idle() {
 
-        ViewStockList(0, 0);
+        //ここではStockListは表示しない。前フレームでの設置後のDetroyが反映されないため、ぬるぽになる。
+        //ViewStockList(0, 0);
 
 
     }
@@ -351,8 +363,7 @@ public class s_FragmentsList : MonoBehaviour
                     GameObject tempGameObject = new GameObject();
                     tempGameObject.transform.position = MainScript.objFieldCursor.transform.position + new Vector3(0, 50, 0);
                     tempGameObject.transform.LookAt(MainScript.objFieldCursor.transform.position);
-                    //tempGameObject.transform.rotation = Quaternion.Euler(new Vector3(0, Mathf.Round(CameraRotationBackUp.y / 90) * 90, 0));
-                    tempGameObject.transform.RotateAround(MainScript.objFieldCursor.transform.position, Vector3.right, -10f);
+                    tempGameObject.transform.RotateAround(MainScript.objFieldCursor.transform.position, Vector3.right, -20f);
                     RotateIndexWorld = 0;
 
                     CameraRotation = tempGameObject.transform.rotation.eulerAngles;
@@ -387,7 +398,8 @@ public class s_FragmentsList : MonoBehaviour
     //============================================================================================================
     void Update_LargeStockHandle() {
 
-        //RotateIndex = Mathf.RoundToInt(StockList[StockListCursorIndex].Stock.transform.rotation.eulerAngles.y / 90);
+
+        SelectedFrameBlink();//赤枠を点滅させる
 
         if (Input.GetButtonDown("Cross"))
         {
@@ -399,7 +411,7 @@ public class s_FragmentsList : MonoBehaviour
 
             Mode = EnumMode.TransitionLargeStockSetToStockList;
             TimerCounter = 0;
-
+            GameObject.Find("Guide2").GetComponent<Text>().text = "";
             return;
 
         }
@@ -421,6 +433,7 @@ public class s_FragmentsList : MonoBehaviour
                 OperationDirection = 1;
             }
             GameObject.Find("Debug2").GetComponent<Text>().text = "";
+            GameObject.Find("Guide2").GetComponent<Text>().text = "";
             return;
         }
 
@@ -439,11 +452,9 @@ public class s_FragmentsList : MonoBehaviour
                 OperationDirection = 1;
             }
             GameObject.Find("Debug2").GetComponent<Text>().text = "";
+            GameObject.Find("Guide2").GetComponent<Text>().text = "";
         }
 
-        //◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
-        //◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
-        //◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
         if (Input.GetAxis("HatLR") != 0 || Input.GetAxis("HatUD") != 0)
         {
             if (Input.GetAxis("HatUD") == 1) SlideDirection = 0;
@@ -480,24 +491,34 @@ public class s_FragmentsList : MonoBehaviour
                 Mode = EnumMode.LargeStockHandleSlide;
                 TimerCounter = 0;
                 GameObject.Find("Debug2").GetComponent<Text>().text = "";
+                GameObject.Find("Guide2").GetComponent<Text>().text = "";
+            }
+            return;
+
+        }
+
+        if (Input.GetButtonDown("Circle"))
+        {
+            int rc = SetCheck();
+            if (rc == 0)
+            {
+                Mode = EnumMode.LargeStockDeploy;
+                TimerCounter = 0;
+                return;
             }
 
         }
 
-        Text DebugText = GameObject.Find("Debug3").GetComponent<Text>();
-        DebugText.text = "";
-        DebugText.text += "SlideDirection:" + SlideDirection.ToString() + "\n";
-        DebugText.text += "RotateIndex:" + RotateIndex.ToString() + "\n";
-        DebugText.text += "objFieldCursor:" + MainScript.objFieldCursor.transform.position.ToString() + "\n";
-        DebugText.text += "Stock.position:" + StockList[StockListCursorIndex].Stock.transform.position.ToString() + "\n";
-        DebugText.text += "Stock.rotation:" + StockList[StockListCursorIndex].Stock.transform.rotation.eulerAngles.ToString() + "\n";
-        DebugText.text += "SlideIndexX:" + SlideIndexX.ToString() + "\n";
-        DebugText.text += "SlideIndexZ:" + SlideIndexZ.ToString() + "\n";
+        //Text DebugText = GameObject.Find("Debug3").GetComponent<Text>();
+        //DebugText.text = "";
+        //DebugText.text += "SlideDirection:" + SlideDirection.ToString() + "\n";
+        //DebugText.text += "RotateIndex:" + RotateIndex.ToString() + "\n";
+        //DebugText.text += "objFieldCursor:" + MainScript.objFieldCursor.transform.position.ToString() + "\n";
+        //DebugText.text += "Stock.position:" + StockList[StockListCursorIndex].Stock.transform.position.ToString() + "\n";
+        //DebugText.text += "Stock.rotation:" + StockList[StockListCursorIndex].Stock.transform.rotation.eulerAngles.ToString() + "\n";
+        //DebugText.text += "SlideIndexX:" + SlideIndexX.ToString() + "\n";
+        //DebugText.text += "SlideIndexZ:" + SlideIndexZ.ToString() + "\n";
 
-
-        //◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
-        //◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
-        //◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
 
 
     }
@@ -509,6 +530,8 @@ public class s_FragmentsList : MonoBehaviour
     //============================================================================================================
     void Update_TransitionIdleToStockList() 
     {
+        RefreshList();
+
         float TransitionTime = 0.2f;
         TimerCounter += Time.deltaTime;
 
@@ -557,6 +580,7 @@ public class s_FragmentsList : MonoBehaviour
             SlideIndexX = 0;
             SlideIndexZ = 0;
             Mode = EnumMode.LargeStockHandle;
+            SetCheckGuide();
         }
 
     }
@@ -586,7 +610,24 @@ public class s_FragmentsList : MonoBehaviour
     //
     //============================================================================================================
 
-    void Update_TransitionDeployToIdle() { 
+    void Update_TransitionDeployToIdle() {
+
+        float TimeStep1 = 0.3f;
+        TimerCounter += Time.deltaTime;
+        MainCamera.transform.position = CameraPosition + (CameraPositionBackUp - CameraPosition) * (TimerCounter / TimeStep1);
+        MainCamera.transform.rotation = Quaternion.Euler(CameraRotation + (CameraRotationBackUp - CameraRotation) * (TimerCounter / TimeStep1));
+
+        if (TimeStep1 < TimerCounter)
+        {
+            MainCamera.transform.position = CameraPositionBackUp;
+            MainCamera.transform.rotation = Quaternion.Euler(CameraRotationBackUp);
+            Mode = EnumMode.Idle;
+            MainScript.isControllEnabled = true;
+            MainCamera.GetComponent<s_MainCamera>().isControllEnabled = true;
+        }
+
+
+
     }
 
 
@@ -756,6 +797,13 @@ public class s_FragmentsList : MonoBehaviour
         StockList[StockListCursorIndex].Stock.transform.position = pos;
 
 
+        if(Mode == EnumMode.LargeStockHandle)
+        {
+            SetCheckGuide();
+
+        }
+
+
     }
 
     //============================================================================================================
@@ -786,6 +834,11 @@ public class s_FragmentsList : MonoBehaviour
             SlideIndexZ = Mathf.RoundToInt((StockList[StockListCursorIndex].Stock.transform.position.z - RotateCenter.z) / BlockIntervalZ);
         }
 
+        if (Mode == EnumMode.LargeStockHandle)
+        {
+            SetCheckGuide();
+
+        }
 
     }
     //============================================================================================================
@@ -818,7 +871,103 @@ public class s_FragmentsList : MonoBehaviour
     //============================================================================================================
     //
     //============================================================================================================
-    void Update_LargeStockDeploy() { }
+    void Update_LargeStockDeploy() {
+        float TimeStep1 = 0.75f;
+        TimerCounter += Time.deltaTime;
+
+        SelectedFrameTransparency((TimeStep1 - TimerCounter) / TimeStep1);
+        Vector3 pos = StockList[StockListCursorIndex].Stock.transform.position;
+        pos.y = FloatHeight * (TimeStep1 - TimerCounter) / TimeStep1;
+        StockList[StockListCursorIndex].Stock.transform.position = pos;
+
+        if (TimeStep1 < TimerCounter)
+        {
+            MainScript.objFieldCursor.transform.position = FragmentsListPos;
+
+            //赤枠の除去とParentの付け替え
+            for (int Index = 0; Index < StockList[StockListCursorIndex].Stock.transform.GetChildCount(); Index++)
+            {
+                GameObject obj = StockList[StockListCursorIndex].Stock.transform.GetChild(Index).gameObject;
+                if (obj.name == "SelectedFrame(Clone)")
+                {
+                    //赤枠の場合は除去
+                    Destroy(obj, 0.1f);
+                }
+                else
+                {
+                    //赤枠ではない場合は、Worldに移す
+                    obj.transform.parent = MainScript.CurrentWorld.transform;
+                    //端数を整理
+                    Vector3 pos2 = obj.transform.position;
+                    pos2.x = Mathf.RoundToInt(pos2.x / BlockIntervalX) * BlockIntervalX;
+                    pos2.y = Mathf.RoundToInt(pos2.y / BlockIntervalY) * BlockIntervalY;
+                    pos2.z = Mathf.RoundToInt(pos2.z / BlockIntervalZ) * BlockIntervalZ;
+                    obj.transform.position = pos2;
+                }
+
+            }
+
+            Destroy(StockList[StockListCursorIndex].StockCameraPrefab);
+            Destroy(StockList[StockListCursorIndex].StockRawImage);
+            Destroy(StockList[StockListCursorIndex].Stock);
+            //RefreshList();
+            //if (StockList.Count - 2 < StockListCursorIndex) StockListCursorIndex = StockList.Count - 1;
+            Mode = EnumMode.LargeStockDeployAfter;
+        }
+
+
+
+
+    }
+    //================================================================================================================
+    //　設置完了後の待機画面
+    //================================================================================================================
+    void Update_LargeStockDeployAfter()
+    {
+        GameObject.Find("Guide2").GetComponent<Text>().text = "設置が完了しました。";
+
+        if (Input.GetButtonDown("Circle") || Input.GetButtonDown("Cross"))
+        {
+            Mode = EnumMode.TransitionDeployToIdle;
+            TimerCounter = 0;
+
+        }
+    }
+    //================================================================================================================
+    //　赤枠の透明度
+    //================================================================================================================
+    void SelectedFrameTransparency(float pCola)
+    {
+        if (StockList.Count == 0) return;
+
+        for (int i = 0; i < StockList[StockListCursorIndex].Stock.transform.childCount; i++)
+        {
+            GameObject obj = StockList[StockListCursorIndex].Stock.transform.GetChild(i).gameObject;
+            if (obj.name == "SelectedFrame(Clone)")
+            {
+                for (int j = 0; j < obj.transform.childCount; j++)
+                {
+                    GameObject obj2 = obj.transform.GetChild(j).gameObject;
+                    Color col2 = obj2.GetComponent<Renderer>().material.color;
+                    col2.a = pCola;
+                    obj2.GetComponent<Renderer>().material.color = col2;
+
+                    //Setのときの演出。スーッと消す
+                    //col2.a = (FloatHeight - SetCounter) / FloatHeight;
+
+                }
+            }
+
+        }
+    }
+
+    //================================================================================================================
+    //　赤枠の点滅
+    //================================================================================================================
+    void SelectedFrameBlink()
+    {
+        SelectedFrameTransparency(Mathf.Sin(Time.time * 8) / 2 + 0.5f);
+    }
 
     //============================================================================================================
     //
@@ -826,12 +975,14 @@ public class s_FragmentsList : MonoBehaviour
     void ViewStockList(float pPorchProgress,float pSelectProgress)
     {
         //PorchPos = GameObject.Find("PorchImage").transform.position;
+        float StockListInterval = 100;
+        float StockListPosY = 80;
 
         for (int Index = 0; Index < StockList.Count; Index++)
         {
             Vector3 pos = StockList[Index].StockRawImage.transform.position;
-            pos.x = Screen.width / 2 + (Index - StockListCursorIndex) * 100 - pSelectProgress * 100;
-            pos.y = 80;
+            pos.x = Screen.width / 2 + (Index - StockListCursorIndex) * StockListInterval - pSelectProgress * StockListInterval;
+            pos.y = StockListPosY;
             pos -= (pos - PorchPos ) * (1- pPorchProgress);
             StockList[Index].StockRawImage.transform.position = pos;
             StockList[Index].StockRawImage.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
@@ -855,6 +1006,197 @@ public class s_FragmentsList : MonoBehaviour
             }
 
         }
+    }
+
+    //================================================================================================================
+    //　設置可能かどうかのチェック
+    //================================================================================================================
+    int SetCheck()
+    {
+        if (!(Mode == EnumMode.StockList || Mode == EnumMode.LargeStockHandle)) return -9999;//正しく呼び出されていない。通常は起きないエラー。
+
+        List<CheckItem> CheckItemWorld = new List<CheckItem>();
+        List<CheckItem> CheckItemStock = new List<CheckItem>();
+
+        //World側　被仕向けノードの抽出
+        for (int Index = 0; Index < MainScript.CurrentWorld.transform.GetChildCount(); Index++)
+        {
+            GameObject FragmentPrefab = MainScript.CurrentWorld.transform.GetChild(Index).gameObject;
+            s_FieldPartsParameter FieldPartsParameter = FragmentPrefab.GetComponent<s_FieldPartsParameter>();
+            Vector3 SelfBlockPos = new Vector3();
+            SelfBlockPos.x = Mathf.RoundToInt(FragmentPrefab.transform.position.x / BlockIntervalX);
+            SelfBlockPos.z = Mathf.RoundToInt(FragmentPrefab.transform.position.z / BlockIntervalZ);
+            float Angle = FragmentPrefab.transform.rotation.eulerAngles.y;
+            int SelfRotateIndex = Mathf.RoundToInt(Angle / 90);
+
+            for (int dir = 0; dir < 4; dir++)
+            {
+                //隣接チェック
+                Vector3 CheckBlockPos1 = new Vector3();
+                CheckBlockPos1.x = SelfBlockPos.x + DirectionIndexX[dir];
+                CheckBlockPos1.z = SelfBlockPos.z + DirectionIndexZ[dir];
+                bool isNeighbor = false;
+                for (int Index2 = 0; Index2 < MainScript.CurrentWorld.transform.GetChildCount(); Index2++)
+                {
+                    GameObject FragmentPrefab2 = MainScript.CurrentWorld.transform.GetChild(Index2).gameObject;
+                    Vector3 CheckBlockPos2 = new Vector3();
+                    CheckBlockPos2.x = Mathf.RoundToInt(FragmentPrefab2.transform.position.x / BlockIntervalX);
+                    CheckBlockPos2.z = Mathf.RoundToInt(FragmentPrefab2.transform.position.z / BlockIntervalZ);
+                    if (CheckBlockPos1 == CheckBlockPos2) isNeighbor = true;
+                }
+
+                //隣接がない場合は、ノードを作成する
+                if (isNeighbor == false)
+                {
+                    //被仕向けのときのNodeは、Selfと同じ
+                    CheckItem Item = new CheckItem();
+                    Item.SelfBlockX = SelfBlockPos.x;
+                    Item.SelfBlockY = Mathf.RoundToInt(FragmentPrefab.transform.position.y / BlockIntervalY);
+                    Item.SelfBlockZ = SelfBlockPos.z;
+                    Item.NodeBlockX = SelfBlockPos.x;
+                    Item.NodeBlockZ = SelfBlockPos.z;
+                    Item.Direction = (dir + 2) % 4;
+                    Item.ConnectionCode = FieldPartsParameter.ConnectionCodeOpponent[(4 + dir + 0 - SelfRotateIndex) % 4];
+                    CheckItemWorld.Add(Item);
+
+                    string LogString = MainScript.CurrentWorld.name + ";" + FragmentPrefab.name + ";";
+                    LogString += "(";
+                    LogString += Item.SelfBlockX.ToString() + ",";
+                    LogString += Item.SelfBlockY.ToString() + ",";
+                    LogString += Item.SelfBlockZ.ToString() + ",";
+                    LogString += "),(";
+                    LogString += Item.NodeBlockX.ToString() + ",";
+                    LogString += Item.NodeBlockZ.ToString() + ",";
+                    LogString += "),";
+                    LogString += Item.Direction.ToString() + ",";
+                    LogString += Item.ConnectionCode;
+                    Debug.Log(LogString);
+                }
+            }
+        }
+
+        //Stock側　仕向けノードの抽出
+        for (int Index = 0; Index < StockList[StockListCursorIndex].Stock.transform.GetChildCount(); Index++)
+        {
+            GameObject FragmentPrefab = StockList[StockListCursorIndex].Stock.transform.GetChild(Index).gameObject;
+            if (FragmentPrefab.name != "SelectedFrame(Clone)")
+            {
+                s_FieldPartsParameter FieldPartsParameter = FragmentPrefab.GetComponent<s_FieldPartsParameter>();
+                Vector3 SelfBlockPos = new Vector3();
+                SelfBlockPos.x = Mathf.RoundToInt(FragmentPrefab.transform.position.x / BlockIntervalX);
+                SelfBlockPos.z = Mathf.RoundToInt(FragmentPrefab.transform.position.z / BlockIntervalZ);
+                float Angle = FragmentPrefab.transform.rotation.eulerAngles.y;
+                int SelfRotateIndex = Mathf.RoundToInt(Angle / 90);
+
+                for (int dir = 0; dir < 4; dir++)
+                {
+                    //隣接チェック
+                    Vector3 CheckBlockPos1 = new Vector3();
+                    CheckBlockPos1.x = SelfBlockPos.x + DirectionIndexX[(4 + dir + RotateIndex) % 4];
+                    CheckBlockPos1.z = SelfBlockPos.z + DirectionIndexZ[(4 + dir + RotateIndex) % 4];
+                    bool isNeighbor = false;
+
+                    for (int Index2 = 0; Index2 < StockList[StockListCursorIndex].Stock.transform.GetChildCount(); Index2++)
+                    {
+                        GameObject FragmentPrefab2 = StockList[StockListCursorIndex].Stock.transform.GetChild(Index2).gameObject;
+                        if (FragmentPrefab2.name != "SelectedFrame(Clone)")
+                        {
+                            Vector3 CheckBlockPos2 = new Vector3();
+                            CheckBlockPos2.x = Mathf.RoundToInt(FragmentPrefab2.transform.position.x / BlockIntervalX);
+                            CheckBlockPos2.z = Mathf.RoundToInt(FragmentPrefab2.transform.position.z / BlockIntervalZ);
+                            if (CheckBlockPos1 == CheckBlockPos2) isNeighbor = true;
+                        }
+
+                    }
+
+                    //隣接がない場合は、ノードを作成する
+                    if (isNeighbor == false)
+                    {
+                        CheckItem Item = new CheckItem();
+                        //仕向けのときの、X,Z座標は、Nodeは増分補正後
+                        //Item.NodeBlockX = Mathf.RoundToInt(FragmentPrefab.transform.position.x / BlockIntervalX) + DirectionIndexX[(dir + RotateIndex + rotdir) % 4];
+                        Item.SelfBlockX = SelfBlockPos.x;
+                        Item.SelfBlockY = Mathf.RoundToInt(FragmentPrefab.transform.position.y / BlockIntervalY);
+                        Item.SelfBlockZ = SelfBlockPos.z;
+                        Item.NodeBlockX = SelfBlockPos.x + DirectionIndexX[(4 + dir + RotateIndex) % 4];
+                        Item.NodeBlockZ = SelfBlockPos.z + DirectionIndexZ[(4 + dir + RotateIndex) % 4];
+                        Item.Direction = (4 + dir + RotateIndex) % 4;
+                        Item.ConnectionCode = FieldPartsParameter.ConnectionCode[(4 + dir + RotateIndex - SelfRotateIndex) % 4];
+                        CheckItemStock.Add(Item);
+
+                        string LogString = StockList[StockListCursorIndex].Stock.name + ";" + FragmentPrefab.name + ";";
+                        LogString += "(";
+                        LogString += Item.SelfBlockX.ToString() + ",";
+                        LogString += Item.SelfBlockY.ToString() + ",";
+                        LogString += Item.SelfBlockZ.ToString() + ",";
+                        LogString += "),(";
+                        LogString += Item.NodeBlockX.ToString() + ",";
+                        LogString += Item.NodeBlockZ.ToString() + ",";
+                        LogString += "),";
+                        LogString += Item.Direction.ToString() + ",";
+                        LogString += Item.ConnectionCode;
+                        Debug.Log(LogString);
+                    }
+                }
+
+            }
+        }
+
+        //マッチング判定
+        int CountOK = 0;
+        int CountNG = 0;
+        int Overlap = 0;
+        for (int Index = 0; Index < CheckItemWorld.Count; Index++)
+        {
+            CheckItem ItemWorld = CheckItemWorld[Index];
+            for (int Index2 = 0; Index2 < CheckItemStock.Count; Index2++)
+            {
+                CheckItem ItemStock = CheckItemStock[Index2];
+
+                if (ItemWorld.SelfBlockX == ItemStock.SelfBlockX && ItemWorld.SelfBlockZ == ItemStock.SelfBlockZ)
+                {
+                    Overlap++;
+                }
+                else
+                {
+                    if (ItemWorld.NodeBlockX == ItemStock.NodeBlockX && ItemWorld.NodeBlockZ == ItemStock.NodeBlockZ && ItemWorld.Direction == ItemStock.Direction)
+                    {
+                        if (ItemWorld.ConnectionCode == ItemStock.ConnectionCode)
+                        {
+                            CountOK++;
+                        }
+                        else
+                        {
+                            CountNG++;
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
+        Debug.Log("CountOK:" + CountOK.ToString() + ", CountNG:" + CountNG.ToString() + ", Overlap:" + Overlap.ToString());
+
+        if (CountOK == 0) return -1;//接している部分の絵柄で、一致した箇所がない
+        if (CountNG > 0) return -2;//接合面の絵柄が合っていない箇所がある
+        if (Overlap > 0) return -3;//一部が重なっている。Fragmentが２枚以上のときありうる。
+
+        return 0;//正常
+
+
+    }
+
+    int SetCheckGuide()
+    {
+        int Rc = SetCheck();
+        Text GuideText = GameObject.Find("Guide2").GetComponent<Text>();
+        if (Rc == 0) GuideText.text = "設置できます。";
+        if (Rc == -1 || Rc == -2) GuideText.text = "接合面の絵柄が合っていない箇所があります。";
+        if (Rc == -3)GuideText.text = "一部がかさなっています。";
+        if (Rc == -9999) GuideText.text = "致命的なエラー。";
+        return Rc;
     }
 
 }
