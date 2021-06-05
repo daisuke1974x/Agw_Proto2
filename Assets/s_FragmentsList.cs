@@ -64,11 +64,50 @@ public class s_FragmentsList : MonoBehaviour
     private Vector3 EndPos;
     private Vector3 PorchPos;
     private Vector3 RotationBackUp;
+    private Vector3 PositionBackUp;
     private Vector3 CameraPositionBackUp;
     private Vector3 CameraRotationBackUp;
+    private Vector3 CameraPositionHomePosition;
+    private Vector3 CameraRotationHomePosition;
     private Vector3 CameraPosition;
     private Vector3 CameraRotation;
     private Vector3 FragmentPositionBackUp;
+
+    public struct CheckItem
+    {
+        public float SelfBlockX;
+        public float SelfBlockY;
+        public float SelfBlockZ;
+        public float NodeBlockX;
+        public float NodeBlockZ;
+        public int Direction;
+        public string ConnectionCode;
+
+    }
+
+    private float BlockIntervalX = 10f;
+    private float BlockIntervalY = 2.5f;
+    private float BlockIntervalZ = 10f;
+    private float FloatHeight = 2f;
+
+    //private float StockListDistance = 100f;
+
+    private int[] DirectionIndexX = { 0, 1, 0, -1 };
+    private int[] DirectionIndexZ = { 1, 0, -1, 0 };
+
+    private int SlideDirection = 0;
+    private int SlideIndexX = 0;
+    private int SlideIndexZ = 0;
+
+    private int RotateIndex = 0;
+    private int RotateIndexWorld = 0;
+
+    private float SetCounter = 0;
+
+    public GameObject objCaption;
+    public GameObject objSelectedFrame;
+
+    public GameObject DebugText;
 
     public void StartStockListSelect()
     {
@@ -97,6 +136,9 @@ public class s_FragmentsList : MonoBehaviour
 
     }
 
+    //============================================================================================================
+    //
+    //============================================================================================================
     public void AddList(string pStockName)
     {
         GameObject Stock = GameObject.Find(pStockName);
@@ -131,6 +173,9 @@ public class s_FragmentsList : MonoBehaviour
 
     }
 
+    //============================================================================================================
+    //
+    //============================================================================================================
     void RefreshList()
     {
         float Cnt = 0;
@@ -172,6 +217,9 @@ public class s_FragmentsList : MonoBehaviour
     }
 
     // Update is called once per frame
+    //============================================================================================================
+    //
+    //============================================================================================================
     void Update()
     {
         switch (Mode)
@@ -233,6 +281,9 @@ public class s_FragmentsList : MonoBehaviour
     }
 
 
+    //============================================================================================================
+    //
+    //============================================================================================================
     void Update_Idle() {
 
         ViewStockList(0, 0);
@@ -241,6 +292,9 @@ public class s_FragmentsList : MonoBehaviour
     }
 
 
+    //============================================================================================================
+    //
+    //============================================================================================================
     void Update_StockList() {
 
         ViewStockList(1, 0);
@@ -299,14 +353,17 @@ public class s_FragmentsList : MonoBehaviour
                     tempGameObject.transform.LookAt(MainScript.objFieldCursor.transform.position);
                     //tempGameObject.transform.rotation = Quaternion.Euler(new Vector3(0, Mathf.Round(CameraRotationBackUp.y / 90) * 90, 0));
                     tempGameObject.transform.RotateAround(MainScript.objFieldCursor.transform.position, Vector3.right, -10f);
-
+                    RotateIndexWorld = 0;
 
                     CameraRotation = tempGameObject.transform.rotation.eulerAngles;
                     CameraPosition = tempGameObject.transform.position;
 
+                    CameraPositionHomePosition = CameraPosition;
+                    CameraRotationHomePosition = CameraRotation;
 
                     FragmentPositionBackUp = StockList[StockListCursorIndex].Stock.transform.position;
-                    StockList[StockListCursorIndex].Stock.transform.position = MainScript.objFieldCursor.transform.position + new Vector3(0, 2, 0);
+                    StockList[StockListCursorIndex].Stock.transform.position = MainScript.objFieldCursor.transform.position + new Vector3(0, FloatHeight, 0);
+                    StockList[StockListCursorIndex].Stock.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
 
                     MainScript.isControllEnabled = false;
                     MainCamera.GetComponent<s_MainCamera>().isControllEnabled = false;
@@ -325,7 +382,13 @@ public class s_FragmentsList : MonoBehaviour
 
 
 
+    //============================================================================================================
+    //
+    //============================================================================================================
     void Update_LargeStockHandle() {
+
+        //RotateIndex = Mathf.RoundToInt(StockList[StockListCursorIndex].Stock.transform.rotation.eulerAngles.y / 90);
+
         if (Input.GetButtonDown("Cross"))
         {
             CameraRotation = MainCamera.transform.rotation.eulerAngles;
@@ -347,6 +410,7 @@ public class s_FragmentsList : MonoBehaviour
         {
             Mode = EnumMode.LargeStockHandleRotate;
             TimerCounter = 0;
+            PositionBackUp = StockList[StockListCursorIndex].Stock.transform.position;
             RotationBackUp = StockList[StockListCursorIndex].Stock.transform.rotation.eulerAngles;
             if (InputL1)
             {
@@ -356,10 +420,93 @@ public class s_FragmentsList : MonoBehaviour
             {
                 OperationDirection = 1;
             }
+            GameObject.Find("Debug2").GetComponent<Text>().text = "";
             return;
         }
 
+        bool InputR2 = Input.GetButton("R2");
+        bool InputL2 = Input.GetButton("L2");
+        if (InputR2 || InputL2)
+        {
+            Mode = EnumMode.LargeStockHandleRotateWorld;
+            TimerCounter = 0;
+            if (InputL2)
+            {
+                OperationDirection = -1;
+            }
+            else
+            {
+                OperationDirection = 1;
+            }
+            GameObject.Find("Debug2").GetComponent<Text>().text = "";
+        }
+
+        //◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+        //◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+        //◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+        if (Input.GetAxis("HatLR") != 0 || Input.GetAxis("HatUD") != 0)
+        {
+            if (Input.GetAxis("HatUD") == 1) SlideDirection = 0;
+            if (Input.GetAxis("HatLR") == 1) SlideDirection = 1;
+            if (Input.GetAxis("HatUD") == -1) SlideDirection = 2;
+            if (Input.GetAxis("HatLR") == -1) SlideDirection = 3;
+
+
+            //動かす（ずらす）ができるかどうかチェック
+            bool isMoveOk = false;
+            int Dir = (4 + SlideDirection - RotateIndexWorld) % 4;
+            Vector3 Compare1 = new Vector3();
+            Compare1.x = -DirectionIndexX[Dir] + Mathf.RoundToInt(MainScript.objFieldCursor.transform.position.x / 10);
+            Compare1.z = -DirectionIndexZ[Dir] + Mathf.RoundToInt(MainScript.objFieldCursor.transform.position.z / 10);
+            for (int i = 0; i < StockList[StockListCursorIndex].Stock.transform.GetChildCount(); i++)
+            {
+                var obj = StockList[StockListCursorIndex].Stock.transform.GetChild(i);
+                if (obj.name != "SelectedFrame(Clone)")
+                {
+                    var ChidPos = obj.transform.position;
+                    Vector3 Compare2 = new Vector3();
+                    Compare2.x = Mathf.RoundToInt(ChidPos.x / 10);
+                    Compare2.z = Mathf.RoundToInt(ChidPos.z / 10);
+                    if (Compare1 == Compare2) isMoveOk = true;
+                }
+
+            }
+
+
+
+            if (isMoveOk == true)
+            {
+                RotateIndex = Mathf.RoundToInt(StockList[StockListCursorIndex].Stock.transform.rotation.eulerAngles.y / 90);
+                Mode = EnumMode.LargeStockHandleSlide;
+                TimerCounter = 0;
+                GameObject.Find("Debug2").GetComponent<Text>().text = "";
+            }
+
+        }
+
+        Text DebugText = GameObject.Find("Debug3").GetComponent<Text>();
+        DebugText.text = "";
+        DebugText.text += "SlideDirection:" + SlideDirection.ToString() + "\n";
+        DebugText.text += "RotateIndex:" + RotateIndex.ToString() + "\n";
+        DebugText.text += "objFieldCursor:" + MainScript.objFieldCursor.transform.position.ToString() + "\n";
+        DebugText.text += "Stock.position:" + StockList[StockListCursorIndex].Stock.transform.position.ToString() + "\n";
+        DebugText.text += "Stock.rotation:" + StockList[StockListCursorIndex].Stock.transform.rotation.eulerAngles.ToString() + "\n";
+        DebugText.text += "SlideIndexX:" + SlideIndexX.ToString() + "\n";
+        DebugText.text += "SlideIndexZ:" + SlideIndexZ.ToString() + "\n";
+
+
+        //◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+        //◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+        //◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
+
+
     }
+
+
+
+    //============================================================================================================
+    //
+    //============================================================================================================
     void Update_TransitionIdleToStockList() 
     {
         float TransitionTime = 0.2f;
@@ -374,6 +521,9 @@ public class s_FragmentsList : MonoBehaviour
     
     
     }
+    //============================================================================================================
+    //
+    //============================================================================================================
     void Update_TransitionStockListToIdle()
     {
         float TransitionTime = 0.2f;
@@ -389,6 +539,9 @@ public class s_FragmentsList : MonoBehaviour
 
     }
 
+    //============================================================================================================
+    //
+    //============================================================================================================
     void Update_TransitionStockListToLargeStockSet() 
     {
         float TimeStep1 = 0.3f;
@@ -401,10 +554,15 @@ public class s_FragmentsList : MonoBehaviour
         {
             MainCamera.transform.position = CameraPosition;
             MainCamera.transform.rotation = Quaternion.Euler(CameraRotation);
+            SlideIndexX = 0;
+            SlideIndexZ = 0;
             Mode = EnumMode.LargeStockHandle;
         }
 
     }
+    //============================================================================================================
+    //
+    //============================================================================================================
     void Update_TransitionLargeStockSetToStockList()
     {
         float TimeStep1 = 0.3f;
@@ -424,8 +582,18 @@ public class s_FragmentsList : MonoBehaviour
 
     }
 
+    //============================================================================================================
+    //
+    //============================================================================================================
 
-    void Update_TransitionDeployToIdle() { }
+    void Update_TransitionDeployToIdle() { 
+    }
+
+
+
+    //============================================================================================================
+    //
+    //============================================================================================================
     void Update_AddStock() {
         ViewStockList(0,0);
         for (int Index = 0; Index < StockList.Count; Index++)
@@ -496,8 +664,11 @@ public class s_FragmentsList : MonoBehaviour
         }
 
     }
-    
-    
+
+
+    //============================================================================================================
+    //
+    //============================================================================================================
     void Update_StockListSelect() {
         float TimeStep1 = 0.2f;
         TimerCounter += Time.deltaTime;
@@ -530,6 +701,9 @@ public class s_FragmentsList : MonoBehaviour
     }
 
 
+    //============================================================================================================
+    //
+    //============================================================================================================
     void Update_StockListRotateStock() {
         float TimeStep1 = 0.3f;
         TimerCounter += Time.deltaTime;
@@ -545,27 +719,110 @@ public class s_FragmentsList : MonoBehaviour
 
 
     }
+    //============================================================================================================
+    //
+    //============================================================================================================
     void Update_StockDelete() { }
+    //============================================================================================================
+    //
+    //============================================================================================================
     void Update_StockDeploy() { }
-    void Update_LargeStockHandleSlide() { }
-    
-    void Update_LargeStockHandleRotate() {
+    //============================================================================================================
+    //
+    //============================================================================================================
+    void Update_LargeStockHandleSlide() 
+    {
+        float TimeStep1 = 0.2f;
+        TimerCounter += Time.deltaTime;
+
+        //int dir = (8 + SlideDirection - RotateIndex - RotateIndexWorld) % 4;
+        int dir = (8 + SlideDirection  - RotateIndex - RotateIndexWorld) % 4;
+        int dir2 = (8 + SlideDirection - RotateIndexWorld) % 4;
+        Vector3 pos = StockList[StockListCursorIndex].Stock.transform.position;
+        Vector3 cpos = MainScript.objFieldCursor.transform.position;
+        pos.x = cpos.x + SlideIndexX * BlockIntervalX + (BlockIntervalX * DirectionIndexX[dir2]) * (TimerCounter / TimeStep1);
+        pos.z = cpos.z + SlideIndexZ * BlockIntervalZ + (BlockIntervalZ * DirectionIndexZ[dir2]) * (TimerCounter / TimeStep1);
+
+
+        if (TimeStep1< TimerCounter)
+        {
+            TimerCounter = TimeStep1;
+            SlideIndexX += DirectionIndexX[dir2];
+            SlideIndexZ += DirectionIndexZ[dir2];
+            pos.x = cpos.x + SlideIndexX * BlockIntervalX ;
+            pos.z = cpos.z + SlideIndexZ * BlockIntervalZ ;
+            Mode = EnumMode.LargeStockHandle;
+        }
+        StockList[StockListCursorIndex].Stock.transform.position = pos;
+
+
+    }
+
+    //============================================================================================================
+    //
+    //============================================================================================================
+    void Update_LargeStockHandleRotate()
+    {
         float TimeStep1 = 0.3f;
         TimerCounter += Time.deltaTime;
         float Angle = OperationDirection * 90 * TimerCounter / TimeStep1;
 
         if (TimeStep1 < TimerCounter)
         {
+            //RotateIndex = (4 + RotateIndex + OperationDirection) % 4;
             Angle = OperationDirection * 90;
             Mode = EnumMode.LargeStockHandle;
         }
-        StockList[StockListCursorIndex].Stock.transform.rotation = Quaternion.Euler(RotationBackUp + new Vector3(0, Angle, 0));
-        //ViewStockList(1, 0);
-    
+
+        Vector3 RotateCenter = MainScript.objFieldCursor.transform.position;//回転の中心の指定
+        StockList[StockListCursorIndex].Stock.transform.rotation = Quaternion.Euler(RotationBackUp);//いったん戻す
+        StockList[StockListCursorIndex].Stock.transform.position = PositionBackUp;//いったん戻す
+
+        StockList[StockListCursorIndex].Stock.transform.RotateAround(RotateCenter, Vector3.up,  Angle);//回転
+
+        if (Mode == EnumMode.LargeStockHandle)
+        {
+            SlideIndexX = Mathf.RoundToInt((StockList[StockListCursorIndex].Stock.transform.position.x - RotateCenter.x) / BlockIntervalX);
+            SlideIndexZ = Mathf.RoundToInt((StockList[StockListCursorIndex].Stock.transform.position.z - RotateCenter.z) / BlockIntervalZ);
+        }
+
+
     }
-    void Update_LargeStockHandleRotateWorld() { }
+    //============================================================================================================
+    //
+    //============================================================================================================
+    void Update_LargeStockHandleRotateWorld()
+    {
+        float TimeStep1 = 0.3f;
+        TimerCounter += Time.deltaTime;
+        float Angle = OperationDirection * 90 * TimerCounter / TimeStep1;
+
+        if (TimeStep1 < TimerCounter)
+        {
+            Angle = 0;
+            Mode = EnumMode.LargeStockHandle;
+            RotateIndexWorld = (4 + RotateIndexWorld + OperationDirection) % 4;
+            TimerCounter = TimeStep1;
+        }
+
+        MainCamera.transform.position = CameraPositionHomePosition;
+        MainCamera.transform.rotation = Quaternion.Euler(CameraRotationHomePosition);
+        Vector3 StockSelectCameraPos = MainScript.objFieldCursor.transform.position;
+        StockSelectCameraPos.y = MainCamera.transform.position.y;
+        MainCamera.transform.RotateAround(StockSelectCameraPos, Vector3.up, - RotateIndexWorld * 90 - Angle);
+
+
+    }
+
+
+    //============================================================================================================
+    //
+    //============================================================================================================
     void Update_LargeStockDeploy() { }
 
+    //============================================================================================================
+    //
+    //============================================================================================================
     void ViewStockList(float pPorchProgress,float pSelectProgress)
     {
         //PorchPos = GameObject.Find("PorchImage").transform.position;
