@@ -172,6 +172,8 @@ public class s_FragmentsList : MonoBehaviour
         StartPos = RectTransformUtility.WorldToScreenPoint(MainCamera.GetComponent<Camera>(), Chest.transform.position);
         EndPos = PorchPos + new Vector3(-100, 0, 0);
 
+
+
     }
 
     //============================================================================================================
@@ -221,8 +223,9 @@ public class s_FragmentsList : MonoBehaviour
                 StockListCursorIndex = 0;
             }
         }
-
-    }
+        var json = JsonUtility.ToJson(StockList);
+        Debug.Log(json);
+    } 
 
     // Update is called once per frame
     //============================================================================================================
@@ -882,7 +885,9 @@ public class s_FragmentsList : MonoBehaviour
 
         if (TimeStep1 < TimerCounter)
         {
-            MainScript.objFieldCursor.transform.position = FragmentsListPos;
+            MainScript.objFieldCursor.GetComponent<s_FieldCursor>().Disappear();
+
+            //MainScript.objFieldCursor.transform.position = FragmentsListPos;
 
             //赤枠の除去とParentの付け替え
             for (int Index = 0; Index < StockList[StockListCursorIndex].Stock.transform.GetChildCount(); Index++)
@@ -1197,6 +1202,12 @@ public class s_FragmentsList : MonoBehaviour
         if (Rc == -3)GuideText.text = "一部がかさなっています。";
         if (Rc == -9999) GuideText.text = "致命的なエラー。";
         return Rc;
+    }
+
+
+    void test()
+    {
+        var json = JsonUtility.ToJson(StockList);
     }
 
 }

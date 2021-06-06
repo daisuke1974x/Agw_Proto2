@@ -459,6 +459,7 @@ public class s_Main : MonoBehaviour
             AbyssPos.y = 0;
             objFieldCursor.transform.position = AbyssPos;
             isFieldCursorSet = true;
+            objFieldCursor.GetComponent<s_FieldCursor>().Appear();
 
             if (PlayerStatus.isKnockBack == false)
             {
@@ -487,8 +488,9 @@ public class s_Main : MonoBehaviour
                 AbyssPos.x = 0;
                 AbyssPos.z = 99999f;
                 AbyssPos.y = 0;
-                objFieldCursor.transform.position = AbyssPos;
+                //objFieldCursor.transform.position = AbyssPos;
                 isFieldCursorSet = false;
+                objFieldCursor.GetComponent<s_FieldCursor>().Disappear();
             }
 
         }
@@ -781,5 +783,8 @@ public class s_Main : MonoBehaviour
         string LogString = pCharStatusFrom.Name + "の攻撃 > " + pCharStatusTo.Name + "は " + DamageValue.ToString() + "のダメージ。";
         Debug.Log(LogString);
     }
+
+
+
 }
 

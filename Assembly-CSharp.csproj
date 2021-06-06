@@ -82,9 +82,13 @@
     <Compile Include="Assets\s_FieldPartsParameter.cs" />
     <Compile Include="Assets\s_Effect.cs" />
     <Compile Include="Assets\Follow.cs" />
+    <Compile Include="Assets\ParticleLight\Scripts\UVScroller_C.cs" />
+    <Compile Include="Assets\s_FieldCursor.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\FantasyCharactersLite\readme.txt" />
+     <None Include="Assets\ParticleLight\Read Me\Read Me.txt" />
+     <None Include="Assets\ParticleLight\Shader\AdditiveMask.shader" />
      <None Include="Assets\Fantasy Skybox FREE\Readme.txt" />
      <None Include="Assets\AurynSky\Gems Ultimate Pack\READ ME.txt" />
      <None Include="Assets\BetterTransparentDiffuse.shader" />
