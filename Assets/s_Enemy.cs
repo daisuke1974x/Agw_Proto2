@@ -88,7 +88,16 @@ public class s_Enemy : MonoBehaviour
                 }
                 else
                 {
-                    objAnimator.SetBool("isIdle", true);
+                    if (dist > 30f)
+                    {
+                        GameObject.Find("Enemies") .GetComponent<s_EnemyControl>().SpawnCount--;
+                        Destroy(this.gameObject);
+                    }
+                    else
+                    {
+                        objAnimator.SetBool("isIdle", true);
+
+                    }
 
                 }
 
