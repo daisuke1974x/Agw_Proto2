@@ -10,8 +10,10 @@ public class s_UI : MonoBehaviour
     private int Money_View;
     public GameObject objPlayer;
 
-    public GameObject objUI_Money;
-    private Text objText_Money;
+    public GameObject UiMoneyUpper;
+    public GameObject UiMoneyLower;
+    private Text TextMoneyUpper;
+    private Text TextMoneyLower;
 
 
     // Start is called before the first frame update
@@ -19,7 +21,8 @@ public class s_UI : MonoBehaviour
     {
         MoneyCountTimer = 0;
         Money_View = objPlayer.GetComponent<s_CharStatus>().Money;
-        objText_Money = objUI_Money.GetComponent<Text>();
+        TextMoneyUpper = UiMoneyUpper.GetComponent<Text>();
+        TextMoneyLower = UiMoneyLower.GetComponent<Text>();
 
     }
 
@@ -43,6 +46,7 @@ public class s_UI : MonoBehaviour
         }
 
         //èäéùã‡ÇÃï\é¶
-        objText_Money.text = "Money:" + Money_View.ToString();
+        TextMoneyUpper.text = Money_View.ToString();
+        TextMoneyLower.text = Money_View.ToString();
     }
 }
