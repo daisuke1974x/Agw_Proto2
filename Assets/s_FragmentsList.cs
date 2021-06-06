@@ -170,8 +170,8 @@ public class s_FragmentsList : MonoBehaviour
         }
 
         StartPos = RectTransformUtility.WorldToScreenPoint(MainCamera.GetComponent<Camera>(), Chest.transform.position);
+        PorchPos = GameObject.Find("PorchImage").transform.position;
         EndPos = PorchPos + new Vector3(-100, 0, 0);
-
 
 
     }
@@ -649,13 +649,13 @@ public class s_FragmentsList : MonoBehaviour
 
         }
 
-
         float TimeStep1 = 0.75f;
         float TimeStep2 = 2.25f;
         float TimeStep3 = 2.75f;
         float ParticleCounter = 0;
         float TimeStepParticle = 1f / 60f/8f;
         float ParabolicConstant = 2000;//放物線の山なりを決める定数。TimeStep1を変更した場合、調整が必要。
+
 
         TimerCounter += Time.deltaTime;
         ParticleCounter += Time.deltaTime;

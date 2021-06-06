@@ -5397,7 +5397,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8569327188380446745, guid: ec277b2580bb5e8428150c49a632bc75, type: 3}
       propertyPath: m_Name
-      value: FieldCursor (1)
+      value: FieldCursor
       objectReference: {fileID: 0}
     - target: {fileID: 9055681458733082144, guid: ec277b2580bb5e8428150c49a632bc75, type: 3}
       propertyPath: m_RootOrder
