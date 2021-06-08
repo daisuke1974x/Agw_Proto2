@@ -68,6 +68,7 @@
     <Compile Include="Assets\FantasyCharactersLite\Scripts\AttachToBody.cs" />
     <Compile Include="Assets\s_FragmentsList.cs" />
     <Compile Include="Assets\CharaMove.cs" />
+    <Compile Include="Assets\ParticleLight\Scripts\UVScroller_C.cs" />
     <Compile Include="Assets\FantasyCharactersLite\Scripts\ChangeDisplay.cs" />
     <Compile Include="Assets\s_DropItem.cs" />
     <Compile Include="Assets\s_ControllerManager.cs" />
@@ -81,9 +82,9 @@
     <Compile Include="Assets\s_UI.cs" />
     <Compile Include="Assets\s_FieldPartsParameter.cs" />
     <Compile Include="Assets\s_Effect.cs" />
-    <Compile Include="Assets\Follow.cs" />
-    <Compile Include="Assets\ParticleLight\Scripts\UVScroller_C.cs" />
     <Compile Include="Assets\s_FieldCursor.cs" />
+    <Compile Include="Assets\Follow.cs" />
+    <Compile Include="Assets\s_HpBar.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\FantasyCharactersLite\readme.txt" />
