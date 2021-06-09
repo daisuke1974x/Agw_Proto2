@@ -966,7 +966,7 @@ public class s_FragmentsList : MonoBehaviour
     {
         CheckImage(0);
 
-        GameObject.Find("Guide2").GetComponent<Text>().text = "設置が完了しました。";
+        //GameObject.Find("Guide2").GetComponent<Text>().text = "設置が完了しました。";
 
         if (Input.GetButtonDown("Circle") || Input.GetButtonDown("Cross"))
         {
