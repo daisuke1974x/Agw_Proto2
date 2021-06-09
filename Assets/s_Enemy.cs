@@ -62,9 +62,9 @@ public class s_Enemy : MonoBehaviour
                     {
                         if (EnemyStatus.isAttack == false)
                         {
-                            //objAnimator.SetTrigger("Attack");
-                            //EnemyStatus.startAttack(5f);
-                            //objScriptMain.PhyzicalAttack(ref EnemyStatus, ref PlayerStatus, 0, 10);
+                            objAnimator.SetTrigger("Attack");
+                            EnemyStatus.startAttack(5f);
+                            objScriptMain.PhyzicalAttack(ref EnemyStatus, ref PlayerStatus, 0, 10);
                         }
                     }
                     else

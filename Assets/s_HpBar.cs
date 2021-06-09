@@ -17,8 +17,8 @@ public class s_HpBar : MonoBehaviour
     public int MaxHp = UnitValue * 3;
     public int Hp = UnitValue * 3;
 
-    public int InnerMaxHp;
-    public int InnerHp;
+    //public int InnerMaxHp;
+    //public int InnerHp;
 
     private string InstanceName = "WhiteFrameInstance";
 
@@ -34,7 +34,7 @@ public class s_HpBar : MonoBehaviour
         UnitX = WhiteFrame.transform.position.x;
         UnitY = WhiteFrame.transform.position.y;
 
-        ResetBar(Hp, MaxHp);
+        //ResetBar(Hp, MaxHp);
 
     }
 
@@ -44,17 +44,17 @@ public class s_HpBar : MonoBehaviour
         
     }
 
-    void ResetBar(int pHp, int pMaxHp)
+    public void ResetBar(int pHp, int pMaxHp)
     {
         Units = (int)Mathf.Floor(pMaxHp / UnitValue);
-        InnerMaxHp = UnitValue * Units;
-        if (InnerHp > InnerMaxHp) InnerHp = InnerMaxHp;
+        MaxHp = UnitValue * Units;
+        if (Hp > MaxHp) Hp = MaxHp;
 
         for (int Index = 0; Index < this.transform.GetChildCount(); Index++)
         {
             if (this.transform.GetChild(Index).name == InstanceName)
             {
-                Destroy(this.transform.GetChild(Index));
+                Destroy(this.transform.GetChild(Index).gameObject);
             }
         }
 
@@ -73,18 +73,18 @@ public class s_HpBar : MonoBehaviour
         BlackBg.GetComponent<RectTransform>().sizeDelta = size;
 
 
-        SetValue(96);
+        //SetValue(96);
 
     }
 
-    void SetValue(int pHp)
+    public void SetValue(int pHp)
     {
         Hp = pHp;
-        if (MaxHp<Hp) Hp = MaxHp;
-        if (Hp<0 ) Hp = 0;
+        if (MaxHp < Hp) Hp = MaxHp;
+        if (Hp < 0) Hp = 0;
 
-        Vector2 size =  ValueBar.GetComponent<RectTransform>().sizeDelta;
-        size.x = (int)Mathf.Floor(((float)Hp / (float)MaxHp) * (float)Units * (float)UnitWidth); 
+        Vector2 size = ValueBar.GetComponent<RectTransform>().sizeDelta;
+        size.x = (int)Mathf.Floor(((float)Hp / (float)MaxHp) * (float)Units * (float)UnitWidth);
         ValueBar.GetComponent<RectTransform>().sizeDelta = size;
     }
     

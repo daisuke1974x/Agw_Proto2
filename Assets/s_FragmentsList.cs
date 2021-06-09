@@ -18,7 +18,9 @@ public class s_FragmentsList : MonoBehaviour
     public RawImage FragmentRawImage;
     public GameObject ParticleStar;
     public GameObject Particles;
-    
+    public GameObject CheckNgImage;
+    public GameObject CheckOkImage;
+
 
     public struct StStock
     {
@@ -134,6 +136,8 @@ public class s_FragmentsList : MonoBehaviour
     {
         MainScript = MainControl.GetComponent<s_Main>();
         PorchPos = GameObject.Find("PorchImage").transform.position ;
+        CheckNgImage.SetActive(false);
+        CheckOkImage.SetActive(false);
 
     }
 
@@ -302,7 +306,7 @@ public class s_FragmentsList : MonoBehaviour
 
         //ここではStockListは表示しない。前フレームでの設置後のDetroyが反映されないため、ぬるぽになる。
         //ViewStockList(0, 0);
-
+        CheckImage(0);
 
     }
 
@@ -534,6 +538,7 @@ public class s_FragmentsList : MonoBehaviour
     void Update_TransitionIdleToStockList() 
     {
         RefreshList();
+        CheckImage(0);
 
         float TransitionTime = 0.2f;
         TimerCounter += Time.deltaTime;
@@ -552,6 +557,8 @@ public class s_FragmentsList : MonoBehaviour
     //============================================================================================================
     void Update_TransitionStockListToIdle()
     {
+        CheckImage(0);
+
         float TransitionTime = 0.2f;
         TimerCounter += Time.deltaTime;
 
@@ -570,6 +577,8 @@ public class s_FragmentsList : MonoBehaviour
     //============================================================================================================
     void Update_TransitionStockListToLargeStockSet() 
     {
+        CheckImage(0);
+
         float TimeStep1 = 0.3f;
         TimerCounter += Time.deltaTime;
         MainCamera.transform.position = CameraPositionBackUp + (CameraPosition - CameraPositionBackUp) * (TimerCounter / TimeStep1);
@@ -592,6 +601,8 @@ public class s_FragmentsList : MonoBehaviour
     //============================================================================================================
     void Update_TransitionLargeStockSetToStockList()
     {
+        CheckImage(0);
+
         float TimeStep1 = 0.3f;
         TimerCounter += Time.deltaTime;
         MainCamera.transform.position = CameraPosition + (CameraPositionBackUp - CameraPosition) * (TimerCounter / TimeStep1);
@@ -614,6 +625,8 @@ public class s_FragmentsList : MonoBehaviour
     //============================================================================================================
 
     void Update_TransitionDeployToIdle() {
+
+        CheckImage(0);
 
         float TimeStep1 = 0.3f;
         TimerCounter += Time.deltaTime;
@@ -639,6 +652,8 @@ public class s_FragmentsList : MonoBehaviour
     //
     //============================================================================================================
     void Update_AddStock() {
+        CheckImage(0);
+
         ViewStockList(0,0);
         for (int Index = 0; Index < StockList.Count; Index++)
         {
@@ -714,6 +729,8 @@ public class s_FragmentsList : MonoBehaviour
     //
     //============================================================================================================
     void Update_StockListSelect() {
+        CheckImage(0);
+
         float TimeStep1 = 0.2f;
         TimerCounter += Time.deltaTime;
 
@@ -749,6 +766,8 @@ public class s_FragmentsList : MonoBehaviour
     //
     //============================================================================================================
     void Update_StockListRotateStock() {
+        CheckImage(0);
+
         float TimeStep1 = 0.3f;
         TimerCounter += Time.deltaTime;
         float Angle = OperationDirection * 90 * TimerCounter / TimeStep1;
@@ -766,16 +785,26 @@ public class s_FragmentsList : MonoBehaviour
     //============================================================================================================
     //
     //============================================================================================================
-    void Update_StockDelete() { }
+    void Update_StockDelete() 
+    {
+        CheckImage(0);
+
+    }
     //============================================================================================================
     //
     //============================================================================================================
-    void Update_StockDeploy() { }
+    void Update_StockDeploy() 
+    {
+        CheckImage(0);
+
+    }
     //============================================================================================================
     //
     //============================================================================================================
     void Update_LargeStockHandleSlide() 
     {
+        CheckImage(0);
+
         float TimeStep1 = 0.2f;
         TimerCounter += Time.deltaTime;
 
@@ -814,6 +843,8 @@ public class s_FragmentsList : MonoBehaviour
     //============================================================================================================
     void Update_LargeStockHandleRotate()
     {
+        CheckImage(0);
+
         float TimeStep1 = 0.3f;
         TimerCounter += Time.deltaTime;
         float Angle = OperationDirection * 90 * TimerCounter / TimeStep1;
@@ -849,6 +880,8 @@ public class s_FragmentsList : MonoBehaviour
     //============================================================================================================
     void Update_LargeStockHandleRotateWorld()
     {
+        CheckImage(0);
+
         float TimeStep1 = 0.3f;
         TimerCounter += Time.deltaTime;
         float Angle = OperationDirection * 90 * TimerCounter / TimeStep1;
@@ -875,6 +908,8 @@ public class s_FragmentsList : MonoBehaviour
     //
     //============================================================================================================
     void Update_LargeStockDeploy() {
+        CheckImage(0);
+
         float TimeStep1 = 0.75f;
         TimerCounter += Time.deltaTime;
 
@@ -929,6 +964,8 @@ public class s_FragmentsList : MonoBehaviour
     //================================================================================================================
     void Update_LargeStockDeployAfter()
     {
+        CheckImage(0);
+
         GameObject.Find("Guide2").GetComponent<Text>().text = "設置が完了しました。";
 
         if (Input.GetButtonDown("Circle") || Input.GetButtonDown("Cross"))
@@ -1196,13 +1233,36 @@ public class s_FragmentsList : MonoBehaviour
     int SetCheckGuide()
     {
         int Rc = SetCheck();
-        Text GuideText = GameObject.Find("Guide2").GetComponent<Text>();
-        if (Rc == 0) GuideText.text = "設置できます。";
-        if (Rc == -1 || Rc == -2) GuideText.text = "接合面の絵柄が合っていない箇所があります。";
-        if (Rc == -3)GuideText.text = "一部がかさなっています。";
-        if (Rc == -9999) GuideText.text = "致命的なエラー。";
+        if (Rc == 0)
+        {
+
+            CheckImage(1);
+        }
+        else
+        {
+            CheckImage(2);
+
+        }
+
+        //Text GuideText = GameObject.Find("Guide2").GetComponent<Text>();
+        //if (Rc == 0) GuideText.text = "設置できます。";
+        //if (Rc == -1 || Rc == -2) GuideText.text = "接合面の絵柄が合っていない箇所があります。";
+        //if (Rc == -3)GuideText.text = "一部がかさなっています。";
+        //if (Rc == -9999) GuideText.text = "致命的なエラー。";
         return Rc;
     }
+
+    void CheckImage(int pPattern)
+    {
+        CheckOkImage.SetActive(false);
+        CheckNgImage.SetActive(false);
+
+        if (pPattern == 1) CheckOkImage.SetActive(true);
+        if (pPattern == 2) CheckNgImage.SetActive(true);
+
+
+    }
+
 
 
     void test()

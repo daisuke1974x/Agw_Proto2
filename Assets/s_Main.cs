@@ -113,7 +113,7 @@ public class s_Main : MonoBehaviour
     //メニュー画面群
     public GameObject objWindow_FieldPartsSelect;
 
-
+    public GameObject HpBar;
 
     // Start is called before the first frame update
     void Start()
@@ -181,12 +181,12 @@ public class s_Main : MonoBehaviour
 
         //ステータス設定
         PlayerStatus.IsPlayer = true;
-        PlayerStatus.HP_Max_Base = 150;
+        PlayerStatus.HP_Max_Base =256;
         PlayerStatus.Offence_Base  = 10;
         PlayerStatus.Defence_Base = 5;
         RecalcStatus(ref PlayerStatus);
         PlayerStatus.HP = PlayerStatus.HP_Max_Calced;
-
+        HpBar.GetComponent<s_HpBar>().ResetBar(PlayerStatus.HP, PlayerStatus.HP_Max_Calced);
 
         //FieldPartsSelect画面はいったん非表示
         objWindow_FieldPartsSelect.SetActive(false);
@@ -587,7 +587,7 @@ public class s_Main : MonoBehaviour
         // HP
         objText_HP.text = "";
         objText_HP.text = "HP:" + PlayerStatus.HP.ToString() + "/" + PlayerStatus.HP_Max_Calced.ToString();
-
+        HpBar.GetComponent<s_HpBar>().SetValue(PlayerStatus.HP);
 
         //デバッグ
         //objText_Debug.text += "isGrounded:" + objCharController.isGrounded.ToString() + "\n";
