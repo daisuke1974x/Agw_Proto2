@@ -28,15 +28,25 @@ public class s_HpBarEnemy : MonoBehaviour
         }
         else
         {
-            Vector3 Pos = RectTransformUtility.WorldToScreenPoint(MainCamera.GetComponent<Camera>(), EnemyObject.transform.position);
-            this.transform.position = Pos;
 
             Hp = EnemyObject.GetComponent<s_CharStatus>().HP;
             MaxHp = EnemyObject.GetComponent<s_CharStatus>().HP_Max_Calced;
-            Vector2 size = ValueBar.GetComponent<RectTransform>().sizeDelta;
-            size.x = (int)(128f * (float)Hp / (float)MaxHp);
-            ValueBar.GetComponent<RectTransform>().sizeDelta = size;
-     
+            if (Hp == MaxHp)
+            {
+                Vector3 Pos = new Vector3(0,-1000,0);
+                this.transform.position = Pos;
+            }
+            else
+            {
+                Vector3 Pos = RectTransformUtility.WorldToScreenPoint(MainCamera.GetComponent<Camera>(), EnemyObject.transform.position);
+                this.transform.position = Pos;
+
+                Vector2 size = ValueBar.GetComponent<RectTransform>().sizeDelta;
+                size.x = (int)(128f * (float)Hp / (float)MaxHp);
+                ValueBar.GetComponent<RectTransform>().sizeDelta = size;
+
+            }
+
         }
     }
 }
