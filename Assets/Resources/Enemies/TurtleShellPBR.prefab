@@ -839,6 +839,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce92c6685cb16c440b580c4ea0b3f41f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HpBarEnemyFrefab: {fileID: 9055228420418710968, guid: 15a2cac1399b7ee4291925466c847e21, type: 3}
+  HpBarEnemy: {fileID: 0}
 --- !u!54 &5197008427214899445
 Rigidbody:
   m_ObjectHideFlags: 0

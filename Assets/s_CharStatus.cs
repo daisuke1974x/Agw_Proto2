@@ -92,6 +92,8 @@ public class s_CharStatus : MonoBehaviour
 
                 DropControl();
 
+                Destroy(this.GetComponent<s_Enemy>().HpBarEnemy.gameObject);
+
                 Destroy(this.gameObject);
 
             }

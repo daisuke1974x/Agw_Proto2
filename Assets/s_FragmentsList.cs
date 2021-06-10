@@ -953,6 +953,7 @@ public class s_FragmentsList : MonoBehaviour
             //RefreshList();
             //if (StockList.Count - 2 < StockListCursorIndex) StockListCursorIndex = StockList.Count - 1;
             Mode = EnumMode.LargeStockDeployAfter;
+            Mode = EnumMode.LargeStockDeployAfter;
         }
 
 

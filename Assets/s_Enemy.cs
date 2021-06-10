@@ -13,7 +13,11 @@ public class s_Enemy : MonoBehaviour
 
     private s_CharStatus EnemyStatus;
     private s_CharStatus PlayerStatus;
-    
+
+    public GameObject HpBarEnemyFrefab;
+    public GameObject HpBarEnemy;
+    public GameObject HpBarEnemyUI;
+
     private float gravity = 20.0f;  //èdóÕÇÃëÂÇ´Ç≥
 
     // Start is called before the first frame update
@@ -29,11 +33,13 @@ public class s_Enemy : MonoBehaviour
         objAnimator = this.GetComponent<Animator>();
 
         EnemyStatus.IsPlayer = false;
-        EnemyStatus.HP_Max_Base = 5;//20Ç≈ÇRâÒçUåÇÇÆÇÁÇ¢
+        EnemyStatus.HP_Max_Base = 30;//20Ç≈ÇRâÒçUåÇÇÆÇÁÇ¢
         EnemyStatus.Offence_Base = 10;
         EnemyStatus.Defence_Base = 5;
         objScriptMain.RecalcStatus(ref EnemyStatus);
         EnemyStatus.HP = EnemyStatus.HP_Max_Calced;
+        HpBarEnemy = Instantiate(HpBarEnemyFrefab,GameObject.Find("HpBarEnemyUI").transform);
+        HpBarEnemy.GetComponent<s_HpBarEnemy>().EnemyObject = this.gameObject;
 
 
     }
@@ -91,6 +97,7 @@ public class s_Enemy : MonoBehaviour
                     if (dist > 30f)
                     {
                         GameObject.Find("Enemies") .GetComponent<s_EnemyControl>().SpawnCount--;
+                        Destroy(HpBarEnemy.gameObject);
                         Destroy(this.gameObject);
                     }
                     else
