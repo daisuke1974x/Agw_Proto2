@@ -134,32 +134,29 @@ public class s_CharStatus : MonoBehaviour
     {
         //ドロップアイテム
         int Rnd = Random.Range(0, 100);
-        if (Rnd < 1)
+        if (0 <= Rnd && Rnd < 1)
         {
             //ドロップなし
 
         }
-        else
+        if (1 <= Rnd && Rnd < 100)
         {
-            Rnd = Random.Range(0, 100);
-            if (Rnd < 1)
+            int Rnd2 = Random.Range(0, 100);
+            if (0 <= Rnd2 && Rnd2 < 1)
             {
-                Rnd = Random.Range(0, 100);
-                if (Rnd < 20)
-                {
-                    DropMoney(0, objEnemies.transform.position);
-                }
-                else
-                {
-                    DropMoney(1, objEnemies.transform.position);
-
-                }
-
+                DropMoney(0, objEnemies.transform.position);
             }
-            else
+            if (1 <= Rnd2 && Rnd2 < 2)
+            {
+                DropMoney(1, objEnemies.transform.position);
+            }
+            if (2 <= Rnd2 && Rnd2 < 3)
             {
                 DropChest(objEnemies.transform.position);
-
+            }
+            if (3 <= Rnd2 && Rnd2 < 100)
+            {
+                DropPotion(objEnemies.transform.position);
             }
         }
 
@@ -223,7 +220,14 @@ public class s_CharStatus : MonoBehaviour
 
 
     }
-
+    private void DropPotion(Vector3 pPos)
+    {
+        GameObject objInstanceItem = Instantiate(objDropItemPrefab[2], objEnemies.transform, false);
+        Vector3 pos = this.transform.position;
+        pos.y += 0.3f;
+        objInstanceItem.transform.position = pos;
+        Destroy(objInstanceItem, 15f);
+    }
 
     private void DropChest(Vector3 pPos)
     {
