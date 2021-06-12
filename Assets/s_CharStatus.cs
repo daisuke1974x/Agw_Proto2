@@ -134,27 +134,27 @@ public class s_CharStatus : MonoBehaviour
     {
         //ドロップアイテム
         int Rnd = Random.Range(0, 100);
-        if (0 <= Rnd && Rnd < 1)
+        if (0 <= Rnd && Rnd < 50)
         {
             //ドロップなし
 
         }
-        if (1 <= Rnd && Rnd < 100)
+        if (50 <= Rnd && Rnd < 100)
         {
             int Rnd2 = Random.Range(0, 100);
-            if (0 <= Rnd2 && Rnd2 < 1)
+            if (0 <= Rnd2 && Rnd2 < 30)
             {
                 DropMoney(0, objEnemies.transform.position);
             }
-            if (1 <= Rnd2 && Rnd2 < 2)
+            if (30 <= Rnd2 && Rnd2 < 40)
             {
                 DropMoney(1, objEnemies.transform.position);
             }
-            if (2 <= Rnd2 && Rnd2 < 3)
+            if (40 <= Rnd2 && Rnd2 < 70)
             {
                 DropChest(objEnemies.transform.position);
             }
-            if (3 <= Rnd2 && Rnd2 < 100)
+            if (70 <= Rnd2 && Rnd2 < 100)
             {
                 DropPotion(objEnemies.transform.position);
             }
