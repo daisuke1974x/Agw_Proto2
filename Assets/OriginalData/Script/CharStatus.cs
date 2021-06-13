@@ -142,19 +142,19 @@ public class CharStatus : MonoBehaviour
         if (0 <= Rnd && Rnd < 100)
         {
             int Rnd2 = Random.Range(0, 100);
-            if (0 <= Rnd2 && Rnd2 < 30)
+            if (0 <= Rnd2 && Rnd2 < 0)
             {
                 DropMoney(0, objEnemies.transform.position);
             }
-            if (30 <= Rnd2 && Rnd2 < 40)
+            if (30 <= Rnd2 && Rnd2 < 0)
             {
                 DropMoney(1, objEnemies.transform.position);
             }
-            if (40 <= Rnd2 && Rnd2 < 70)
+            if (0 <= Rnd2 && Rnd2 < 100)
             {
                 DropChest(objEnemies.transform.position);
             }
-            if (70 <= Rnd2 && Rnd2 < 100)
+            if (00 <= Rnd2 && Rnd2 < 0)
             {
                 DropPotion(objEnemies.transform.position);
             }

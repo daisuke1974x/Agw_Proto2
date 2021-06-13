@@ -171,6 +171,8 @@ public class s_Window_FieldPartsSelect : MonoBehaviour
     //================================================================================================================
     void Update_Set()
     {
+
+/*        
         Vector3 FieldCursorPos = MainControl.GetComponent<MainControl>().objFieldCursor.transform.position;
         //var StockList = scriptMain.FieldPartsStockList;
         //var StockSelected = StockList[SelectIndex];
@@ -446,7 +448,7 @@ public class s_Window_FieldPartsSelect : MonoBehaviour
         DebugText2.text += "HatUD:" + Input.GetAxis("HatUD").ToString() + "\n";
         DebugText2.text += "HatLR:" + Input.GetAxis("HatLR").ToString() + "\n";
 
-
+        */
     }
     
 
@@ -584,177 +586,178 @@ public class s_Window_FieldPartsSelect : MonoBehaviour
     //================================================================================================================
     int SetCheck()
     {
-        if (ScreenMode != EnumScreenMode.Set) return -9999;//正しく呼び出されていない。通常は起きないエラー。
+        return 0;
+        //if (ScreenMode != EnumScreenMode.Set) return -9999;//正しく呼び出されていない。通常は起きないエラー。
 
-        List<CheckItem> CheckItemWorld = new List<CheckItem>();
-        List<CheckItem> CheckItemStock = new List<CheckItem>();
+        //List<CheckItem> CheckItemWorld = new List<CheckItem>();
+        //List<CheckItem> CheckItemStock = new List<CheckItem>();
 
-        //World側　被仕向けノードの抽出
-        for (int Index = 0; Index < MainControl.GetComponent<MainControl>().CurrentWorld.transform.GetChildCount(); Index++)
-        {
-            GameObject FragmentPrefab = MainControl.GetComponent<MainControl>().CurrentWorld.transform.GetChild(Index).gameObject;
-            FragmentParameter Parameter = FragmentPrefab.GetComponent<FragmentParameter>();
-            Vector3 SelfBlockPos = new Vector3();
-            SelfBlockPos.x = Mathf.RoundToInt(FragmentPrefab.transform.position.x / BlockIntervalX) ;
-            SelfBlockPos.z = Mathf.RoundToInt(FragmentPrefab.transform.position.z / BlockIntervalZ) ;
-            float Angle = FragmentPrefab.transform.rotation.eulerAngles.y;
-            int SelfRotateIndex = Mathf.RoundToInt(Angle / 90);
+        ////World側　被仕向けノードの抽出
+        //for (int Index = 0; Index < MainControl.GetComponent<MainControl>().CurrentWorld.transform.GetChildCount(); Index++)
+        //{
+        //    GameObject FragmentPrefab = MainControl.GetComponent<MainControl>().CurrentWorld.transform.GetChild(Index).gameObject;
+        //    FragmentParameter Parameter = FragmentPrefab.GetComponent<FragmentParameter>();
+        //    Vector3 SelfBlockPos = new Vector3();
+        //    SelfBlockPos.x = Mathf.RoundToInt(FragmentPrefab.transform.position.x / BlockIntervalX) ;
+        //    SelfBlockPos.z = Mathf.RoundToInt(FragmentPrefab.transform.position.z / BlockIntervalZ) ;
+        //    float Angle = FragmentPrefab.transform.rotation.eulerAngles.y;
+        //    int SelfRotateIndex = Mathf.RoundToInt(Angle / 90);
 
-            for (int dir = 0; dir < 4; dir++)
-            {
-                //隣接チェック
-                Vector3 CheckBlockPos1 = new Vector3();
-                CheckBlockPos1.x = SelfBlockPos.x + DirectionIndexX[dir];
-                CheckBlockPos1.z = SelfBlockPos.z + DirectionIndexZ[dir];
-                bool isNeighbor = false;
-                for (int Index2 = 0; Index2 < MainControl.GetComponent<MainControl>().CurrentWorld.transform.GetChildCount(); Index2++)
-                {
-                    GameObject FragmentPrefab2 = MainControl.GetComponent<MainControl>().CurrentWorld.transform.GetChild(Index2).gameObject;
-                    Vector3 CheckBlockPos2 = new Vector3();
-                    CheckBlockPos2.x = Mathf.RoundToInt(FragmentPrefab2.transform.position.x / BlockIntervalX);
-                    CheckBlockPos2.z = Mathf.RoundToInt(FragmentPrefab2.transform.position.z / BlockIntervalZ);
-                    if (CheckBlockPos1 == CheckBlockPos2) isNeighbor = true;
-                }
+        //    for (int dir = 0; dir < 4; dir++)
+        //    {
+        //        //隣接チェック
+        //        Vector3 CheckBlockPos1 = new Vector3();
+        //        CheckBlockPos1.x = SelfBlockPos.x + DirectionIndexX[dir];
+        //        CheckBlockPos1.z = SelfBlockPos.z + DirectionIndexZ[dir];
+        //        bool isNeighbor = false;
+        //        for (int Index2 = 0; Index2 < MainControl.GetComponent<MainControl>().CurrentWorld.transform.GetChildCount(); Index2++)
+        //        {
+        //            GameObject FragmentPrefab2 = MainControl.GetComponent<MainControl>().CurrentWorld.transform.GetChild(Index2).gameObject;
+        //            Vector3 CheckBlockPos2 = new Vector3();
+        //            CheckBlockPos2.x = Mathf.RoundToInt(FragmentPrefab2.transform.position.x / BlockIntervalX);
+        //            CheckBlockPos2.z = Mathf.RoundToInt(FragmentPrefab2.transform.position.z / BlockIntervalZ);
+        //            if (CheckBlockPos1 == CheckBlockPos2) isNeighbor = true;
+        //        }
 
-                //隣接がない場合は、ノードを作成する
-                if (isNeighbor == false)
-                {
-                    //被仕向けのときのNodeは、Selfと同じ
-                    CheckItem Item = new CheckItem();
-                    Item.SelfBlockX = SelfBlockPos.x;
-                    Item.SelfBlockY = Mathf.RoundToInt(FragmentPrefab.transform.position.y / BlockIntervalY);
-                    Item.SelfBlockZ = SelfBlockPos.z;
-                    Item.NodeBlockX = SelfBlockPos.x;
-                    Item.NodeBlockZ = SelfBlockPos.z;
-                    Item.Direction = (dir + 2) % 4;
-                    Item.ConnectionCode = Parameter.ConnectionCodeOpponent[(4+dir + 0 - SelfRotateIndex) % 4];
-                    CheckItemWorld.Add(Item);
+        //        //隣接がない場合は、ノードを作成する
+        //        if (isNeighbor == false)
+        //        {
+        //            //被仕向けのときのNodeは、Selfと同じ
+        //            CheckItem Item = new CheckItem();
+        //            Item.SelfBlockX = SelfBlockPos.x;
+        //            Item.SelfBlockY = Mathf.RoundToInt(FragmentPrefab.transform.position.y / BlockIntervalY);
+        //            Item.SelfBlockZ = SelfBlockPos.z;
+        //            Item.NodeBlockX = SelfBlockPos.x;
+        //            Item.NodeBlockZ = SelfBlockPos.z;
+        //            Item.Direction = (dir + 2) % 4;
+        //            Item.ConnectionCode = Parameter.ConnectionCodeOpponent[(4+dir + 0 - SelfRotateIndex) % 4];
+        //            CheckItemWorld.Add(Item);
 
-                    string LogString = MainControl.GetComponent<MainControl>().CurrentWorld.name + ";" + FragmentPrefab.name + ";";
-                    LogString += "(";
-                    LogString += Item.SelfBlockX.ToString() + ",";
-                    LogString += Item.SelfBlockY.ToString() + ",";
-                    LogString += Item.SelfBlockZ.ToString() + ",";
-                    LogString += "),(";
-                    LogString += Item.NodeBlockX.ToString() + ",";
-                    LogString += Item.NodeBlockZ.ToString() + ",";
-                    LogString += "),";
-                    LogString += Item.Direction.ToString() + ",";
-                    LogString += Item.ConnectionCode;
-                    Debug.Log(LogString);
-                }
-            }
-        }
+        //            string LogString = MainControl.GetComponent<MainControl>().CurrentWorld.name + ";" + FragmentPrefab.name + ";";
+        //            LogString += "(";
+        //            LogString += Item.SelfBlockX.ToString() + ",";
+        //            LogString += Item.SelfBlockY.ToString() + ",";
+        //            LogString += Item.SelfBlockZ.ToString() + ",";
+        //            LogString += "),(";
+        //            LogString += Item.NodeBlockX.ToString() + ",";
+        //            LogString += Item.NodeBlockZ.ToString() + ",";
+        //            LogString += "),";
+        //            LogString += Item.Direction.ToString() + ",";
+        //            LogString += Item.ConnectionCode;
+        //            Debug.Log(LogString);
+        //        }
+        //    }
+        //}
 
-        //Stock側　仕向けノードの抽出
-        for (int Index = 0; Index < StockSelected.transform.GetChildCount(); Index++)
-        {
-            GameObject FragmentPrefab = StockSelected.transform.GetChild(Index).gameObject;
-            if (FragmentPrefab.name != "SelectedFrame(Clone)")
-            {
-                FragmentParameter Parameter = FragmentPrefab.GetComponent<FragmentParameter>();
-                Vector3 SelfBlockPos = new Vector3();
-                SelfBlockPos.x = Mathf.RoundToInt(FragmentPrefab.transform.position.x / BlockIntervalX);
-                SelfBlockPos.z = Mathf.RoundToInt(FragmentPrefab.transform.position.z / BlockIntervalZ);
-                float Angle = FragmentPrefab.transform.rotation.eulerAngles.y;
-                int SelfRotateIndex = Mathf.RoundToInt(Angle / 90);
+        ////Stock側　仕向けノードの抽出
+        //for (int Index = 0; Index < StockSelected.transform.GetChildCount(); Index++)
+        //{
+        //    GameObject FragmentPrefab = StockSelected.transform.GetChild(Index).gameObject;
+        //    if (FragmentPrefab.name != "SelectedFrame(Clone)")
+        //    {
+        //        FragmentParameter Parameter = FragmentPrefab.GetComponent<FragmentParameter>();
+        //        Vector3 SelfBlockPos = new Vector3();
+        //        SelfBlockPos.x = Mathf.RoundToInt(FragmentPrefab.transform.position.x / BlockIntervalX);
+        //        SelfBlockPos.z = Mathf.RoundToInt(FragmentPrefab.transform.position.z / BlockIntervalZ);
+        //        float Angle = FragmentPrefab.transform.rotation.eulerAngles.y;
+        //        int SelfRotateIndex = Mathf.RoundToInt(Angle / 90);
 
-                for (int dir = 0; dir < 4; dir++)
-                {
-                    //隣接チェック
-                    Vector3 CheckBlockPos1 = new Vector3();
-                    CheckBlockPos1.x = SelfBlockPos.x + DirectionIndexX[(4 + dir + RotateIndex) % 4];
-                    CheckBlockPos1.z = SelfBlockPos.z + DirectionIndexZ[(4 + dir + RotateIndex) % 4];
-                    bool isNeighbor = false;
+        //        for (int dir = 0; dir < 4; dir++)
+        //        {
+        //            //隣接チェック
+        //            Vector3 CheckBlockPos1 = new Vector3();
+        //            CheckBlockPos1.x = SelfBlockPos.x + DirectionIndexX[(4 + dir + RotateIndex) % 4];
+        //            CheckBlockPos1.z = SelfBlockPos.z + DirectionIndexZ[(4 + dir + RotateIndex) % 4];
+        //            bool isNeighbor = false;
 
-                    for (int Index2 = 0; Index2 < StockSelected.transform.GetChildCount(); Index2++)
-                    {
-                        GameObject FragmentPrefab2 = StockSelected.transform.GetChild(Index2).gameObject;
-                        if (FragmentPrefab2.name != "SelectedFrame(Clone)")
-                        {
-                            Vector3 CheckBlockPos2 = new Vector3();
-                            CheckBlockPos2.x = Mathf.RoundToInt(FragmentPrefab2.transform.position.x / BlockIntervalX);
-                            CheckBlockPos2.z = Mathf.RoundToInt(FragmentPrefab2.transform.position.z / BlockIntervalZ);
-                            if (CheckBlockPos1 == CheckBlockPos2) isNeighbor = true;
-                        }
+        //            for (int Index2 = 0; Index2 < StockSelected.transform.GetChildCount(); Index2++)
+        //            {
+        //                GameObject FragmentPrefab2 = StockSelected.transform.GetChild(Index2).gameObject;
+        //                if (FragmentPrefab2.name != "SelectedFrame(Clone)")
+        //                {
+        //                    Vector3 CheckBlockPos2 = new Vector3();
+        //                    CheckBlockPos2.x = Mathf.RoundToInt(FragmentPrefab2.transform.position.x / BlockIntervalX);
+        //                    CheckBlockPos2.z = Mathf.RoundToInt(FragmentPrefab2.transform.position.z / BlockIntervalZ);
+        //                    if (CheckBlockPos1 == CheckBlockPos2) isNeighbor = true;
+        //                }
 
-                    }
+        //            }
 
-                    //隣接がない場合は、ノードを作成する
-                    if (isNeighbor == false)
-                    {
-                        CheckItem Item = new CheckItem();
-                        //仕向けのときの、X,Z座標は、Nodeは増分補正後
-                        //Item.NodeBlockX = Mathf.RoundToInt(FragmentPrefab.transform.position.x / BlockIntervalX) + DirectionIndexX[(dir + RotateIndex + rotdir) % 4];
-                        Item.SelfBlockX = SelfBlockPos.x;
-                        Item.SelfBlockY = Mathf.RoundToInt(FragmentPrefab.transform.position.y / BlockIntervalY);
-                        Item.SelfBlockZ = SelfBlockPos.z;
-                        Item.NodeBlockX = SelfBlockPos.x + DirectionIndexX[(4 + dir + RotateIndex) % 4];
-                        Item.NodeBlockZ = SelfBlockPos.z + DirectionIndexZ[(4 + dir + RotateIndex) % 4];
-                        Item.Direction = (4 + dir + RotateIndex) % 4;
-                        Item.ConnectionCode = Parameter.ConnectionCode[(4 + dir + RotateIndex - SelfRotateIndex) % 4];
-                        CheckItemStock.Add(Item);
+        //            //隣接がない場合は、ノードを作成する
+        //            if (isNeighbor == false)
+        //            {
+        //                CheckItem Item = new CheckItem();
+        //                //仕向けのときの、X,Z座標は、Nodeは増分補正後
+        //                //Item.NodeBlockX = Mathf.RoundToInt(FragmentPrefab.transform.position.x / BlockIntervalX) + DirectionIndexX[(dir + RotateIndex + rotdir) % 4];
+        //                Item.SelfBlockX = SelfBlockPos.x;
+        //                Item.SelfBlockY = Mathf.RoundToInt(FragmentPrefab.transform.position.y / BlockIntervalY);
+        //                Item.SelfBlockZ = SelfBlockPos.z;
+        //                Item.NodeBlockX = SelfBlockPos.x + DirectionIndexX[(4 + dir + RotateIndex) % 4];
+        //                Item.NodeBlockZ = SelfBlockPos.z + DirectionIndexZ[(4 + dir + RotateIndex) % 4];
+        //                Item.Direction = (4 + dir + RotateIndex) % 4;
+        //                Item.ConnectionCode = Parameter.ConnectionCode[(4 + dir + RotateIndex - SelfRotateIndex) % 4];
+        //                CheckItemStock.Add(Item);
 
-                        string LogString = StockSelected.name + ";" + FragmentPrefab.name + ";";
-                        LogString += "(";
-                        LogString += Item.SelfBlockX.ToString() + ",";
-                        LogString += Item.SelfBlockY.ToString() + ",";
-                        LogString += Item.SelfBlockZ.ToString() + ",";
-                        LogString += "),(";
-                        LogString += Item.NodeBlockX.ToString() + ",";
-                        LogString += Item.NodeBlockZ.ToString() + ",";
-                        LogString += "),";
-                        LogString += Item.Direction.ToString() + ",";
-                        LogString += Item.ConnectionCode;
-                        Debug.Log(LogString);
-                    }
-                }
+        //                string LogString = StockSelected.name + ";" + FragmentPrefab.name + ";";
+        //                LogString += "(";
+        //                LogString += Item.SelfBlockX.ToString() + ",";
+        //                LogString += Item.SelfBlockY.ToString() + ",";
+        //                LogString += Item.SelfBlockZ.ToString() + ",";
+        //                LogString += "),(";
+        //                LogString += Item.NodeBlockX.ToString() + ",";
+        //                LogString += Item.NodeBlockZ.ToString() + ",";
+        //                LogString += "),";
+        //                LogString += Item.Direction.ToString() + ",";
+        //                LogString += Item.ConnectionCode;
+        //                Debug.Log(LogString);
+        //            }
+        //        }
 
-            }
-        }
+        //    }
+        //}
 
-        //マッチング判定
-        int CountOK = 0;
-        int CountNG = 0;
-        int Overlap = 0;
-        for (int Index = 0; Index < CheckItemWorld.Count; Index++)
-        {
-            CheckItem ItemWorld = CheckItemWorld[Index];
-            for (int Index2 = 0; Index2 < CheckItemStock.Count; Index2++)
-            {
-                CheckItem ItemStock = CheckItemStock[Index2];
+        ////マッチング判定
+        //int CountOK = 0;
+        //int CountNG = 0;
+        //int Overlap = 0;
+        //for (int Index = 0; Index < CheckItemWorld.Count; Index++)
+        //{
+        //    CheckItem ItemWorld = CheckItemWorld[Index];
+        //    for (int Index2 = 0; Index2 < CheckItemStock.Count; Index2++)
+        //    {
+        //        CheckItem ItemStock = CheckItemStock[Index2];
 
-                if (ItemWorld.SelfBlockX == ItemStock.SelfBlockX && ItemWorld.SelfBlockZ == ItemStock.SelfBlockZ)
-                {
-                    Overlap++;
-                }
-                else
-                {
-                    if (ItemWorld.NodeBlockX == ItemStock.NodeBlockX && ItemWorld.NodeBlockZ == ItemStock.NodeBlockZ && ItemWorld.Direction == ItemStock.Direction)
-                    {
-                        if (ItemWorld.ConnectionCode == ItemStock.ConnectionCode)
-                        {
-                            CountOK++;
-                        }
-                        else
-                        {
-                            CountNG++;
-                        }
-                    }
+        //        if (ItemWorld.SelfBlockX == ItemStock.SelfBlockX && ItemWorld.SelfBlockZ == ItemStock.SelfBlockZ)
+        //        {
+        //            Overlap++;
+        //        }
+        //        else
+        //        {
+        //            if (ItemWorld.NodeBlockX == ItemStock.NodeBlockX && ItemWorld.NodeBlockZ == ItemStock.NodeBlockZ && ItemWorld.Direction == ItemStock.Direction)
+        //            {
+        //                if (ItemWorld.ConnectionCode == ItemStock.ConnectionCode)
+        //                {
+        //                    CountOK++;
+        //                }
+        //                else
+        //                {
+        //                    CountNG++;
+        //                }
+        //            }
 
-                }
+        //        }
 
-            }
+        //    }
 
-        }
+        //}
 
-        Debug.Log("CountOK:" + CountOK.ToString() + ", CountNG:" + CountNG.ToString() + ", Overlap:" + Overlap.ToString());
+        //Debug.Log("CountOK:" + CountOK.ToString() + ", CountNG:" + CountNG.ToString() + ", Overlap:" + Overlap.ToString());
 
-        if (CountOK == 0) return -1;//接している部分の絵柄で、一致した箇所がない
-        if (CountNG > 0) return -2;//接合面の絵柄が合っていない箇所がある
-        if (Overlap > 0) return -3;//一部が重なっている。Fragmentが２枚以上のときありうる。
+        //if (CountOK == 0) return -1;//接している部分の絵柄で、一致した箇所がない
+        //if (CountNG > 0) return -2;//接合面の絵柄が合っていない箇所がある
+        //if (Overlap > 0) return -3;//一部が重なっている。Fragmentが２枚以上のときありうる。
 
-        return 0;//正常
+        //return 0;//正常
 
 
     }

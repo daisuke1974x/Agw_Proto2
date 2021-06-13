@@ -9,6 +9,7 @@ public class FragmentParameter : MonoBehaviour
     public string[] ConnectionCodeOpponent;
     public float[] ConnectionHeight;
     public int DestroyCounter;
+    public bool isDefaultSet = false;
 
 
     // Start is called before the first frame update

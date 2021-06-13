@@ -91,6 +91,8 @@ public class MainControl : MonoBehaviour
 
     public GameObject HpBar;
 
+    public int SaveFileNumber = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -133,7 +135,7 @@ public class MainControl : MonoBehaviour
         //LoadFieldParts("World_001", "RiverBridge", 0, 0, -1, 1);
 
 
-        CurrentWorld = GameObject.Find("World_001");
+        //CurrentWorld = GameObject.Find("World_001");
 
         //ステータス設定
         PlayerStatus.IsPlayer = true;
@@ -740,14 +742,44 @@ public class MainControl : MonoBehaviour
         Debug.Log(LogString);
     }
 
+    //*******************************************************************************************************************************************
+    //マップの読み込み
+    //*******************************************************************************************************************************************
     private void LoadMap(string pMapName)
     {
-        GameObject FieldMap = GameObject.Find("FieldMap");
-        GameObject Map = FieldMap.transform.Find(pMapName).gameObject;
-        //GameObject Map = GameObject.Find(pMapName);
-        for (int Index = 0; Index < Map.transform.GetChildCount(); Index++) {
-            GameObject Object = Map.transform.GetChild(Index).gameObject;
+        GameObject WorldMap = GameObject.Find("WorldMap");
+
+        GameObject CurrentMap = WorldMap.transform.Find("CurrentMap").gameObject;
+        GameObject CurrentField = CurrentMap.transform.Find("CurrentField").gameObject;
+        GameObject CurrentNpc = CurrentMap.transform.Find("CurrentNpc").gameObject;
+        GameObject CurrentSpawn = CurrentMap.transform.Find("CurrentSpawn").gameObject;
+
+        GameObject SourceMap = WorldMap.transform.Find(pMapName).gameObject;
+        GameObject SourceField = SourceMap.transform.Find("Field").gameObject;
+        GameObject SourceNpc = SourceMap.transform.Find("Npc").gameObject;
+        GameObject SourceSpawn = SourceMap.transform.Find("Spawn").gameObject;
+
+        for (int Index = 0; Index < CurrentField.transform.GetChildCount(); Index++)
+        {
+            GameObject DistObject = CurrentField.transform.GetChild(Index).gameObject;
+            Destroy(DistObject);
+        }
+
+        for (int Index = 0; Index < SourceField.transform.GetChildCount(); Index++)
+        {
+            GameObject SourceObject = SourceField.transform.GetChild(Index).gameObject;
+            GameObject Instance = Instantiate(SourceObject, CurrentField.transform);
+            Instance.GetComponent<FragmentParameter>().isDefaultSet = true;
+
+        }
+
+
+
+        for (int Index = 0; Index < SourceField.transform.GetChildCount(); Index++) {
+            GameObject Object = SourceField.transform.GetChild(Index).gameObject;
             GameObject Instance = Instantiate(Object, CurrentField.transform);
+            Instance.GetComponent<FragmentParameter>().isDefaultSet = true;
+
         }
         CurrentMapName = pMapName;
     }

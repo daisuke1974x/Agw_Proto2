@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class FragmentList : MonoBehaviour
 {
     public GameObject Field;
+    public GameObject CurrentField;
     public GameObject MainCamera;
     public GameObject Player;
     public GameObject MainControl;
@@ -936,7 +937,7 @@ public class FragmentList : MonoBehaviour
                 else
                 {
                     //赤枠ではない場合は、Worldに移す
-                    obj.transform.parent = MainControl.GetComponent<MainControl>().CurrentWorld.transform;
+                    obj.transform.parent = CurrentField.transform;
                     //端数を整理
                     Vector3 pos2 = obj.transform.position;
                     pos2.x = Mathf.RoundToInt(pos2.x / BlockIntervalX) * BlockIntervalX;
@@ -1062,9 +1063,9 @@ public class FragmentList : MonoBehaviour
         List<CheckItem> CheckItemStock = new List<CheckItem>();
 
         //World側　被仕向けノードの抽出
-        for (int Index = 0; Index < MainControl.GetComponent<MainControl>().CurrentWorld.transform.GetChildCount(); Index++)
+        for (int Index = 0; Index < CurrentField.transform.GetChildCount(); Index++)
         {
-            GameObject FragmentPrefab = MainControl.GetComponent<MainControl>().CurrentWorld.transform.GetChild(Index).gameObject;
+            GameObject FragmentPrefab = CurrentField.transform.GetChild(Index).gameObject;
             FragmentParameter FieldPartsParameter = FragmentPrefab.GetComponent<FragmentParameter>();
             Vector3 SelfBlockPos = new Vector3();
             SelfBlockPos.x = Mathf.RoundToInt(FragmentPrefab.transform.position.x / BlockIntervalX);
@@ -1079,9 +1080,9 @@ public class FragmentList : MonoBehaviour
                 CheckBlockPos1.x = SelfBlockPos.x + DirectionIndexX[dir];
                 CheckBlockPos1.z = SelfBlockPos.z + DirectionIndexZ[dir];
                 bool isNeighbor = false;
-                for (int Index2 = 0; Index2 < MainControl.GetComponent<MainControl>().CurrentWorld.transform.GetChildCount(); Index2++)
+                for (int Index2 = 0; Index2 < CurrentField.transform.GetChildCount(); Index2++)
                 {
-                    GameObject FragmentPrefab2 = MainControl.GetComponent<MainControl>().CurrentWorld.transform.GetChild(Index2).gameObject;
+                    GameObject FragmentPrefab2 = CurrentField.transform.GetChild(Index2).gameObject;
                     Vector3 CheckBlockPos2 = new Vector3();
                     CheckBlockPos2.x = Mathf.RoundToInt(FragmentPrefab2.transform.position.x / BlockIntervalX);
                     CheckBlockPos2.z = Mathf.RoundToInt(FragmentPrefab2.transform.position.z / BlockIntervalZ);
@@ -1102,7 +1103,7 @@ public class FragmentList : MonoBehaviour
                     Item.ConnectionCode = FieldPartsParameter.ConnectionCodeOpponent[(4 + dir + 0 - SelfRotateIndex) % 4];
                     CheckItemWorld.Add(Item);
 
-                    string LogString = MainControl.GetComponent<MainControl>().CurrentWorld.name + ";" + FragmentPrefab.name + ";";
+                    string LogString = MainControl.GetComponent<MainControl>().CurrentMapName + ";" + FragmentPrefab.name + ";";
                     LogString += "(";
                     LogString += Item.SelfBlockX.ToString() + ",";
                     LogString += Item.SelfBlockY.ToString() + ",";
