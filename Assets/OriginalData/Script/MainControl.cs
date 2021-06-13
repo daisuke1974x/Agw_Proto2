@@ -21,7 +21,7 @@ public class MainControl : MonoBehaviour
 
     public GameObject EnemyControl;
 
-    public s_CharStatus PlayerStatus;
+    public CharStatus PlayerStatus;
 
     //Unityの公式スクリプトレファンスにあるものと同じ
     //十字キーのみで操作(矢印キー＝前後左右移動)
@@ -125,7 +125,7 @@ public class MainControl : MonoBehaviour
 
         objCharController = objPlayer.GetComponent<CharacterController>();
         objAnimator = objPlayerAppearance.GetComponent<Animator>();
-        PlayerStatus = objPlayer.GetComponent<s_CharStatus>();
+        PlayerStatus = objPlayer.GetComponent<CharStatus>();
 
         objText_Debug = objUI_Debug.GetComponent<Text>();
         objText_HP = objUI_HP.GetComponent<Text>();
@@ -186,7 +186,7 @@ public class MainControl : MonoBehaviour
         PlayerStatus.Defence_Base = 5;
         RecalcStatus(ref PlayerStatus);
         PlayerStatus.HP = PlayerStatus.HP_Max_Calced;
-        HpBar.GetComponent<s_HpBar>().ResetBar(PlayerStatus.HP, PlayerStatus.HP_Max_Calced);
+        HpBar.GetComponent<HpBar>().ResetBar(PlayerStatus.HP, PlayerStatus.HP_Max_Calced);
 
         //FieldPartsSelect画面はいったん非表示
         objWindow_FieldPartsSelect.SetActive(false);
@@ -459,7 +459,7 @@ public class MainControl : MonoBehaviour
             AbyssPos.y = 0;
             objFieldCursor.transform.position = AbyssPos;
             isFieldCursorSet = true;
-            objFieldCursor.GetComponent<s_FieldCursor>().Appear();
+            objFieldCursor.GetComponent<FieldCursor>().Appear();
 
             if (PlayerStatus.isKnockBack == false)
             {
@@ -490,7 +490,7 @@ public class MainControl : MonoBehaviour
                 AbyssPos.y = 0;
                 //objFieldCursor.transform.position = AbyssPos;
                 isFieldCursorSet = false;
-                objFieldCursor.GetComponent<s_FieldCursor>().Disappear();
+                objFieldCursor.GetComponent<FieldCursor>().Disappear();
             }
 
         }
@@ -514,11 +514,11 @@ public class MainControl : MonoBehaviour
         //if (Mode == "Main" && moveDirection.x == 0 && moveDirection.z == 0)
         //{
         //}
-        if (objTargetCursor.GetComponent<s_TargetCursor>().objTarget is null)
+        if (objTargetCursor.GetComponent<TargetCursor>().objTarget is null)
         {
             if (Mode == "Main" && isFieldCursorSet == true)
             {
-                FragmentsListUI.GetComponent<s_FragmentsList>().StartStockListSelect();
+                FragmentsListUI.GetComponent<FragmentList>().StartStockListSelect();
                 isStarted = true;
 
 
@@ -531,7 +531,7 @@ public class MainControl : MonoBehaviour
         }
         if (isStarted == false)
         {
-            FragmentsListUI.GetComponent<s_FragmentsList>().EndStockListSelect();
+            FragmentsListUI.GetComponent<FragmentList>().EndStockListSelect();
 
         }
 
@@ -587,7 +587,7 @@ public class MainControl : MonoBehaviour
         // HP
         objText_HP.text = "";
         objText_HP.text = "HP:" + PlayerStatus.HP.ToString() + "/" + PlayerStatus.HP_Max_Calced.ToString();
-        HpBar.GetComponent<s_HpBar>().SetValue(PlayerStatus.HP);
+        HpBar.GetComponent<HpBar>().SetValue(PlayerStatus.HP);
 
         //デバッグ
         //objText_Debug.text += "isGrounded:" + objCharController.isGrounded.ToString() + "\n";
@@ -595,7 +595,7 @@ public class MainControl : MonoBehaviour
         //objText_Debug.text += "CheckAbyss:" + CheckAbyss(objPlayer).ToString() + "\n";
         //objText_Debug.text += "isKnockBack:" + PlayerStatus.isKnockBack.ToString() + "\n";
 
-        objText_Debug.text += "EnemyCount:" + EnemyControl.GetComponent<s_EnemyControl>().SpawnCount + "\n";
+        objText_Debug.text += "EnemyCount:" + EnemyControl.GetComponent<EnemyControl>().SpawnCount + "\n";
 
         //objText_Debug.text += "LstickUD:" + Input.GetAxis("LstickUD").ToString() + "\n";
         //objText_Debug.text += "LstickLR:" + Input.GetAxis("LstickLR").ToString() + "\n";
@@ -706,14 +706,14 @@ public class MainControl : MonoBehaviour
     //*******************************************************************************************************************************************
     //HPの増減処理
     //*******************************************************************************************************************************************
-    public void RecalcStatus(ref s_CharStatus pCharStatus)
+    public void RecalcStatus(ref CharStatus pCharStatus)
     {
         pCharStatus.HP_Max_Calced = pCharStatus.HP_Max_Base + 0;
         pCharStatus.Offence_Calced = pCharStatus.Offence_Base + 0;
         pCharStatus.Defence_Calced = pCharStatus.Defence_Base + 0;
     }
 
-    public void HP_Control(ref s_CharStatus pCharStatus, int pHP)
+    public void HP_Control(ref CharStatus pCharStatus, int pHP)
     {
         pCharStatus.HP += pHP;
         if (pCharStatus.HP < 0)
@@ -731,7 +731,7 @@ public class MainControl : MonoBehaviour
     //*******************************************************************************************************************************************
     //攻撃処理
     //*******************************************************************************************************************************************
-    public void PhyzicalAttack(ref s_CharStatus pCharStatusFrom, ref s_CharStatus pCharStatusTo, int DiceMin, int DiceMax)
+    public void PhyzicalAttack(ref CharStatus pCharStatusFrom, ref CharStatus pCharStatusTo, int DiceMin, int DiceMax)
     {
         //前回ダメージを受けてから一定時間は無敵（ハメ殺し防止）
         if (pCharStatusTo.IsPlayer)
