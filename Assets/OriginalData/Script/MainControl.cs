@@ -79,11 +79,12 @@ public class MainControl : MonoBehaviour
     public GameObject CurrentField;
     private GameObject[] FragmentPrefabs;
 
-    private Vector3 WaitingPlacePos = new Vector3(0, 0, 1000f);
+    private Vector3 WaitingPlacePos = new Vector3(0, 0, 90000f);
 
     //public GameObject CurrentWorld;
     public GameObject FragmentsListUI;
     public string CurrentMapName = "";
+    public GameObject FragmentStock;
 
     //モード
     public string Mode = "Main";
@@ -630,15 +631,15 @@ public class MainControl : MonoBehaviour
     //*******************************************************************************************************************************************
     public int LoadFragment(string pCollectionName,string pFieldPatrsName, int pBlockX, int pBlockY, int pBlockZ, int pRotate)
     {
-        ////配下のヒエラルキーを探して、ない場合は新規作成
-        //GameObject objCollection = GameObject.Find(pCollectionName);
-        //if (objCollection is null)
-        //{
-        //    objCollection = new GameObject(pCollectionName);
-        //    objCollection.transform.position = new Vector3(0, 0, 0);
-        //    objCollection.transform.parent = CurrentField.transform;
+        //配下のヒエラルキーを探して、ない場合は新規作成
+        GameObject objCollection = GameObject.Find(pCollectionName);
+        if (objCollection is null)
+        {
+            objCollection = new GameObject(pCollectionName);
+            objCollection.transform.position = new Vector3(0, 0, 0);
+            objCollection.transform.parent = FragmentStock.transform;
 
-        //}
+        }
 
         //構造体にセットして、LISTに追加
         //FragmentProperty FieldPartsPlaced = new FragmentProperty();
@@ -651,16 +652,15 @@ public class MainControl : MonoBehaviour
         //FieldPartsPlaced.Rotate = pRotate;
         //FieldPartsPlaced.isSystemSet = true;
 
-        GameObject CurrentField = GameObject.Find("CurrentField");
-        GameObject FragmentStock = GameObject.Find("FragmentStock");
+        //GameObject CurrentField = GameObject.Find("CurrentField");
 
         //prefabの呼び出し
         foreach (var objI in FragmentPrefabs)
         {
             if (objI.name == pFieldPatrsName)
             {
-                GameObject objInstance = Instantiate(objI, CurrentField.transform, false);
-                CurrentField.transform.parent = CurrentField.transform;
+                GameObject objInstance = Instantiate(objI, objCollection.transform, false);
+                CurrentField.transform.parent = objCollection.transform;
                 Vector3 pos = objInstance.transform.position;
                 pos.x = CurrentField.transform.position.x + (float)(pBlockX) * 10f;// BlockIntervalX;
                 pos.y = CurrentField.transform.position.y + (float)(pBlockY) * 2.5f;// BlockIntervalY;
@@ -673,9 +673,9 @@ public class MainControl : MonoBehaviour
                 //ストックのときは、赤枠を付与して、待機場所に移動させる
                 if (pCollectionName.Substring(0, 5) == "Stock")
                 {
-                    GameObject objInstanceF = Instantiate(objSelectedFrame, FragmentStock.transform);
+                    GameObject objInstanceF = Instantiate(objSelectedFrame, objCollection.transform);
                     objInstanceF.transform.position = pos;
-                    FragmentStock.transform.position = WaitingPlacePos;
+                    objCollection.transform.position = WaitingPlacePos;
                 }
 
             }

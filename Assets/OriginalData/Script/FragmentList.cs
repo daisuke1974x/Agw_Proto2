@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class FragmentList : MonoBehaviour
 {
-    public GameObject Field;
+    public GameObject FragmentStock;
     public GameObject CurrentField;
     public GameObject MainCamera;
     public GameObject Player;
@@ -13,7 +13,7 @@ public class FragmentList : MonoBehaviour
     public GameObject FragmentsListCameraPrefab;
     public GameObject Chest;
     //private MainControl MainScript;
-    private Vector3 FragmentsListPos = new Vector3(0, 0, 20000);
+    private Vector3 FragmentsListPos = new Vector3(0, 0, 90000f);
 
     public RenderTexture FragmentRenderTexture;
     public RawImage FragmentRawImage;
@@ -150,7 +150,7 @@ public class FragmentList : MonoBehaviour
         GameObject Stock = GameObject.Find(pStockName);
         RenderTexture StockRenderTexture = Instantiate(FragmentRenderTexture, this.transform, true);
 
-        GameObject StockCameraPrefab = Instantiate(FragmentsListCameraPrefab.gameObject, Field.transform, true);
+        GameObject StockCameraPrefab = Instantiate(FragmentsListCameraPrefab.gameObject, FragmentStock.transform, true);
         Camera StockCamera = StockCameraPrefab.transform.GetChild(0).GetComponent<Camera>();
         StockCamera.targetTexture = StockRenderTexture;
         StockCameraPrefab.name = "Camera_" + pStockName;
@@ -190,9 +190,9 @@ public class FragmentList : MonoBehaviour
         string StockNum = "";
         StockList.Clear();
 
-        for (int Index = 0; Index < Field.transform.GetChildCount(); Index++)
+        for (int Index = 0; Index < FragmentStock.transform.GetChildCount(); Index++)
         {
-            GameObject FindObject = Field.transform.GetChild(Index).gameObject;
+            GameObject FindObject = FragmentStock.transform.GetChild(Index).gameObject;
             if (FindObject.name.Substring(0, 5) == "Stock")
             {
                 GameObject Stock = FindObject;
