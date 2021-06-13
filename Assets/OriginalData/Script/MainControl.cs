@@ -103,12 +103,12 @@ public class MainControl : MonoBehaviour
     void Start()
     {
 
-    SaveFilePath = Application.persistentDataPath + "/" + ".SaveData.json";
+        SaveFilePath = Application.persistentDataPath + "/" + ".SaveData.json";
 
 
-    //objControllerManager = gameObject.GetComponent<s_ControllerManager>();
+        //objControllerManager = gameObject.GetComponent<s_ControllerManager>();
 
-    objCharController = objPlayer.GetComponent<CharacterController>();
+        objCharController = objPlayer.GetComponent<CharacterController>();
         objAnimator = objPlayerAppearance.GetComponent<Animator>();
         PlayerStatus = objPlayer.GetComponent<CharStatus>();
 
@@ -146,15 +146,6 @@ public class MainControl : MonoBehaviour
         LoadMap("FirstVillage");
 
 
-
-        //LoadFragment("World_001", "Road2", 0, 0, 0, 1);
-        //LoadFragment("World_001", "Road2", 1, 0, 0, 3);
-        //LoadFragment("World_001", "Green", 0, 0, 1, 0);
-        //LoadFragment("World_001", "Road2", 1, 0, 1, 1);
-        //LoadFragment("World_001", "RiverBridge", 0, 0, -1, 1);
-
-
-        //CurrentWorld = GameObject.Find("World_001");
 
         //ステータス設定
         PlayerStatus.IsPlayer = true;
@@ -639,15 +630,15 @@ public class MainControl : MonoBehaviour
     //*******************************************************************************************************************************************
     public int LoadFragment(string pCollectionName,string pFieldPatrsName, int pBlockX, int pBlockY, int pBlockZ, int pRotate)
     {
-        //配下のヒエラルキーを探して、ない場合は新規作成
-        GameObject objCollection = GameObject.Find(pCollectionName);
-        if (objCollection is null)
-        {
-            objCollection = new GameObject(pCollectionName);
-            objCollection.transform.position = new Vector3(0, 0, 0);
-            objCollection.transform.parent = CurrentField.transform;
+        ////配下のヒエラルキーを探して、ない場合は新規作成
+        //GameObject objCollection = GameObject.Find(pCollectionName);
+        //if (objCollection is null)
+        //{
+        //    objCollection = new GameObject(pCollectionName);
+        //    objCollection.transform.position = new Vector3(0, 0, 0);
+        //    objCollection.transform.parent = CurrentField.transform;
 
-        }
+        //}
 
         //構造体にセットして、LISTに追加
         //FragmentProperty FieldPartsPlaced = new FragmentProperty();
@@ -660,17 +651,20 @@ public class MainControl : MonoBehaviour
         //FieldPartsPlaced.Rotate = pRotate;
         //FieldPartsPlaced.isSystemSet = true;
 
+        GameObject CurrentField = GameObject.Find("CurrentField");
+        GameObject FragmentStock = GameObject.Find("FragmentStock");
+
         //prefabの呼び出し
         foreach (var objI in FragmentPrefabs)
         {
             if (objI.name == pFieldPatrsName)
             {
-                GameObject objInstance = Instantiate(objI, objCollection.transform, false);
-                objCollection.transform.parent = objCollection.transform;
+                GameObject objInstance = Instantiate(objI, CurrentField.transform, false);
+                CurrentField.transform.parent = CurrentField.transform;
                 Vector3 pos = objInstance.transform.position;
-                pos.x = objCollection.transform.position.x + (float)(pBlockX) * 10f;// BlockIntervalX;
-                pos.y = objCollection.transform.position.y + (float)(pBlockY) * 2.5f;// BlockIntervalY;
-                pos.z = objCollection.transform.position.z + (float)(pBlockZ) * 10f;// BlockIntervalZ;
+                pos.x = CurrentField.transform.position.x + (float)(pBlockX) * 10f;// BlockIntervalX;
+                pos.y = CurrentField.transform.position.y + (float)(pBlockY) * 2.5f;// BlockIntervalY;
+                pos.z = CurrentField.transform.position.z + (float)(pBlockZ) * 10f;// BlockIntervalZ;
                 objInstance.transform.position = pos;
                 Vector3 rot = objInstance.transform.eulerAngles;
                 rot.y = 90f * (float)pRotate;
@@ -679,13 +673,40 @@ public class MainControl : MonoBehaviour
                 //ストックのときは、赤枠を付与して、待機場所に移動させる
                 if (pCollectionName.Substring(0, 5) == "Stock")
                 {
-                    GameObject objInstanceF = Instantiate(objSelectedFrame, objCollection.transform);
+                    GameObject objInstanceF = Instantiate(objSelectedFrame, FragmentStock.transform);
                     objInstanceF.transform.position = pos;
-                    objCollection.transform.position = WaitingPlacePos;
+                    FragmentStock.transform.position = WaitingPlacePos;
                 }
 
             }
         }
+
+        ////prefabの呼び出し
+        //foreach (var objI in FragmentPrefabs)
+        //{
+        //    if (objI.name == pFieldPatrsName)
+        //    {
+        //        GameObject objInstance = Instantiate(objI, objCollection.transform, false);
+        //        objCollection.transform.parent = objCollection.transform;
+        //        Vector3 pos = objInstance.transform.position;
+        //        pos.x = objCollection.transform.position.x + (float)(pBlockX) * 10f;// BlockIntervalX;
+        //        pos.y = objCollection.transform.position.y + (float)(pBlockY) * 2.5f;// BlockIntervalY;
+        //        pos.z = objCollection.transform.position.z + (float)(pBlockZ) * 10f;// BlockIntervalZ;
+        //        objInstance.transform.position = pos;
+        //        Vector3 rot = objInstance.transform.eulerAngles;
+        //        rot.y = 90f * (float)pRotate;
+        //        objInstance.transform.eulerAngles = rot;
+
+        //        //ストックのときは、赤枠を付与して、待機場所に移動させる
+        //        if (pCollectionName.Substring(0, 5) == "Stock")
+        //        {
+        //            GameObject objInstanceF = Instantiate(objSelectedFrame, objCollection.transform);
+        //            objInstanceF.transform.position = pos;
+        //            objCollection.transform.position = WaitingPlacePos;
+        //        }
+
+        //    }
+        //}
 
         return 0;
     }
@@ -821,12 +842,12 @@ public class MainControl : MonoBehaviour
         }
         CurrentMapName = pMapName;
 
-        if (!(SaveData.SaveFieldData is  null)){
-            for (int Index = 0; Index < SaveData.SaveFieldData.Count; Index++)
+        if (!(SaveData.MapName is  null)){
+            for (int Index = 0; Index < SaveData.MapName.Count; Index++)
             {
-                if (SaveData.SaveFieldData[Index].MapName == CurrentMapName)
+                if (SaveData.MapName[Index] == CurrentMapName)
                 {
-                    LoadFragment(SaveData.SaveFieldData[Index].MapName, SaveData.SaveFieldData[Index].FragmentName, SaveData.SaveFieldData[Index].BlockX, SaveData.SaveFieldData[Index].BlockY, SaveData.SaveFieldData[Index].BlockZ, SaveData.SaveFieldData[Index].Rotate);
+                    LoadFragment(SaveData.MapName[Index], SaveData.FragmentName[Index], SaveData.BlockX[Index], SaveData.BlockY[Index], SaveData.BlockZ[Index], SaveData.Rotate[Index]);
                 }
 
             }
@@ -884,15 +905,21 @@ public class MainControl : MonoBehaviour
 
 }
 
-
+[System.Serializable]
 public class csSaveData
 {
-    //private string filePath = Application.persistentDataPath + "/" + ".savedata.json";
+
 
     public string DayDate;
-    public List<StSaveFieldData> SaveFieldData;
+    public List<string> MapName;
+    public List<string> FragmentName;
+    public List<int> BlockX;
+    public List<int> BlockY;
+    public List<int> BlockZ;
+    public List<int> Rotate;
+    public string Test = "aaa";
 
-    public struct  StSaveFieldData
+    public struct StSaveFieldData
     {
         public string MapName;
         public string FragmentName;
@@ -904,73 +931,59 @@ public class csSaveData
 
     public void AddSaveFieldData(StSaveFieldData pSaveFieldData)
     {
-        if (SaveFieldData is null)
+        if (MapName is null)
         {
-            SaveFieldData = new List<StSaveFieldData>();
+            MapName = new List<string>();
+            FragmentName = new List<string>();
+            BlockX = new List<int>();
+            BlockY = new List<int>();
+            BlockZ = new List<int>();
+            Rotate = new List<int>();
+
         }
-        SaveFieldData.Add(pSaveFieldData);
+        MapName.Add(pSaveFieldData.MapName);
+        FragmentName.Add(pSaveFieldData.FragmentName);
+        BlockX.Add(pSaveFieldData.BlockX);
+        BlockY.Add(pSaveFieldData.BlockY);
+        BlockZ.Add(pSaveFieldData.BlockZ);
+        Rotate.Add(pSaveFieldData.Rotate);
+
+        //Array.Resize(ref SaveFieldData, SaveFieldData.GetLength(0) + 1);
+        //SaveFieldData[SaveFieldData.GetLength(0) - 1] = pSaveFieldData;
     }
 
 
     public void ClearAllSaveFieldData()
     {
-        SaveFieldData = new List<StSaveFieldData>();
+        MapName = new List<string>();
+        FragmentName = new List<string>();
+        BlockX = new List<int>();
+        BlockY = new List<int>();
+        BlockZ = new List<int>();
+        Rotate = new List<int>();
     }
 
     public void ClearSaveFieldData(string pMapName)
     {
-        List<StSaveFieldData> NewSaveFieldData = new List<StSaveFieldData>();
-        for (int Index = 0;Index < SaveFieldData.Count; Index++)
-        {
-            if (SaveFieldData[Index].MapName != pMapName)
-            {
-                NewSaveFieldData.Add(SaveFieldData[Index]);
-            }
-        }
-        SaveFieldData = NewSaveFieldData;
+        //List<StSaveFieldData> NewSaveFieldData = new List<StSaveFieldData>();
+        //for (int Index = 0;Index < SaveFieldData.Count; Index++)
+        //{
+        //    if (SaveFieldData[Index].MapName != pMapName)
+        //    {
+        //        NewSaveFieldData.Add(SaveFieldData[Index]);
+        //    }
+        //}
+        //SaveFieldData = NewSaveFieldData;
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
+
     }
 
+    // Update is called once per frame
+    void Update()
+    {
 
+    }
 }
-
-
-
-
-//public class SaveManager : MonoBehaviour
-//{
-
-//    string filePath;
-//    csSaveData SaveData;
-
-//    void Awake()
-//    {
-//        filePath = Application.persistentDataPath + "/" + ".savedata.json";
-//        SaveData = new csSaveData();
-//    }
-
-//    //～中略～
-
-//    public void Save()
-//    {
-//        string json = JsonUtility.ToJson(SaveData);
-
-//        StreamWriter streamWriter = new StreamWriter(filePath);
-//        streamWriter.Write(json);
-//        streamWriter.Flush();
-//        streamWriter.Close();
-//    }
-
-//    public void Load()
-//    {
-//        if (File.Exists(filePath))
-//        {
-//            StreamReader streamReader;
-//            streamReader = new StreamReader(filePath);
-//            string data = streamReader.ReadToEnd();
-//            streamReader.Close();
-
-//            SaveData = JsonUtility.FromJson<csSaveData>(data);
-//        }
-//    }
-
-//}
