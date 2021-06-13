@@ -109,9 +109,9 @@ public class s_Window_FieldPartsSelect : MonoBehaviour
         //ストックリストの配置
         //List<GameObject> StockList = new List<GameObject>();
         StockList.Clear();
-        for (int Index = 0; Index < MainControl.GetComponent<MainControl>().objFieldPath.transform.GetChildCount(); Index++)
+        for (int Index = 0; Index < MainControl.GetComponent<MainControl>().CurrentField.transform.GetChildCount(); Index++)
         {
-            GameObject obj = MainControl.GetComponent<MainControl>().objFieldPath.transform.GetChild(Index).gameObject;
+            GameObject obj = MainControl.GetComponent<MainControl>().CurrentField.transform.GetChild(Index).gameObject;
             if (obj.name.Substring(0, 5) == "Stock")
             {
                 StockList.Add(obj);

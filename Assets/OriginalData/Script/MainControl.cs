@@ -74,38 +74,14 @@ public class MainControl : MonoBehaviour
     public bool isIdle = true;
 
     //フィールド関連
-    public GameObject objFieldPath;
+    public GameObject CurrentField;
     private GameObject[] FragmentPrefabs;
-
-    //FieldPartsPlacedStruct[][] FieldParts;
-
-    //public struct FragmentProperty
-    //{
-    //    public string CollectionName;
-    //    public GameObject Hierarchy;
-    //    public string FieldPatrsName;
-    //    public GameObject FragmentPrefab;
-    //    public int BlockX;
-    //    public int BlockY;
-    //    public int BlockZ;
-    //    public int Rotate;
-    //    public bool isSystemSet;
-    //}
-    //public List<FragmentProperty> FieldPartsPlacedList = new List<FragmentProperty>();
-
-    //public struct stStockList
-    //{
-    //    public string CollectionName;
-    //    public GameObject Hierarchy;
-    //}
-    //public List<stStockList> FieldPartsStockList = new List<stStockList>();
-
 
     private Vector3 WaitingPlacePos = new Vector3(0, 0, 1000f);
 
-    public GameObject CurrentWorld;
+    //public GameObject CurrentWorld;
     public GameObject FragmentsListUI;
-
+    public string CurrentMapName = "";
 
     //モード
     public string Mode = "Main";
@@ -146,38 +122,18 @@ public class MainControl : MonoBehaviour
 
 
         //テストデータ
-        //LoadFieldParts("World_001", "Road2", 0, 0, 0, 0);
-        //LoadFieldParts("World_001", "RiverBridge", 0, 0, 1, 1);
-        //LoadFieldParts("World_001", "Road1", 0, 0, 2, 0);
-        //LoadFieldParts("World_001", "Green", 1, 0, 2, 0);
-        //LoadFieldParts("World_001", "Road1", 1, 0, 0, 1);
-        //LoadFieldParts("World_001", "Road1", 2, 0, 0, 1);
-        //LoadFieldParts("World_001", "River1", 1, 0, 1, 1);
-        //LoadFieldParts("World_001", "Green", 0, 0, -1, 0);
-        //LoadFieldParts("World_001", "Green", 1, 0, -1, 0);
+        LoadMap("FirstVillage");
 
-        LoadFieldParts("World_001", "Road2", 0, 0, 0, 1);
-        LoadFieldParts("World_001", "Road2", 1, 0, 0, 3);
-        LoadFieldParts("World_001", "Green", 0, 0, 1, 0);
-        LoadFieldParts("World_001", "Road2", 1, 0, 1, 1);
-        LoadFieldParts("World_001", "RiverBridge", 0, 0, -1, 1);
+
+
+        //LoadFieldParts("World_001", "Road2", 0, 0, 0, 1);
+        //LoadFieldParts("World_001", "Road2", 1, 0, 0, 3);
+        //LoadFieldParts("World_001", "Green", 0, 0, 1, 0);
+        //LoadFieldParts("World_001", "Road2", 1, 0, 1, 1);
+        //LoadFieldParts("World_001", "RiverBridge", 0, 0, -1, 1);
 
 
         CurrentWorld = GameObject.Find("World_001");
-
-        //LoadFieldParts("Stock_1", "Green", 0, 0, 0, 0);
-        //LoadFieldParts("Stock_2", "Road0", 0, 0, 0, 0);
-
-        //LoadFieldParts("Stock_3", "Road2", 0, 0, 0, 1);
-        //LoadFieldParts("Stock_3", "RiverBridge", 1, 0, 0, 0);
-
-        //LoadFieldParts("Stock_4", "Road3", 0, 0, 0, 2);
-        //LoadFieldParts("Stock_4", "Road2", 1, 0, 0, 3);
-        //LoadFieldParts("Stock_4", "Road1", 1, 0, 1, 2);
-        //LoadFieldParts("Stock_4", "Road1", 0, 0, -1,0);
-        //LoadFieldParts("Stock_4", "Road1", -1, 0, 0, 1);
-
-
 
         //ステータス設定
         PlayerStatus.IsPlayer = true;
@@ -655,7 +611,7 @@ public class MainControl : MonoBehaviour
         {
             objCollection = new GameObject(pCollectionName);
             objCollection.transform.position = new Vector3(0, 0, 0);
-            objCollection.transform.parent = objFieldPath.transform;
+            objCollection.transform.parent = CurrentField.transform;
 
         }
 
@@ -784,7 +740,17 @@ public class MainControl : MonoBehaviour
         Debug.Log(LogString);
     }
 
-
+    private void LoadMap(string pMapName)
+    {
+        GameObject FieldMap = GameObject.Find("FieldMap");
+        GameObject Map = FieldMap.transform.Find(pMapName).gameObject;
+        //GameObject Map = GameObject.Find(pMapName);
+        for (int Index = 0; Index < Map.transform.GetChildCount(); Index++) {
+            GameObject Object = Map.transform.GetChild(Index).gameObject;
+            GameObject Instance = Instantiate(Object, CurrentField.transform);
+        }
+        CurrentMapName = pMapName;
+    }
 
 }
 
