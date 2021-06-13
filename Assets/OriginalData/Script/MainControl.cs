@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
+
 
 
 
@@ -91,17 +93,22 @@ public class MainControl : MonoBehaviour
 
     public GameObject HpBar;
 
-    public int SaveFileNumber = 0;
 
+    //セーブデータ関連
+    csSaveData SaveData;
+    public int SaveFileNumber = 0;
+    private string SaveFilePath;
+    
     // Start is called before the first frame update
     void Start()
     {
 
+    SaveFilePath = Application.persistentDataPath + "/" + ".SaveData.json";
 
 
-        //objControllerManager = gameObject.GetComponent<s_ControllerManager>();
+    //objControllerManager = gameObject.GetComponent<s_ControllerManager>();
 
-        objCharController = objPlayer.GetComponent<CharacterController>();
+    objCharController = objPlayer.GetComponent<CharacterController>();
         objAnimator = objPlayerAppearance.GetComponent<Animator>();
         PlayerStatus = objPlayer.GetComponent<CharStatus>();
 
@@ -118,9 +125,21 @@ public class MainControl : MonoBehaviour
         FragmentPrefabs = Resources.LoadAll<GameObject>("FragmentPrefabs");
 
 
+        //セーブデータの読み込み関連
+        SaveData = new csSaveData();
+
+        csSaveData.StSaveFieldData SaveFieldData = new csSaveData.StSaveFieldData();
 
 
+        if (File.Exists(SaveFilePath))
+        {
+            StreamReader streamReader;
+            streamReader = new StreamReader(SaveFilePath);
+            string data = streamReader.ReadToEnd();
+            streamReader.Close();
 
+            SaveData = JsonUtility.FromJson<csSaveData>(data);
+        }
 
 
         //テストデータ
@@ -128,11 +147,11 @@ public class MainControl : MonoBehaviour
 
 
 
-        //LoadFieldParts("World_001", "Road2", 0, 0, 0, 1);
-        //LoadFieldParts("World_001", "Road2", 1, 0, 0, 3);
-        //LoadFieldParts("World_001", "Green", 0, 0, 1, 0);
-        //LoadFieldParts("World_001", "Road2", 1, 0, 1, 1);
-        //LoadFieldParts("World_001", "RiverBridge", 0, 0, -1, 1);
+        //LoadFragment("World_001", "Road2", 0, 0, 0, 1);
+        //LoadFragment("World_001", "Road2", 1, 0, 0, 3);
+        //LoadFragment("World_001", "Green", 0, 0, 1, 0);
+        //LoadFragment("World_001", "Road2", 1, 0, 1, 1);
+        //LoadFragment("World_001", "RiverBridge", 0, 0, -1, 1);
 
 
         //CurrentWorld = GameObject.Find("World_001");
@@ -538,6 +557,19 @@ public class MainControl : MonoBehaviour
             isIdle = false;
         }
 
+
+
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        // 
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        if (Input.GetKeyUp(KeyCode.Y))
+        {
+            Debug.Log("セーブ開始");
+            DataSave();
+            Debug.Log("セーブ完了");
+        }
+
+
         //---------------------------------------------------------------------------------------------------------------------------------------
         //UI表示
         //---------------------------------------------------------------------------------------------------------------------------------------
@@ -605,7 +637,7 @@ public class MainControl : MonoBehaviour
     //*******************************************************************************************************************************************
     //フィールドパーツの配置
     //*******************************************************************************************************************************************
-    public int LoadFieldParts(string pCollectionName,string pFieldPatrsName, int pBlockX, int pBlockY, int pBlockZ, int pRotate)
+    public int LoadFragment(string pCollectionName,string pFieldPatrsName, int pBlockX, int pBlockY, int pBlockZ, int pRotate)
     {
         //配下のヒエラルキーを探して、ない場合は新規作成
         GameObject objCollection = GameObject.Find(pCollectionName);
@@ -740,6 +772,12 @@ public class MainControl : MonoBehaviour
 
         string LogString = pCharStatusFrom.Name + "の攻撃 > " + pCharStatusTo.Name + "は " + DamageValue.ToString() + "のダメージ。";
         Debug.Log(LogString);
+    
+    
+
+
+
+
     }
 
     //*******************************************************************************************************************************************
@@ -782,7 +820,157 @@ public class MainControl : MonoBehaviour
 
         }
         CurrentMapName = pMapName;
+
+        if (!(SaveData.SaveFieldData is  null)){
+            for (int Index = 0; Index < SaveData.SaveFieldData.Count; Index++)
+            {
+                if (SaveData.SaveFieldData[Index].MapName == CurrentMapName)
+                {
+                    LoadFragment(SaveData.SaveFieldData[Index].MapName, SaveData.SaveFieldData[Index].FragmentName, SaveData.SaveFieldData[Index].BlockX, SaveData.SaveFieldData[Index].BlockY, SaveData.SaveFieldData[Index].BlockZ, SaveData.SaveFieldData[Index].Rotate);
+                }
+
+            }
+
+        }
+
+
+
+    }
+
+
+    void DataSave()
+    {
+
+        GameObject WorldMap = GameObject.Find("WorldMap");
+
+        GameObject CurrentMap = WorldMap.transform.Find("CurrentMap").gameObject;
+        GameObject CurrentField = CurrentMap.transform.Find("CurrentField").gameObject;
+        GameObject CurrentNpc = CurrentMap.transform.Find("CurrentNpc").gameObject;
+        GameObject CurrentSpawn = CurrentMap.transform.Find("CurrentSpawn").gameObject;
+
+        for (int Index = 0; Index < CurrentField.transform.GetChildCount(); Index++)
+        {
+            GameObject DistObject = CurrentField.transform.GetChild(Index).gameObject;
+            if (DistObject.GetComponent<FragmentParameter>().isDefaultSet == false)
+            {
+                csSaveData.StSaveFieldData SaveFieldData = new csSaveData.StSaveFieldData();
+                SaveFieldData.MapName = CurrentMapName;
+
+                string FragmentName = DistObject.name;
+                FragmentName = FragmentName.Substring(0, FragmentName.Length - "(Clone)".Length);
+                SaveFieldData.FragmentName = FragmentName;
+                SaveFieldData.BlockX = Mathf.RoundToInt(DistObject.transform.position.x / 10f);
+                SaveFieldData.BlockY = Mathf.RoundToInt(DistObject.transform.position.y / 10f);
+                SaveFieldData.BlockZ = Mathf.RoundToInt(DistObject.transform.position.z / 10f);
+                SaveFieldData.Rotate = Mathf.RoundToInt(DistObject.transform.rotation.eulerAngles.y / 90f);
+                SaveData.AddSaveFieldData(SaveFieldData);
+            }
+
+        }
+
+
+
+
+        string json = JsonUtility.ToJson(SaveData);
+
+        StreamWriter streamWriter = new StreamWriter(SaveFilePath);
+        streamWriter.Write(json);
+        streamWriter.Flush();
+        streamWriter.Close();
+
+
+
     }
 
 }
 
+
+public class csSaveData
+{
+    //private string filePath = Application.persistentDataPath + "/" + ".savedata.json";
+
+    public string DayDate;
+    public List<StSaveFieldData> SaveFieldData;
+
+    public struct  StSaveFieldData
+    {
+        public string MapName;
+        public string FragmentName;
+        public int BlockX;
+        public int BlockY;
+        public int BlockZ;
+        public int Rotate;
+    }
+
+    public void AddSaveFieldData(StSaveFieldData pSaveFieldData)
+    {
+        if (SaveFieldData is null)
+        {
+            SaveFieldData = new List<StSaveFieldData>();
+        }
+        SaveFieldData.Add(pSaveFieldData);
+    }
+
+
+    public void ClearAllSaveFieldData()
+    {
+        SaveFieldData = new List<StSaveFieldData>();
+    }
+
+    public void ClearSaveFieldData(string pMapName)
+    {
+        List<StSaveFieldData> NewSaveFieldData = new List<StSaveFieldData>();
+        for (int Index = 0;Index < SaveFieldData.Count; Index++)
+        {
+            if (SaveFieldData[Index].MapName != pMapName)
+            {
+                NewSaveFieldData.Add(SaveFieldData[Index]);
+            }
+        }
+        SaveFieldData = NewSaveFieldData;
+    }
+
+
+}
+
+
+
+
+//public class SaveManager : MonoBehaviour
+//{
+
+//    string filePath;
+//    csSaveData SaveData;
+
+//    void Awake()
+//    {
+//        filePath = Application.persistentDataPath + "/" + ".savedata.json";
+//        SaveData = new csSaveData();
+//    }
+
+//    //～中略～
+
+//    public void Save()
+//    {
+//        string json = JsonUtility.ToJson(SaveData);
+
+//        StreamWriter streamWriter = new StreamWriter(filePath);
+//        streamWriter.Write(json);
+//        streamWriter.Flush();
+//        streamWriter.Close();
+//    }
+
+//    public void Load()
+//    {
+//        if (File.Exists(filePath))
+//        {
+//            StreamReader streamReader;
+//            streamReader = new StreamReader(filePath);
+//            string data = streamReader.ReadToEnd();
+//            streamReader.Close();
+
+//            SaveData = JsonUtility.FromJson<csSaveData>(data);
+//        }
+//    }
+
+//}
