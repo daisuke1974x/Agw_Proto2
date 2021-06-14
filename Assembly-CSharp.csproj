@@ -90,6 +90,7 @@
     <Compile Include="Assets\OriginalData\Script\Effect.cs" />
     <Compile Include="Assets\OriginalData\Script\FieldCursor.cs" />
     <Compile Include="Assets\Follow.cs" />
+    <Compile Include="Assets\OriginalData\Script\NpcEvent.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\FromStore\FantasyCharactersLite\readme.txt" />

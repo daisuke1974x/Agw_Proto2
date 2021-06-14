@@ -143,6 +143,18 @@ public class MainControl : MonoBehaviour
         }
 
 
+        //CurrentWorld以外を非アクティブにする
+        GameObject WorldMap = GameObject.Find("WorldMap");
+
+        for (int Index = 0; Index < WorldMap.transform.GetChildCount(); Index++)
+        {
+            if (WorldMap.transform.GetChild(Index).name != "CurrentMap")
+            {
+                WorldMap.transform.GetChild(Index).gameObject.SetActive(false);
+            }
+        }
+
+
         //テストデータ
         LoadMap("FirstVillage");
 
