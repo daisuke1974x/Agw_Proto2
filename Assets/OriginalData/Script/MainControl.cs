@@ -686,7 +686,7 @@ public class MainControl : MonoBehaviour
                 pos.x = CurrentField.transform.position.x + (float)(pBlockX) * 10f;// BlockIntervalX;
                 pos.y = CurrentField.transform.position.y + (float)(pBlockY) * 2.5f;// BlockIntervalY;
                 pos.z = CurrentField.transform.position.z + (float)(pBlockZ) * 10f;// BlockIntervalZ;
-                objInstance.transform.position = pos;
+                objInstance.transform.localPosition = pos;
                 Vector3 rot = objInstance.transform.eulerAngles;
                 rot.y = 90f * (float)pRotate;
                 objInstance.transform.eulerAngles = rot;
@@ -695,8 +695,8 @@ public class MainControl : MonoBehaviour
                 if (pCollectionName.Substring(0, 5) == "Stock")
                 {
                     GameObject objInstanceF = Instantiate(objSelectedFrame, objCollection.transform);
-                    objInstanceF.transform.position = pos;
-                    objCollection.transform.position = WaitingPlacePos;
+                    objInstanceF.transform.localPosition = pos;
+                    //objCollection.transform.position += WaitingPlacePos;
                 }
 
             }
