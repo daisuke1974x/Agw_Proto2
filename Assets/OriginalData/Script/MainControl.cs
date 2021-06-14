@@ -839,29 +839,45 @@ public class MainControl : MonoBehaviour
         GameObject SourceNpc = SourceMap.transform.Find("Npc").gameObject;
         GameObject SourceSpawn = SourceMap.transform.Find("Spawn").gameObject;
 
+        //CurrentFieldにあるオブジェクトを破棄
         for (int Index = 0; Index < CurrentField.transform.GetChildCount(); Index++)
         {
             GameObject DistObject = CurrentField.transform.GetChild(Index).gameObject;
             Destroy(DistObject);
         }
 
+        //SourceFieldからCurrentFieldにコピー
         for (int Index = 0; Index < SourceField.transform.GetChildCount(); Index++)
         {
             GameObject SourceObject = SourceField.transform.GetChild(Index).gameObject;
             GameObject Instance = Instantiate(SourceObject, CurrentField.transform);
             Instance.GetComponent<FragmentParameter>().isDefaultSet = true;
+        }
 
+        //CurrentNpcにあるオブジェクトを破棄
+        for (int Index = 0; Index < CurrentNpc.transform.GetChildCount(); Index++)
+        {
+            GameObject DistObject = CurrentNpc.transform.GetChild(Index).gameObject;
+            Destroy(DistObject);
+        }
+
+        //SourceNpcからCurrentNpcにコピー
+        for (int Index = 0; Index < SourceNpc.transform.GetChildCount(); Index++)
+        {
+            GameObject SourceObject = SourceNpc.transform.GetChild(Index).gameObject;
+            GameObject Instance = Instantiate(SourceObject, CurrentNpc.transform);
         }
 
 
+        //for (int Index = 0; Index < SourceField.transform.GetChildCount(); Index++) {
+        //    GameObject Object = SourceField.transform.GetChild(Index).gameObject;
+        //    GameObject Instance = Instantiate(Object, CurrentField.transform);
+        //    Instance.GetComponent<FragmentParameter>().isDefaultSet = true;
+        //}
 
-        for (int Index = 0; Index < SourceField.transform.GetChildCount(); Index++) {
-            GameObject Object = SourceField.transform.GetChild(Index).gameObject;
-            GameObject Instance = Instantiate(Object, CurrentField.transform);
-            Instance.GetComponent<FragmentParameter>().isDefaultSet = true;
-
-        }
         CurrentMapName = pMapName;
+
+
 
         if (!(SaveData.MapName is  null)){
             for (int Index = 0; Index < SaveData.MapName.Count; Index++)

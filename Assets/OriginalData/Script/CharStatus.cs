@@ -46,7 +46,7 @@ public class CharStatus : MonoBehaviour
         objEnemies = GameObject.Find("Enemies");
         objDropItemPrefab = Resources.LoadAll<GameObject>("DropItems");
         objChestPrefab = objDropItemPrefab[1];
-        Hierarchy_TargetObject= GameObject.Find("TargetObject");
+        Hierarchy_TargetObject= GameObject.Find("CurrentNpc");
     }
 
     // Update is called once per frame
