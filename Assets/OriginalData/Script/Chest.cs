@@ -114,6 +114,14 @@ public class Chest : MonoBehaviour
         Rnd= Random.Range(0, 100);
         FragmentListScript.Chest = this.gameObject;
 
+
+        MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road2", 0, 0, 0, 0);
+        MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road1", 1, 0, 0, 1);
+        FragmentListScript.AddList(StockName);
+        return;
+
+
+
         //—Î’nŒn
         if (0<= Rnd && Rnd < 60)
         {

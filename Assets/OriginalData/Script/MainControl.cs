@@ -631,14 +631,22 @@ public class MainControl : MonoBehaviour
     //*******************************************************************************************************************************************
     public int LoadFragment(string pCollectionName,string pFieldPatrsName, int pBlockX, int pBlockY, int pBlockZ, int pRotate)
     {
-        //配下のヒエラルキーを探して、ない場合は新規作成
-        GameObject objCollection = GameObject.Find(pCollectionName);
-        if (objCollection is null)
+        GameObject objCollection;
+        
+        if (pCollectionName.Substring(0, 5) == "Stock")
         {
-            objCollection = new GameObject(pCollectionName);
-            objCollection.transform.position = new Vector3(0, 0, 0);
-            objCollection.transform.parent = FragmentStock.transform;
-
+            objCollection = GameObject.Find(pCollectionName);
+            //配下のヒエラルキーを探して、ない場合は新規作成
+            if (objCollection is null)
+            {
+                objCollection = new GameObject(pCollectionName);
+                objCollection.transform.position = new Vector3(0, 0, 0);
+                objCollection.transform.parent = FragmentStock.transform;
+            }
+        }
+        else
+        {
+            objCollection = GameObject.Find("CurrentField");
         }
 
         //構造体にセットして、LISTに追加
@@ -660,7 +668,20 @@ public class MainControl : MonoBehaviour
             if (objI.name == pFieldPatrsName)
             {
                 GameObject objInstance = Instantiate(objI, objCollection.transform, false);
-                CurrentField.transform.parent = objCollection.transform;
+                //CurrentField.transform.parent = objCollection.transform;
+                objInstance.transform.parent = objCollection.transform;
+
+
+                //if (pCollectionName.Substring(0, 5) == "Stock")
+                //{
+                //    objInstance.transform.parent = objCollection.transform;
+
+                //}
+                //else
+                //{
+                //    objInstance.transform.parent = CurrentField.transform;
+
+                //}
                 Vector3 pos = objInstance.transform.position;
                 pos.x = CurrentField.transform.position.x + (float)(pBlockX) * 10f;// BlockIntervalX;
                 pos.y = CurrentField.transform.position.y + (float)(pBlockY) * 2.5f;// BlockIntervalY;
