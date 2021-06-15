@@ -1,0 +1,57 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using TMPro;
+
+public class MessageWindow : MonoBehaviour
+{
+    public bool isActive = false;
+    public string MessageText="テスト！";
+    public GameObject TextMeshPro;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+        //表示・非表示
+        if (isActive)
+        {
+            //this.gameObject.SetActive(true);
+            //表示位置（真ん中下）
+            this.transform.position = new Vector3(Screen.width / 2, 0, 0);
+        }
+        else
+        {
+            //this.gameObject.SetActive(false);
+            //表示位置（真ん中下）
+            this.transform.position = new Vector3(Screen.width / 2, -1000, 0);
+
+        }
+
+        //画面解像度に応じて大きさを変える
+        if (100 < Screen.height && Screen.height <= 600)
+        {
+            this.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        }
+        if (600 < Screen.height && Screen.height <= 1400)
+        {
+            this.transform.localScale = new Vector3(1, 1, 1);
+        }
+
+        if (1400 < Screen.height && Screen.height <= 3000)
+        {
+            this.transform.localScale = new Vector3(2, 2, 2);
+        }
+
+
+        //文字設定
+        TextMeshPro.GetComponent<TextMeshProUGUI>().text  = MessageText;
+
+    }
+}
