@@ -47,7 +47,10 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
+        //ƒvƒŒƒCƒ„[‚Ì‘€ì‚ª‹Ö~‚³‚ê‚Ä‚¢‚é‚Æ‚«‚ÍA“G‚Ì“®‚«‚à~‚ß‚é
+        if (MainControl.GetComponent<MainControl>().isControllEnabled == false) return;
+
         //if (objScriptMain.Mode != "Main")
         //{
         //    this.GetComponent<Animation>().Stop();

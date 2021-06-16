@@ -10,6 +10,8 @@ using System.IO;
 
 public class MainControl : MonoBehaviour
 {
+
+
     //プレイヤーキャラクター関連
     public GameObject objPlayer;
     public GameObject objPlayerAppearance;
