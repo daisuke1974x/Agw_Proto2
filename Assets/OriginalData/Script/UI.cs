@@ -49,4 +49,28 @@ public class UI : MonoBehaviour
         TextMoneyUpper.text = Money_View.ToString();
         TextMoneyLower.text = Money_View.ToString();
     }
+
+    public float GetScreenMagnificationRate()
+    {
+        //‰æ–Ê‰ð‘œ“x‚É‰ž‚¶‚Ä‘å‚«‚³‚ð•Ï‚¦‚é
+        if (Screen.height <= 100)
+        {
+            return 0.1f;
+        }
+        if (100 < Screen.height && Screen.height <= 600)
+        {
+            return 0.5f;
+        }
+        if (600 < Screen.height && Screen.height <= 1400)
+        {
+            return 1;
+        }
+    
+        if (1400 < Screen.height && Screen.height <= 3000)
+        {
+            return 2;
+        }
+        return 3;
+    }
+
 }

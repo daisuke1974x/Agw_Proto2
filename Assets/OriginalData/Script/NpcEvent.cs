@@ -13,7 +13,7 @@ public class NpcEvent : MonoBehaviour
     private GameObject FadeInOutPanel;
     private GameObject WaitCursorObject;
     private GameObject MainControl;
-
+    private GameObject TargetCursor;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +25,7 @@ public class NpcEvent : MonoBehaviour
         WaitCursorObject = GameObject.Find("WaitCursor");
         //WaitCursorObject.SetActive(false);
         MainControl = GameObject.Find("MainControl");
+        TargetCursor = GameObject.Find("TargetCursor");
 
     }
 
@@ -35,10 +36,14 @@ public class NpcEvent : MonoBehaviour
         {
             if (MainControl.GetComponent<MainControl>().isIdle ==true)
             {
-                if (isEventInProgress == false)
+                if (TargetCursor.GetComponent<TargetCursor>().objTarget == this.gameObject)
                 {
-                    isEventInProgress = true;
-                    StartCoroutine(EventControl());
+                    if (isEventInProgress == false)
+                    {
+                        isEventInProgress = true;
+                        StartCoroutine(EventControl());
+                    }
+
                 }
             }
         }
@@ -55,8 +60,8 @@ public class NpcEvent : MonoBehaviour
      private IEnumerator EventControl()
     {
 
+        yield return null;
         MainControl.GetComponent<MainControl>().isControllEnabled = false;
-//        yield return null;
         //Debug.Log(EventCode);
         MessageWindow.GetComponent<MessageWindow>().isActive = true;
         MessageWindow.GetComponent<MessageWindow>().MessageText = this.gameObject.GetComponent<Text>().text;

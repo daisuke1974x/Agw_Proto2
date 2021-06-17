@@ -7,12 +7,12 @@ public class MessageWindow : MonoBehaviour
 {
     public bool isActive = false;
     public string MessageText="テスト！";
-    public GameObject TextMeshPro;
+    private GameObject TextMeshPro;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        TextMeshPro = this.transform.Find("Text (TMP)").gameObject;
     }
 
     // Update is called once per frame
@@ -35,19 +35,8 @@ public class MessageWindow : MonoBehaviour
         }
 
         //画面解像度に応じて大きさを変える
-        if (100 < Screen.height && Screen.height <= 600)
-        {
-            this.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-        }
-        if (600 < Screen.height && Screen.height <= 1400)
-        {
-            this.transform.localScale = new Vector3(1, 1, 1);
-        }
-
-        if (1400 < Screen.height && Screen.height <= 3000)
-        {
-            this.transform.localScale = new Vector3(2, 2, 2);
-        }
+        float ScreenMagnificationRate = this.transform.parent.GetComponent<UI>().GetScreenMagnificationRate();
+        this.transform.localScale = Vector3.one * ScreenMagnificationRate;
 
 
         //文字設定
