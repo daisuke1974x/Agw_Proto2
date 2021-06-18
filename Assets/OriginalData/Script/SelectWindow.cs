@@ -6,23 +6,38 @@ using TMPro;
 public class SelectWindow : MonoBehaviour
 {
 
-    public bool isActive = true;
+    public bool isActive = false;
     public string SelectText = "テスト！";
+    private GameObject UiObject;
     private GameObject TextMeshPro;
+    private GameObject SelectCursor;
     public Vector3 WindowPosition;// = new Vector3(700, 0135, 0);
 
     public List<string> SelectItem= new List<string>();
 
     public int CursorPosX;
     public int CursorPosY;
+    private int Columns;
+    private int Rows;
     public int ReturnIndex;
+    private int MaxLength;
+    private float FontSize;
 
+    private float BlinkTimer;
+    private float BlinkTimerSetting = 0.8f;
+    private int CaptionRow=0;
 
     // Start is called before the first frame update
     void Start()
     {
+        UiObject = this.transform.parent.gameObject;
         TextMeshPro = this.transform.Find("Text (TMP)").gameObject;
+        SelectCursor = this.transform.Find("SelectCursor").gameObject;
 
+    }
+
+    public IEnumerator Test()
+    {
         //SelectItem.Clear();
         //SelectItem.Add("は　い");
         //SelectItem.Add("いいえ");
@@ -38,9 +53,14 @@ public class SelectWindow : MonoBehaviour
         SelectItem.Add("あいうえお");
         SelectItem.Add("あいうえお");
         SelectItem.Add("いいえ");
-        WindowPosition = new Vector3(100, Screen.height- 100);
-        StartCoroutine( OpenSelectWindow(WindowPosition, SelectItem, 2, 4, 0));
-
+        SelectItem.Add("いいえ");
+        SelectItem.Add("いいえ");
+        SelectItem.Add("いいえ");
+        SelectItem.Add("いいえ");
+        SelectItem.Add("いいえ");
+        WindowPosition = new Vector3(100, Screen.height - 100);
+        StartCoroutine(OpenSelectWindow("選んでください", WindowPosition, SelectItem, 3, 4, 0));
+        yield return null;
     }
 
     // Update is called once per frame
@@ -67,8 +87,9 @@ public class SelectWindow : MonoBehaviour
     }
 
 
-    public IEnumerator OpenSelectWindow(Vector3 pWindowPosition,List<string> pSelectItem,int pColumns,int pRows,int pDefaultIndex)
+    public IEnumerator OpenSelectWindow(string pCaption, Vector3 pWindowPosition,List<string> pSelectItem,int pColumns,int pRows,int pDefaultIndex)
     {
+
         //呼び出しエラーチェック
         if (pColumns < 1)
         {
@@ -81,12 +102,25 @@ public class SelectWindow : MonoBehaviour
             yield return -2;
         }
 
+        //Captionの指定がある場合は、ウィンドウの縦サイズを＋１行追加して大きくする
+        if (pCaption == "")
+        {
+            CaptionRow = 0;
+            this.transform.Find("Caption").gameObject.GetComponent<TextMeshProUGUI>().text = "";
+        }
+        else
+        {
+            CaptionRow = 1;
+            this.transform.Find("Caption").gameObject.GetComponent<TextMeshProUGUI>().text = pCaption;
+
+        }
+
         //１文字の幅
         float ScreenMagnificationRate = this.transform.parent.GetComponent<UI>().GetScreenMagnificationRate();
-        float FontSize = 64 * ScreenMagnificationRate;
+        FontSize = 64 * ScreenMagnificationRate;
 
         //pSelectItemの最大文字数を取得する
-        int MaxLength = 0;
+        MaxLength = 0;
         for (int Index = 0; Index < pSelectItem.Count; Index++)
         {
             if (pSelectItem[Index].Length > MaxLength) MaxLength = pSelectItem[Index].Length;
@@ -94,7 +128,7 @@ public class SelectWindow : MonoBehaviour
 
         //ウィンドウのサイズを決定する
         float WindowWidth = (MaxLength + 5) * pColumns * FontSize;
-        float WindowHeight = 2f *( pRows+1) * FontSize;
+        float WindowHeight = 2f *( pRows + 1+ CaptionRow) * FontSize;
         Vector2 SizeDelta = this.GetComponent<RectTransform>().sizeDelta;
         SizeDelta.x = WindowWidth;
         SizeDelta.y = WindowHeight;
@@ -102,21 +136,27 @@ public class SelectWindow : MonoBehaviour
 
         //アイテムを表示する
         GameObject Items = this.transform.Find("Items").gameObject;
+        TextMeshPro = this.transform.Find("Text (TMP)").gameObject;
         for (int Index = 0; Index < pSelectItem.Count; Index++)
         {
             GameObject InstanceTextMeshPro = Instantiate(TextMeshPro, Items.transform, true);
             Vector3 Pos = InstanceTextMeshPro.transform.localPosition;
             Pos.x = (Index % pColumns) * FontSize * (MaxLength + 4) + 1 * FontSize;
-            Pos.y = -FontSize * Mathf.Floor(Index / pColumns) * 2f;
+            Pos.y = -FontSize * (Mathf.Floor(Index / pColumns) - 1 + CaptionRow) * 2f;
             InstanceTextMeshPro.transform.localPosition = Pos;
             InstanceTextMeshPro.GetComponent<TextMeshProUGUI>().text = pSelectItem[Index];
         }
-        CursorPosX = 0;
-        CursorPosY = 0;
 
-        //for(; ; )
+        Rows = pRows;
+        Columns = pColumns;
+        CursorPosX = pDefaultIndex % Columns;
+        CursorPosY = Mathf.RoundToInt(pDefaultIndex / Columns);
+        BlinkTimer = BlinkTimerSetting;
+        isActive = true;
+        yield return null;
+        yield return StartCoroutine(SelectWindowCursor());
+        //for (; ; )
         //{
-        //    yield return StartCoroutine(SelectWindowCursor());
 
 
         //}
@@ -126,12 +166,90 @@ public class SelectWindow : MonoBehaviour
 
     IEnumerator SelectWindowCursor()
     {
+        bool InputHatFlg = false;
         for(; ; )
         {
+            if (Input.GetButtonDown("Circle"))
+            {
+                BlinkTimer = BlinkTimerSetting;
+                ReturnIndex = CursorPosX + CursorPosY * Columns;
+                yield return 0;
+                break;
+            }
 
+            if (Input.GetButtonDown("Cross"))
+            {
+                BlinkTimer = BlinkTimerSetting;
+                ReturnIndex = -1;
+                yield return 0;
+                break;
+            }
 
+            float HatLR = Input.GetAxis("HatLR");
+            float HatUD = Input.GetAxis("HatUD");
 
+            if (HatLR != 0)
+            {
+                if (InputHatFlg == false)
+                {
+                    InputHatFlg = true;
+                    if (HatLR == 1)
+                    {
+                        CursorPosX = (CursorPosX + Columns + 1) % Columns;
+                        BlinkTimer = BlinkTimerSetting;
+                        //Debug.Log("SelectWindow : CursorPosX = " + CursorPosX.ToString() + ", CursorPosY = " + CursorPosY.ToString());
+                    }
+                    if (HatLR == -1)
+                    {
+                        CursorPosX = (CursorPosX + Columns - 1) % Columns;
+                        //Debug.Log("SelectWindow : CursorPosX = " + CursorPosX.ToString() + ", CursorPosY = " + CursorPosY.ToString());
+                        BlinkTimer = BlinkTimerSetting;
+                    }
 
+                }
+            }
+            else
+            {
+                if (HatUD != 0)
+                {
+                    if (InputHatFlg == false)
+                    {
+                        InputHatFlg = true;
+                        if (HatUD == -1)
+                        {
+                            CursorPosY = (CursorPosY + Rows + 1) % Rows;
+                            //Debug.Log("SelectWindow : CursorPosX = " + CursorPosX.ToString() + ", CursorPosY = " + CursorPosY.ToString());
+                            BlinkTimer = BlinkTimerSetting;
+                        }
+                        if (HatUD == 1)
+                        {
+                            CursorPosY = (CursorPosY + Rows - 1) % Rows;
+                            //Debug.Log("SelectWindow : CursorPosX = " + CursorPosX.ToString() + ", CursorPosY = " + CursorPosY.ToString());
+                            BlinkTimer = BlinkTimerSetting;
+                        }
+
+                    }
+
+                }
+                else
+                {
+                    InputHatFlg = false;
+
+                }
+            }
+            BlinkTimer -= Time.deltaTime;
+            if (BlinkTimer<0) BlinkTimer = BlinkTimerSetting;
+            if (BlinkTimer > BlinkTimerSetting / 2)
+            {
+                SelectCursor.SetActive(true);
+                SelectCursor.transform.localPosition = new Vector3((MaxLength + 4) * CursorPosX * FontSize, -2f * (CursorPosY + 1 + CaptionRow) * FontSize, 0);
+            }
+            else
+            {
+                SelectCursor.SetActive(false);
+
+            }
+            yield return null;
         }
 
 

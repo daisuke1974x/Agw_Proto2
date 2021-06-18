@@ -14,19 +14,23 @@ public class NpcEvent : MonoBehaviour
     private GameObject WaitCursorObject;
     private GameObject MainControl;
     private GameObject TargetCursor;
+    private GameObject SelectWindow;
+    private GameObject UiObject;
 
     // Start is called before the first frame update
     void Start()
     {
-        EventCode = this.GetComponent<Text>().text;
-        MessageWindow = GameObject.Find("MessageWindow");
+        UiObject = GameObject.Find("UI");
+        MessageWindow = UiObject.transform.Find("MessageWindow").gameObject;
+        WaitCursorObject = MessageWindow.transform.Find("WaitCursor").gameObject;
+        SelectWindow = UiObject.transform.Find("SelectWindow").gameObject;
+        FadeInOutPanel = UiObject.transform.Find("FadeInOutPanel").gameObject;
+
         Player = GameObject.Find("Player");
-        FadeInOutPanel = GameObject.Find("FadeInOutPanel");
-        WaitCursorObject = GameObject.Find("WaitCursor");
-        //WaitCursorObject.SetActive(false);
         MainControl = GameObject.Find("MainControl");
         TargetCursor = GameObject.Find("TargetCursor");
 
+        EventCode = this.GetComponent<Text>().text;
     }
 
     // Update is called once per frame
@@ -64,9 +68,13 @@ public class NpcEvent : MonoBehaviour
         MainControl.GetComponent<MainControl>().isControllEnabled = false;
         //Debug.Log(EventCode);
         MessageWindow.GetComponent<MessageWindow>().isActive = true;
-        MessageWindow.GetComponent<MessageWindow>().MessageText = this.gameObject.GetComponent<Text>().text;
+        MessageWindow.GetComponent<MessageWindow>().MessageText = "大地の端末がある。";
+        //MessageWindow.GetComponent<MessageWindow>().MessageText = this.gameObject.GetComponent<Text>().text;
         yield return StartCoroutine(WaitCursor());
-//        yield return null;
+        //        yield return null;
+        GameObject SelectWindowObject = Instantiate(SelectWindow, UiObject.transform, false);
+        yield return StartCoroutine(SelectWindowObject.GetComponent<SelectWindow>().Test());
+
         MessageWindow.GetComponent<MessageWindow>().MessageText = "テキスト２";
         yield return StartCoroutine(WaitCursor());
         MessageWindow.GetComponent<MessageWindow>().isActive = false;

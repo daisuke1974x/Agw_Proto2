@@ -9,10 +9,12 @@ public class MessageWindow : MonoBehaviour
     public string MessageText="テスト！";
     private GameObject TextMeshPro;
 
+
     // Start is called before the first frame update
     void Start()
     {
         TextMeshPro = this.transform.Find("Text (TMP)").gameObject;
+
     }
 
     // Update is called once per frame
