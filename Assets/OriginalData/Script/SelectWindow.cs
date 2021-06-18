@@ -9,9 +9,14 @@ public class SelectWindow : MonoBehaviour
     public bool isActive = true;
     public string SelectText = "テスト！";
     private GameObject TextMeshPro;
-    public Vector3 WindowPosition = new Vector3(700, 0135, 0);
+    public Vector3 WindowPosition;// = new Vector3(700, 0135, 0);
 
     public List<string> SelectItem= new List<string>();
+
+    public int CursorPosX;
+    public int CursorPosY;
+    public int ReturnIndex;
+
 
     // Start is called before the first frame update
     void Start()
@@ -33,8 +38,8 @@ public class SelectWindow : MonoBehaviour
         SelectItem.Add("あいうえお");
         SelectItem.Add("あいうえお");
         SelectItem.Add("いいえ");
-        Vector3 WindowPosition = new Vector3(100, -300);
-        OpenSelectWindow(WindowPosition, SelectItem, 2, 2, 0);
+        WindowPosition = new Vector3(100, Screen.height- 100);
+        StartCoroutine( OpenSelectWindow(WindowPosition, SelectItem, 2, 4, 0));
 
     }
 
@@ -62,18 +67,18 @@ public class SelectWindow : MonoBehaviour
     }
 
 
-    public int OpenSelectWindow(Vector3 pWindowPosition,List<string> pSelectItem,int pColumns,int pRows,int pDefaultIndex)
+    public IEnumerator OpenSelectWindow(Vector3 pWindowPosition,List<string> pSelectItem,int pColumns,int pRows,int pDefaultIndex)
     {
         //呼び出しエラーチェック
         if (pColumns < 1)
         {
             Debug.Log("OpenSelectWindow Error -> pColumns : " + pColumns.ToString());
-            return -2;
+            yield return -2;
         }
         if (pRows < 1)
         {
             Debug.Log("OpenSelectWindow Error -> pRows : " + pRows.ToString());
-            return -2;
+            yield return -2;
         }
 
         //１文字の幅
@@ -106,9 +111,32 @@ public class SelectWindow : MonoBehaviour
             InstanceTextMeshPro.transform.localPosition = Pos;
             InstanceTextMeshPro.GetComponent<TextMeshProUGUI>().text = pSelectItem[Index];
         }
+        CursorPosX = 0;
+        CursorPosY = 0;
+
+        //for(; ; )
+        //{
+        //    yield return StartCoroutine(SelectWindowCursor());
 
 
-        return -1;
+        //}
+
+        yield return -1;
+    }
+
+    IEnumerator SelectWindowCursor()
+    {
+        for(; ; )
+        {
+
+
+
+
+        }
+
+
+        yield return null;
+
     }
 
 }
