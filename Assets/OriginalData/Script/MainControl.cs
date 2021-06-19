@@ -158,8 +158,8 @@ public class MainControl : MonoBehaviour
 
 
         //テストデータ
-        //LoadMap("FirstVillage");
-        LoadMap("SecondTown");
+        LoadMap("FirstVillage");
+        //LoadMap("SecondTown");
 
 
 
@@ -685,7 +685,7 @@ public class MainControl : MonoBehaviour
                 GameObject objInstance = Instantiate(objI, objCollection.transform, false);
                 //CurrentField.transform.parent = objCollection.transform;
                 objInstance.transform.parent = objCollection.transform;
-
+                objInstance.name = objI.name;
 
                 //if (pCollectionName.Substring(0, 5) == "Stock")
                 //{
@@ -854,6 +854,7 @@ public class MainControl : MonoBehaviour
         GameObject SourceNpc = SourceMap.transform.Find("Npc").gameObject;
         GameObject SourceSpawn = SourceMap.transform.Find("Spawn").gameObject;
 
+
         //CurrentFieldにあるオブジェクトを破棄
         for (int Index = 0; Index < CurrentField.transform.GetChildCount(); Index++)
         {
@@ -866,6 +867,7 @@ public class MainControl : MonoBehaviour
         {
             GameObject SourceObject = SourceField.transform.GetChild(Index).gameObject;
             GameObject Instance = Instantiate(SourceObject, CurrentField.transform);
+            Instance.name = SourceObject.name;
             Instance.GetComponent<FragmentParameter>().isDefaultSet = true;
         }
 
@@ -881,8 +883,27 @@ public class MainControl : MonoBehaviour
         {
             GameObject SourceObject = SourceNpc.transform.GetChild(Index).gameObject;
             GameObject Instance = Instantiate(SourceObject, CurrentNpc.transform);
+            Instance.name = SourceObject.name;
         }
 
+
+        //Enemiesにあるオブジェクトを破棄
+        GameObject Enemies = GameObject.Find("Enemies").gameObject;
+        for (int Index = 0; Index < Enemies.transform.GetChildCount(); Index++)
+        {
+            GameObject DistObject = Enemies.transform.GetChild(Index).gameObject;
+            Destroy(DistObject);
+        }
+
+        //HpBarEnemyUIにあるオブジェクトを破棄
+        GameObject HpBarEnemyUI = GameObject.Find("HpBarEnemyUI").gameObject;
+        for (int Index = 0; Index < HpBarEnemyUI.transform.GetChildCount(); Index++)
+        {
+            GameObject DistObject = HpBarEnemyUI.transform.GetChild(Index).gameObject;
+            Destroy(DistObject);
+        }
+
+        
 
         //for (int Index = 0; Index < SourceField.transform.GetChildCount(); Index++) {
         //    GameObject Object = SourceField.transform.GetChild(Index).gameObject;

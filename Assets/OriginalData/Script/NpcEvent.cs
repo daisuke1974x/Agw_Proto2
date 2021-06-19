@@ -16,6 +16,7 @@ public class NpcEvent : MonoBehaviour
     private GameObject TargetCursor;
     private GameObject SelectWindow;
     private GameObject UiObject;
+    private GameObject WorldMapObject;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +30,8 @@ public class NpcEvent : MonoBehaviour
         Player = GameObject.Find("Player");
         MainControl = GameObject.Find("MainControl");
         TargetCursor = GameObject.Find("TargetCursor");
+
+        WorldMapObject = GameObject.Find("WorldMap");
 
         if (!(this.GetComponent<Text>() is null))
         {
@@ -49,19 +52,19 @@ public class NpcEvent : MonoBehaviour
                     if (isEventInProgress == false)
                     {
                         isEventInProgress = true;
-                        string Name = this.name.Substring(0, this.name.Length - "(Clome)".Length);
+                        string Name = this.name;
                         switch (Name)
                         {
                             case "Tomb_FirstVillage":
                                 StartCoroutine(EventControl());
                                 break;
 
-                            case "Sphere_FirstVillage":
-                                StartCoroutine(Sphere_FirstVillage());
+                            case "Porter1_FirstVillage":
+                                StartCoroutine(Porter1_FirstVillage());
                                 break;
 
-                            case "Capsule_SecondTown":
-                                StartCoroutine(Capsule_SecondTown());
+                            case "Porter1_SecondTown":
+                                StartCoroutine(Porter1_SecondTown());
                                 break;
 
                         }
@@ -124,8 +127,10 @@ public class NpcEvent : MonoBehaviour
     //---------------------------------------------------------------------------------------------------
     // イベント
     //---------------------------------------------------------------------------------------------------
-    private IEnumerator Capsule_SecondTown()
+    private IEnumerator Porter1_SecondTown()
     {
+        string DistName = "Porter1_FirstVillage";
+        GameObject DistObject = SearchNpc(DistName);
 
         //MessageWindow.GetComponent<MessageWindow>().MessageText = this.gameObject.GetComponent<Text>().text;
 
@@ -142,20 +147,15 @@ public class NpcEvent : MonoBehaviour
 
         if (ReturnIndex == 0)
         {
-            yield return StartCoroutine(FadeOut(1));
-            MainControl.GetComponent<MainControl>().LoadMap("FirstVillage");
-            yield return null;
-            yield return StartCoroutine(FadeIn(1));
+            //yield return StartCoroutine(FadeOut(1));
+            MainControl.GetComponent<MainControl>().LoadMap(DistObject.transform.parent.transform.parent.name);
+            Player.transform.position = DistObject.transform.position + new Vector3(0, 0, -1);
+            //yield return StartCoroutine(FadeIn(1));
 
         }
 
 
         MessageWindow.GetComponent<MessageWindow>().isActive = false;
-        yield return null;
-
-
-        //StartCoroutine(Test());
-        //MessageWindow.GetComponent<MessageWindow>().isActive = false;
         isEventInProgress = false;
         MainControl.GetComponent<MainControl>().isControllEnabled = true;
 
@@ -164,8 +164,10 @@ public class NpcEvent : MonoBehaviour
     //---------------------------------------------------------------------------------------------------
     // イベント
     //---------------------------------------------------------------------------------------------------
-    private IEnumerator Sphere_FirstVillage()
+    private IEnumerator Porter1_FirstVillage()
     {
+        string DistName = "Porter1_SecondTown";
+        GameObject DistObject = SearchNpc(DistName);
 
         //MessageWindow.GetComponent<MessageWindow>().MessageText = this.gameObject.GetComponent<Text>().text;
 
@@ -182,19 +184,15 @@ public class NpcEvent : MonoBehaviour
 
         if (ReturnIndex == 0)
         {
-            yield return StartCoroutine(FadeOut(1));
-            MainControl.GetComponent<MainControl>().LoadMap("SecontTown");
-            yield return StartCoroutine(FadeIn(1));
+            //yield return StartCoroutine(FadeOut(1));
+            MainControl.GetComponent<MainControl>().LoadMap(DistObject.transform.parent.transform.parent.name);
+            Player.transform.position = DistObject.transform.position + new Vector3(0, 0, -1);
+            //yield return StartCoroutine(FadeIn(1));
 
         }
 
 
         MessageWindow.GetComponent<MessageWindow>().isActive = false;
-        yield return null;
-
-
-        //StartCoroutine(Test());
-        //MessageWindow.GetComponent<MessageWindow>().isActive = false;
         isEventInProgress = false;
         MainControl.GetComponent<MainControl>().isControllEnabled = true;
 
@@ -267,6 +265,20 @@ public class NpcEvent : MonoBehaviour
             if (Input.GetButtonDown("Circle")) break;
         }
         WaitCursorObject.SetActive(false);
+    }
+
+    private GameObject SearchNpc(string pName)
+    {
+
+        for (int Index = 0; Index < WorldMapObject.transform.GetChildCount(); Index++)
+        {
+            GameObject SearchMap = WorldMapObject.transform.GetChild(Index).gameObject;
+            if (!(SearchMap.transform.FindChild("Npc/" + pName) is null))
+            {
+                return SearchMap.transform.FindChild("Npc/" + pName).gameObject;
+            }
+        }
+        return null;
     }
 
 }
