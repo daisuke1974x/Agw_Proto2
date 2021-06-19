@@ -105,6 +105,8 @@ public class MainControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        isControllEnabled = false;
+        this.GetComponent<NpcEvent>().BlackOut(1);
 
         SaveFilePath = Application.persistentDataPath + "/" + ".SaveData.json";
 
@@ -174,6 +176,10 @@ public class MainControl : MonoBehaviour
         //FieldPartsSelect画面はいったん非表示
         objWindow_FieldPartsSelect.SetActive(false);
 
+        //フェードインで始まる
+        StartCoroutine(FadeinStart());
+        //isControllEnabled = true;
+
         //StockListの更新（あとでサブルーチン化する）
         //List<stStockList> FieldPartsStockList = new List<stStockList>(); //ここでnew すると、他のスクリプトで参照したとき、0件になるので、newしないこと
         //foreach (FragmentProperty item in FieldPartsPlacedList)
@@ -216,6 +222,13 @@ public class MainControl : MonoBehaviour
     }
 
 
+    //フェードインで始める
+    private IEnumerator FadeinStart()
+    {
+        yield return StartCoroutine(this.GetComponent<NpcEvent>().FadeIn(1.5f));
+        isControllEnabled = true;
+
+    }
 
 
     // Update is called once per frame

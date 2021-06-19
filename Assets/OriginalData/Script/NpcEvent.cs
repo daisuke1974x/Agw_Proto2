@@ -30,7 +30,11 @@ public class NpcEvent : MonoBehaviour
         MainControl = GameObject.Find("MainControl");
         TargetCursor = GameObject.Find("TargetCursor");
 
-        EventCode = this.GetComponent<Text>().text;
+        if(!(this.GetComponent<Text>() is null))
+        {
+            EventCode = this.GetComponent<Text>().text;
+
+        }
     }
 
     // Update is called once per frame
@@ -110,7 +114,7 @@ public class NpcEvent : MonoBehaviour
     //-----------------------------------------------------------------------------------------------------
     // FadeOut
     //-----------------------------------------------------------------------------------------------------
-    private IEnumerator FadeOut(float TimeRequired)
+    public IEnumerator FadeOut(float TimeRequired)
     {
         float TimeRemain = TimeRequired;
         for (; ; )
@@ -124,7 +128,7 @@ public class NpcEvent : MonoBehaviour
     //-----------------------------------------------------------------------------------------------------
     // FadeIn
     //-----------------------------------------------------------------------------------------------------
-    private IEnumerator FadeIn(float TimeRequired)
+    public IEnumerator FadeIn(float TimeRequired)
     {
         float TimeRemain = TimeRequired;
         for (; ; )
@@ -134,6 +138,14 @@ public class NpcEvent : MonoBehaviour
             yield return null;
             if (TimeRemain < 0) break;
         }
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+    // BlackOut
+    //-----------------------------------------------------------------------------------------------------
+    public void BlackOut(float pTransparency)
+    {
+        FadeInOutPanel.GetComponent<Image>().color = new Color(0, 0, 0, pTransparency);
     }
 
     //-----------------------------------------------------------------------------------------------------
