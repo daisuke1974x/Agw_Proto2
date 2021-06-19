@@ -38,13 +38,6 @@ public class SelectWindow : MonoBehaviour
 
     public IEnumerator Test()
     {
-        //SelectItem.Clear();
-        //SelectItem.Add("は　い");
-        //SelectItem.Add("いいえ");
-        //Vector3 WindowPosition = new Vector3(100, -200);
-        //OpenSelectWindow(WindowPosition, SelectItem, 1, 2, 0);
-
-
         SelectItem.Clear();
         SelectItem.Add("あいうえお");
         SelectItem.Add("かき");
@@ -59,8 +52,18 @@ public class SelectWindow : MonoBehaviour
         SelectItem.Add("いいえ");
         SelectItem.Add("いいえ");
         WindowPosition = new Vector3(100, Screen.height - 100);
-        StartCoroutine(OpenSelectWindow("選んでください", WindowPosition, SelectItem, 3, 4, 0));
-        yield return null;
+        yield return StartCoroutine(OpenSelectWindow("選んでください", WindowPosition, SelectItem, 3, 4, 0));
+        //yield return null;
+    }
+
+    public IEnumerator YesNoWindow()
+    {
+        SelectItem.Clear();
+        SelectItem.Add("は　い");
+        SelectItem.Add("いいえ");
+        Vector3 WindowPosition = new Vector3(100, -200);
+        yield return StartCoroutine(OpenSelectWindow("",WindowPosition, SelectItem, 1, 2, 0));
+
     }
 
     // Update is called once per frame
@@ -153,15 +156,17 @@ public class SelectWindow : MonoBehaviour
         CursorPosY = Mathf.RoundToInt(pDefaultIndex / Columns);
         BlinkTimer = BlinkTimerSetting;
         isActive = true;
-        yield return null;
+
+        yield return null;//ここでこれを入れておかないと、void startらへんのGameObject取得ができず、nullになる
         yield return StartCoroutine(SelectWindowCursor());
+        isActive = false;
         //for (; ; )
         //{
 
 
         //}
 
-        yield return -1;
+//        yield return -1;
     }
 
     IEnumerator SelectWindowCursor()
@@ -169,22 +174,6 @@ public class SelectWindow : MonoBehaviour
         bool InputHatFlg = false;
         for(; ; )
         {
-            if (Input.GetButtonDown("Circle"))
-            {
-                BlinkTimer = BlinkTimerSetting;
-                ReturnIndex = CursorPosX + CursorPosY * Columns;
-                yield return 0;
-                break;
-            }
-
-            if (Input.GetButtonDown("Cross"))
-            {
-                BlinkTimer = BlinkTimerSetting;
-                ReturnIndex = -1;
-                yield return 0;
-                break;
-            }
-
             float HatLR = Input.GetAxis("HatLR");
             float HatUD = Input.GetAxis("HatUD");
 
@@ -249,11 +238,27 @@ public class SelectWindow : MonoBehaviour
                 SelectCursor.SetActive(false);
 
             }
+
             yield return null;
+
+            if (Input.GetButtonDown("Circle"))
+            {
+                BlinkTimer = BlinkTimerSetting;
+                ReturnIndex = CursorPosX + CursorPosY * Columns;
+                break;
+            }
+
+            if (Input.GetButtonDown("Cross"))
+            {
+                BlinkTimer = BlinkTimerSetting;
+                ReturnIndex = -1;
+                break;
+            }
+
         }
 
 
-        yield return null;
+        //yield return null;
 
     }
 

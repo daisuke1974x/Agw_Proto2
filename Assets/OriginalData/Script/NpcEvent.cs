@@ -64,22 +64,32 @@ public class NpcEvent : MonoBehaviour
      private IEnumerator EventControl()
     {
 
+        //MessageWindow.GetComponent<MessageWindow>().MessageText = this.gameObject.GetComponent<Text>().text;
+
         yield return null;
         MainControl.GetComponent<MainControl>().isControllEnabled = false;
-        //Debug.Log(EventCode);
         MessageWindow.GetComponent<MessageWindow>().isActive = true;
-        MessageWindow.GetComponent<MessageWindow>().MessageText = "大地の端末がある。";
-        //MessageWindow.GetComponent<MessageWindow>().MessageText = this.gameObject.GetComponent<Text>().text;
-        yield return StartCoroutine(WaitCursor());
-        //        yield return null;
-        GameObject SelectWindowObject = Instantiate(SelectWindow, UiObject.transform, false);
-        yield return StartCoroutine(SelectWindowObject.GetComponent<SelectWindow>().Test());
 
-        MessageWindow.GetComponent<MessageWindow>().MessageText = "テキスト２";
+        MessageWindow.GetComponent<MessageWindow>().MessageText = "大地の端末がある。";
         yield return StartCoroutine(WaitCursor());
+        MessageWindow.GetComponent<MessageWindow>().MessageText = "端末を起動しますか？";
+
+        GameObject SelectWindowObject = Instantiate(SelectWindow, UiObject.transform, false);
+        yield return StartCoroutine(SelectWindowObject.GetComponent<SelectWindow>().YesNoWindow());
+        int ReturnIndex = SelectWindowObject.GetComponent<SelectWindow>().ReturnIndex;
+        Destroy(SelectWindowObject);
+
+        if (ReturnIndex == 0){
+            MessageWindow.GetComponent<MessageWindow>().MessageText = "端末を起動した。";
+        }
+        else
+        {
+            MessageWindow.GetComponent<MessageWindow>().MessageText = "端末を起動しなかった。";
+        }
+        yield return StartCoroutine(WaitCursor());
+
         MessageWindow.GetComponent<MessageWindow>().isActive = false;
         yield return null;
-        //        yield return null;
 
 
         //StartCoroutine(Test());
