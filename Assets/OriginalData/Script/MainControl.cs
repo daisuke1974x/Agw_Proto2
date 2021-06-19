@@ -158,7 +158,8 @@ public class MainControl : MonoBehaviour
 
 
         //テストデータ
-        LoadMap("FirstVillage");
+        //LoadMap("FirstVillage");
+        LoadMap("SecondTown");
 
 
 
@@ -839,7 +840,7 @@ public class MainControl : MonoBehaviour
     //*******************************************************************************************************************************************
     //マップの読み込み
     //*******************************************************************************************************************************************
-    private void LoadMap(string pMapName)
+    public void LoadMap(string pMapName)
     {
         GameObject WorldMap = GameObject.Find("WorldMap");
 

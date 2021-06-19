@@ -30,7 +30,11 @@ public class NpcEvent : MonoBehaviour
         MainControl = GameObject.Find("MainControl");
         TargetCursor = GameObject.Find("TargetCursor");
 
-        EventCode = this.GetComponent<Text>().text;
+        if (!(this.GetComponent<Text>() is null))
+        {
+            EventCode = this.GetComponent<Text>().text;
+
+        }
     }
 
     // Update is called once per frame
@@ -45,7 +49,22 @@ public class NpcEvent : MonoBehaviour
                     if (isEventInProgress == false)
                     {
                         isEventInProgress = true;
-                        StartCoroutine(EventControl());
+                        string Name = this.name.Substring(0, this.name.Length - "(Clome)".Length);
+                        switch (Name)
+                        {
+                            case "Tomb_FirstVillage":
+                                StartCoroutine(EventControl());
+                                break;
+
+                            case "Sphere_FirstVillage":
+                                StartCoroutine(Sphere_FirstVillage());
+                                break;
+
+                            case "Capsule_SecondTown":
+                                StartCoroutine(Capsule_SecondTown());
+                                break;
+
+                        }
                     }
 
                 }
@@ -61,7 +80,10 @@ public class NpcEvent : MonoBehaviour
 
     }
 
-     private IEnumerator EventControl()
+    //---------------------------------------------------------------------------------------------------
+    // イベント
+    //---------------------------------------------------------------------------------------------------
+    private IEnumerator EventControl()
     {
 
         //MessageWindow.GetComponent<MessageWindow>().MessageText = this.gameObject.GetComponent<Text>().text;
@@ -98,6 +120,87 @@ public class NpcEvent : MonoBehaviour
         MainControl.GetComponent<MainControl>().isControllEnabled = true;
 
     }
+
+    //---------------------------------------------------------------------------------------------------
+    // イベント
+    //---------------------------------------------------------------------------------------------------
+    private IEnumerator Capsule_SecondTown()
+    {
+
+        //MessageWindow.GetComponent<MessageWindow>().MessageText = this.gameObject.GetComponent<Text>().text;
+
+        yield return null;
+        MainControl.GetComponent<MainControl>().isControllEnabled = false;
+        MessageWindow.GetComponent<MessageWindow>().isActive = true;
+
+        MessageWindow.GetComponent<MessageWindow>().MessageText = "First Village へ移動します。\nよろしいですか？";
+
+        GameObject SelectWindowObject = Instantiate(SelectWindow, UiObject.transform, false);
+        yield return StartCoroutine(SelectWindowObject.GetComponent<SelectWindow>().YesNoWindow());
+        int ReturnIndex = SelectWindowObject.GetComponent<SelectWindow>().ReturnIndex;
+        Destroy(SelectWindowObject);
+
+        if (ReturnIndex == 0)
+        {
+            yield return StartCoroutine(FadeOut(1));
+            MainControl.GetComponent<MainControl>().LoadMap("FirstVillage");
+            yield return null;
+            yield return StartCoroutine(FadeIn(1));
+
+        }
+
+
+        MessageWindow.GetComponent<MessageWindow>().isActive = false;
+        yield return null;
+
+
+        //StartCoroutine(Test());
+        //MessageWindow.GetComponent<MessageWindow>().isActive = false;
+        isEventInProgress = false;
+        MainControl.GetComponent<MainControl>().isControllEnabled = true;
+
+    }
+
+    //---------------------------------------------------------------------------------------------------
+    // イベント
+    //---------------------------------------------------------------------------------------------------
+    private IEnumerator Sphere_FirstVillage()
+    {
+
+        //MessageWindow.GetComponent<MessageWindow>().MessageText = this.gameObject.GetComponent<Text>().text;
+
+        yield return null;
+        MainControl.GetComponent<MainControl>().isControllEnabled = false;
+        MessageWindow.GetComponent<MessageWindow>().isActive = true;
+
+        MessageWindow.GetComponent<MessageWindow>().MessageText = "Second Town へ移動します。\nよろしいですか？";
+
+        GameObject SelectWindowObject = Instantiate(SelectWindow, UiObject.transform, false);
+        yield return StartCoroutine(SelectWindowObject.GetComponent<SelectWindow>().YesNoWindow());
+        int ReturnIndex = SelectWindowObject.GetComponent<SelectWindow>().ReturnIndex;
+        Destroy(SelectWindowObject);
+
+        if (ReturnIndex == 0)
+        {
+            yield return StartCoroutine(FadeOut(1));
+            MainControl.GetComponent<MainControl>().LoadMap("SecontTown");
+            yield return StartCoroutine(FadeIn(1));
+
+        }
+
+
+        MessageWindow.GetComponent<MessageWindow>().isActive = false;
+        yield return null;
+
+
+        //StartCoroutine(Test());
+        //MessageWindow.GetComponent<MessageWindow>().isActive = false;
+        isEventInProgress = false;
+        MainControl.GetComponent<MainControl>().isControllEnabled = true;
+
+    }
+
+
 
     private IEnumerator Test()
     {
