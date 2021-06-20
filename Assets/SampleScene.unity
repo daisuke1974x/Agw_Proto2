@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.37793598, g: 0.6875553, b: 0.8765884, a: 1}
+  m_IndirectSpecularColor: {r: 0.37234145, g: 0.6828717, b: 0.87289566, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2469,7 +2469,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8852951649462989637, guid: 9f2c7764ac38a5d4ab5986f8487f1dad, type: 3}
       propertyPath: SpawnInterval
-      value: 20
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8852951649462989637, guid: 9f2c7764ac38a5d4ab5986f8487f1dad, type: 3}
+      propertyPath: DropRate.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8852951649462989637, guid: 9f2c7764ac38a5d4ab5986f8487f1dad, type: 3}
+      propertyPath: ItemName.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8852951649462989637, guid: 9f2c7764ac38a5d4ab5986f8487f1dad, type: 3}
+      propertyPath: ItemType.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8852951649462989637, guid: 9f2c7764ac38a5d4ab5986f8487f1dad, type: 3}
+      propertyPath: DropRate.Array.data[0]
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8852951649462989637, guid: 9f2c7764ac38a5d4ab5986f8487f1dad, type: 3}
+      propertyPath: DropRate.Array.data[1]
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8852951649462989637, guid: 9f2c7764ac38a5d4ab5986f8487f1dad, type: 3}
+      propertyPath: ItemName.Array.data[0]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8852951649462989637, guid: 9f2c7764ac38a5d4ab5986f8487f1dad, type: 3}
+      propertyPath: ItemName.Array.data[1]
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8852951649462989637, guid: 9f2c7764ac38a5d4ab5986f8487f1dad, type: 3}
+      propertyPath: ItemType.Array.data[0]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8852951649462989637, guid: 9f2c7764ac38a5d4ab5986f8487f1dad, type: 3}
+      propertyPath: ItemType.Array.data[1]
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f2c7764ac38a5d4ab5986f8487f1dad, type: 3}
@@ -7646,7 +7682,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1760381377
 Transform:
   m_ObjectHideFlags: 0
@@ -8889,7 +8925,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2029947275
 Transform:
   m_ObjectHideFlags: 0

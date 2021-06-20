@@ -132,6 +132,47 @@ public class CharStatus : MonoBehaviour
 
     private void DropControl()
     {
+
+        GameObject SpawnObject = this.transform.parent.gameObject;
+        SpawnScript SpawnScriptObject = SpawnObject.GetComponent<SpawnScript>();
+
+        if (SpawnScriptObject.DropRate.Length == 0)  return;
+
+        float TotalRate = 0;
+        float Lot = Random.Range(0f, 1f);
+        int GetIndex = -1;
+
+        //DropRateに設定された確率を順次チェックして、当選したかどうかチェック
+        for (int Index = 0;Index< SpawnScriptObject.DropRate.Length; Index++)
+        {
+            TotalRate += SpawnScriptObject.DropRate[Index];
+            if ((Lot <= TotalRate) && (GetIndex == -1))
+            {
+                GetIndex = Index;
+            }
+        }
+        if (GetIndex == -1) return;
+
+        switch (SpawnScriptObject.ItemType[GetIndex])
+        {
+            case SpawnScriptObject.enumItemType.Money:
+                break;
+
+
+
+
+        }
+        if (SpawnScriptObject.ItemType[GetIndex] != SpawnScriptObject.enumItemType.Money)
+        {
+
+        }
+
+
+        if (GetIndex == 0) DropMoney(1, objEnemies.transform.position);
+        if (GetIndex == 1) DropMoney(5, objEnemies.transform.position);
+        return;
+
+
         //ドロップアイテム
         int Rnd = Random.Range(0, 100);
         if (0 <= Rnd && Rnd < 0)
