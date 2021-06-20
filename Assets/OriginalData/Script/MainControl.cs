@@ -158,8 +158,8 @@ public class MainControl : MonoBehaviour
 
 
         //テストデータ
-        LoadMap("FirstVillage");
-        //LoadMap("SecondTown");
+        LoadMap("FirstVillage",null);
+        //LoadMap("SecondTown",null);
 
 
 
@@ -840,7 +840,7 @@ public class MainControl : MonoBehaviour
     //*******************************************************************************************************************************************
     //マップの読み込み
     //*******************************************************************************************************************************************
-    public void LoadMap(string pMapName)
+    public void LoadMap(string pMapName,GameObject DontDestroy)
     {
         GameObject WorldMap = GameObject.Find("WorldMap");
 
@@ -874,8 +874,11 @@ public class MainControl : MonoBehaviour
         //CurrentNpcにあるオブジェクトを破棄
         for (int Index = 0; Index < CurrentNpc.transform.GetChildCount(); Index++)
         {
-            GameObject DistObject = CurrentNpc.transform.GetChild(Index).gameObject;
-            Destroy(DistObject);
+            if (!(DontDestroy is null)&&(DontDestroy != CurrentNpc.transform.GetChild(Index).gameObject)){
+                GameObject DistObject = CurrentNpc.transform.GetChild(Index).gameObject;
+                Destroy(DistObject);
+
+            }
         }
 
         //SourceNpcからCurrentNpcにコピー

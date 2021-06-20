@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.37234145, g: 0.6828717, b: 0.87289566, a: 1}
+  m_IndirectSpecularColor: {r: 0.37793598, g: 0.6875553, b: 0.8765884, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1013,9 +1013,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 061392cae55e7bd4aa23c4e708d97bf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NpcType: 1
   NameJp: "\u7B2C\u4E8C\u306E\u8857\u3000\u79FB\u52D5\u30AF\u30EA\u30B9\u30BF\u30EB"
   NameEn: 
-  isPorter: 1
   PortDistination: {fileID: 937553218}
 --- !u!1 &362017388
 GameObject:
@@ -2299,9 +2299,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 061392cae55e7bd4aa23c4e708d97bf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NpcType: 2
   NameJp: 
   NameEn: 
-  isPorter: 0
   PortDistination: {fileID: 0}
 --- !u!114 &565600182
 MonoBehaviour:
@@ -3515,7 +3515,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 937553218}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.17, y: 1.11, z: 0}
+  m_LocalPosition: {x: -12.26, y: 1.11, z: 13.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1471472858}
@@ -3533,9 +3533,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 061392cae55e7bd4aa23c4e708d97bf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NpcType: 1
   NameJp: "\u59CB\u3081\u306E\u6751\u3000\u79FB\u52D5\u30AF\u30EA\u30B9\u30BF\u30EB"
   NameEn: 
-  isPorter: 1
   PortDistination: {fileID: 327436660}
 --- !u!135 &937553221
 SphereCollider:

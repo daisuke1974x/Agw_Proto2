@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class NpcEvent : MonoBehaviour
 {
+    public enumNpcType NpcType; 
     public string NameJp;
     public string NameEn;
 
@@ -19,9 +20,18 @@ public class NpcEvent : MonoBehaviour
     private GameObject UiObject;
     private GameObject WorldMapObject;
 
-    public bool isPorter = false;
+    //public bool isPorter = false;
     public GameObject PortDistination;
 
+    public enum enumNpcType
+    {
+        General,
+        Porter,
+        Terminal,
+        DedicatedScript
+
+
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -57,22 +67,27 @@ public class NpcEvent : MonoBehaviour
                     {
                         isEventInProgress = true;
 
-                        if (isPorter == true)
+                        switch (NpcType)
                         {
-                            StartCoroutine(GeneralPorting());
-                        }
-                        else
-                        {
+                            case enumNpcType.Porter:
+                                StartCoroutine(GeneralPorting());
+                                break;
 
-                            string Name = this.name;
-                            switch (Name)
-                            {
-                                case "Tomb_FirstVillage":
-                                    StartCoroutine(EventControl());
-                                    break;
+                            case enumNpcType.Terminal:
+                                StartCoroutine(EventControl());
+                                break;
+
+                            case enumNpcType.DedicatedScript:
+                                string Name = this.name;
+                                switch (Name)
+                                {
+                                    case "Tomb_FirstVillage":
+                                        StartCoroutine(EventControl());
+                                        break;
 
 
-                            }
+                                }
+                                break;
                         }
 
                     }
@@ -153,21 +168,22 @@ public class NpcEvent : MonoBehaviour
         if (ReturnIndex == 0)
         {
             GameObject Player = GameObject.Find("Player");
+            yield return StartCoroutine(FadeOut(1));//フェードアウト
+            MainControl.GetComponent<MainControl>().LoadMap(PortDistination.transform.parent.transform.parent.name, this.gameObject);//2021．6.20第二パラメータを追加。自分自身のオブジェクトは後でDestroyするよう修正。これをしないと、この後のコルーチンが正常に動作しなくなるため。
 
-            Debug.Log("aaaaaaaaaaaa01");
-            //yield return StartCoroutine(FadeOut(1));
-            Debug.Log("aaaaaaaaaaaa02");
-            MainControl.GetComponent<MainControl>().LoadMap(PortDistination.transform.parent.transform.parent.name);
-            Debug.Log("aaaaaaaaaaaa03");
             Debug.Log("PlayerPos:" + Player.transform.position.ToString());
             Debug.Log("DistPos:"+DistPos.ToString());
-            Player.transform.position = DistPos + new Vector3(0, 1000, -2);
-            Debug.Log("PlayerPos:" + Player.transform.position.ToString());
+            Player.transform.position = DistPos + new Vector3(0, 1000, -2);//うまくいくときといかないときがあるバグ◆◆◆◆◆◆◆◆◆◆◆
             MainControl.GetComponent<MainControl>().Landing(Player);
-            Debug.Log("aaaaaaaaaaaa04");
-            //yield return StartCoroutine(FadeIn(1));
+            Debug.Log("PlayerPos:" + Player.transform.position.ToString());
 
-
+            MessageWindow.GetComponent<MessageWindow>().isActive = false;//ウィンドウを消す
+            this.gameObject.transform.position = new Vector3(10000f, 10000f, 10000f);//このイベントオブジェクトを見えない位置に移動する
+            yield return StartCoroutine(FadeIn(1));//フェードイン
+            isEventInProgress = false;
+            MainControl.GetComponent<MainControl>().isControllEnabled = true;
+            Destroy(this.gameObject);
+            yield break;
         }
 
 
@@ -210,8 +226,9 @@ public class NpcEvent : MonoBehaviour
             TimeRemain -= Time.deltaTime;
             FadeInOutPanel.GetComponent<Image>().color = new Color(0, 0, 0, 1 - (TimeRemain/ TimeRequired));
             yield return null;
-            if (TimeRemain < 0) break;
+            if (TimeRemain < 0) yield break;
         }
+
     }
     //-----------------------------------------------------------------------------------------------------
     // FadeIn
@@ -224,7 +241,7 @@ public class NpcEvent : MonoBehaviour
             TimeRemain -= Time.deltaTime;
             FadeInOutPanel.GetComponent<Image>().color = new Color(0, 0, 0,  (TimeRemain / TimeRequired));
             yield return null;
-            if (TimeRemain < 0) break;
+            if (TimeRemain < 0) yield break;
         }
     }
 
