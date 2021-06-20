@@ -22,7 +22,7 @@ public class HpBarEnemy : MonoBehaviour
     void Update()
     {
 
-        if (EnemyObject is null)
+        if (EnemyObject == null)
         {
             Destroy(this.gameObject);
         }

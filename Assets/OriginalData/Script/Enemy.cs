@@ -39,6 +39,7 @@ public class Enemy : MonoBehaviour
         MainControl.GetComponent<MainControl>().RecalcStatus(ref EnemyStatus);
         EnemyStatus.HP = EnemyStatus.HP_Max_Calced;
         HpBarEnemy = Instantiate(HpBarEnemyFrefab,GameObject.Find("HpBarEnemyUI").transform);
+        HpBarEnemy.name = "HpBarEnemyUI";
         HpBarEnemy.GetComponent<HpBarEnemy>().EnemyObject = this.gameObject;
 
 
@@ -127,7 +128,7 @@ public class Enemy : MonoBehaviour
             {
                 objAnimator.SetTrigger("Die");
                 EnemyStatus.startDie(1.0f);
-                this.transform.parent.GetComponent<EnemyControl>().SpawnCount--;
+ //               this.transform.parent.GetComponent<EnemyControl>().SpawnCount--;
 
             }
         }

@@ -592,7 +592,7 @@ public class MainControl : MonoBehaviour
         //objText_Debug.text += "CheckAbyss:" + CheckAbyss(objPlayer).ToString() + "\n";
         //objText_Debug.text += "isKnockBack:" + PlayerStatus.isKnockBack.ToString() + "\n";
 
-        objText_Debug.text += "EnemyCount:" + EnemyControl.GetComponent<EnemyControl>().SpawnCount + "\n";
+        //objText_Debug.text += "EnemyCount:" + EnemyControl.GetComponent<EnemyControl>().SpawnCount + "\n";
 
         //objText_Debug.text += "LstickUD:" + Input.GetAxis("LstickUD").ToString() + "\n";
         //objText_Debug.text += "LstickLR:" + Input.GetAxis("LstickLR").ToString() + "\n";
@@ -874,10 +874,10 @@ public class MainControl : MonoBehaviour
         //CurrentNpcにあるオブジェクトを破棄
         for (int Index = 0; Index < CurrentNpc.transform.GetChildCount(); Index++)
         {
+            //2021.6.20 第二パラメータで指定したオブジェクトはDestroyしない。マップ間を移動する際、コルーチンの処理がうまくいかなくなるため。
             if (!(DontDestroy is null)&&(DontDestroy != CurrentNpc.transform.GetChild(Index).gameObject)){
                 GameObject DistObject = CurrentNpc.transform.GetChild(Index).gameObject;
                 Destroy(DistObject);
-
             }
         }
 
@@ -886,6 +886,22 @@ public class MainControl : MonoBehaviour
         {
             GameObject SourceObject = SourceNpc.transform.GetChild(Index).gameObject;
             GameObject Instance = Instantiate(SourceObject, CurrentNpc.transform);
+            Instance.name = SourceObject.name;
+        }
+
+
+        //CurrentSpawnにあるオブジェクトを破棄
+        for (int Index = 0; Index < CurrentSpawn.transform.GetChildCount(); Index++)
+        {
+            GameObject DistObject = CurrentSpawn.transform.GetChild(Index).gameObject;
+            Destroy(DistObject);
+        }
+
+        //SourceSpawnからCurrentFieldにコピー
+        for (int Index = 0; Index < SourceSpawn.transform.GetChildCount(); Index++)
+        {
+            GameObject SourceObject = SourceSpawn.transform.GetChild(Index).gameObject;
+            GameObject Instance = Instantiate(SourceObject, CurrentSpawn.transform);
             Instance.name = SourceObject.name;
         }
 
