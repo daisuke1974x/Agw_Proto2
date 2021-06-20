@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.37793598, g: 0.6875553, b: 0.8765884, a: 1}
+  m_IndirectSpecularColor: {r: 0.37234145, g: 0.6828717, b: 0.87289566, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -918,7 +918,7 @@ GameObject:
   - component: {fileID: 327436662}
   - component: {fileID: 327436665}
   m_Layer: 2
-  m_Name: Capsule_SecondTown
+  m_Name: Porter1_SecondTown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1013,6 +1013,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 061392cae55e7bd4aa23c4e708d97bf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NameJp: "\u7B2C\u4E8C\u306E\u8857\u3000\u79FB\u52D5\u30AF\u30EA\u30B9\u30BF\u30EB"
+  NameEn: 
+  isPorter: 1
+  PortDistination: {fileID: 937553218}
 --- !u!1 &362017388
 GameObject:
   m_ObjectHideFlags: 0
@@ -2295,6 +2299,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 061392cae55e7bd4aa23c4e708d97bf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NameJp: 
+  NameEn: 
+  isPorter: 0
+  PortDistination: {fileID: 0}
 --- !u!114 &565600182
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3493,7 +3501,7 @@ GameObject:
   - component: {fileID: 937553221}
   - component: {fileID: 937553220}
   m_Layer: 0
-  m_Name: Sphere_FirstVillage
+  m_Name: Porter1_FirstVillage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3525,6 +3533,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 061392cae55e7bd4aa23c4e708d97bf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NameJp: "\u59CB\u3081\u306E\u6751\u3000\u79FB\u52D5\u30AF\u30EA\u30B9\u30BF\u30EB"
+  NameEn: 
+  isPorter: 1
+  PortDistination: {fileID: 327436660}
 --- !u!135 &937553221
 SphereCollider:
   m_ObjectHideFlags: 0

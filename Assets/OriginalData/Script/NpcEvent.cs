@@ -5,11 +5,12 @@ using UnityEngine.UI;
 
 public class NpcEvent : MonoBehaviour
 {
+    public string NameJp;
+    public string NameEn;
 
     private string EventCode;
     private bool isEventInProgress = false;
     private GameObject MessageWindow;
-    private GameObject Player;
     private GameObject FadeInOutPanel;
     private GameObject WaitCursorObject;
     private GameObject MainControl;
@@ -17,6 +18,10 @@ public class NpcEvent : MonoBehaviour
     private GameObject SelectWindow;
     private GameObject UiObject;
     private GameObject WorldMapObject;
+
+    public bool isPorter = false;
+    public GameObject PortDistination;
+
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +32,6 @@ public class NpcEvent : MonoBehaviour
         SelectWindow = UiObject.transform.Find("SelectWindow").gameObject;
         FadeInOutPanel = UiObject.transform.Find("FadeInOutPanel").gameObject;
 
-        Player = GameObject.Find("Player");
         MainControl = GameObject.Find("MainControl");
         TargetCursor = GameObject.Find("TargetCursor");
 
@@ -52,22 +56,25 @@ public class NpcEvent : MonoBehaviour
                     if (isEventInProgress == false)
                     {
                         isEventInProgress = true;
-                        string Name = this.name;
-                        switch (Name)
+
+                        if (isPorter == true)
                         {
-                            case "Tomb_FirstVillage":
-                                StartCoroutine(EventControl());
-                                break;
-
-                            case "Porter1_FirstVillage":
-                                StartCoroutine(Porter1_FirstVillage());
-                                break;
-
-                            case "Porter1_SecondTown":
-                                StartCoroutine(Porter1_SecondTown());
-                                break;
-
+                            StartCoroutine(GeneralPorting());
                         }
+                        else
+                        {
+
+                            string Name = this.name;
+                            switch (Name)
+                            {
+                                case "Tomb_FirstVillage":
+                                    StartCoroutine(EventControl());
+                                    break;
+
+
+                            }
+                        }
+
                     }
 
                 }
@@ -125,20 +132,18 @@ public class NpcEvent : MonoBehaviour
     }
 
     //---------------------------------------------------------------------------------------------------
-    // イベント
+    // 汎用移動処理
     //---------------------------------------------------------------------------------------------------
-    private IEnumerator Porter1_SecondTown()
+    private IEnumerator GeneralPorting()
     {
-        string DistName = "Porter1_FirstVillage";
-        GameObject DistObject = SearchNpc(DistName);
-
-        //MessageWindow.GetComponent<MessageWindow>().MessageText = this.gameObject.GetComponent<Text>().text;
-
+        string DistName = PortDistination.name;
+        string DistNameJp = PortDistination.GetComponent<NpcEvent>().NameJp;
+        Vector3 DistPos = PortDistination.transform.position;
         yield return null;
         MainControl.GetComponent<MainControl>().isControllEnabled = false;
         MessageWindow.GetComponent<MessageWindow>().isActive = true;
 
-        MessageWindow.GetComponent<MessageWindow>().MessageText = "First Village へ移動します。\nよろしいですか？";
+        MessageWindow.GetComponent<MessageWindow>().MessageText = DistNameJp +" へ移動します。\nよろしいですか？";
 
         GameObject SelectWindowObject = Instantiate(SelectWindow, UiObject.transform, false);
         yield return StartCoroutine(SelectWindowObject.GetComponent<SelectWindow>().YesNoWindow());
@@ -147,10 +152,21 @@ public class NpcEvent : MonoBehaviour
 
         if (ReturnIndex == 0)
         {
+            GameObject Player = GameObject.Find("Player");
+
+            Debug.Log("aaaaaaaaaaaa01");
             //yield return StartCoroutine(FadeOut(1));
-            MainControl.GetComponent<MainControl>().LoadMap(DistObject.transform.parent.transform.parent.name);
-            Player.transform.position = DistObject.transform.position + new Vector3(0, 0, -1);
+            Debug.Log("aaaaaaaaaaaa02");
+            MainControl.GetComponent<MainControl>().LoadMap(PortDistination.transform.parent.transform.parent.name);
+            Debug.Log("aaaaaaaaaaaa03");
+            Debug.Log("PlayerPos:" + Player.transform.position.ToString());
+            Debug.Log("DistPos:"+DistPos.ToString());
+            Player.transform.position = DistPos + new Vector3(0, 1000, -2);
+            Debug.Log("PlayerPos:" + Player.transform.position.ToString());
+            MainControl.GetComponent<MainControl>().Landing(Player);
+            Debug.Log("aaaaaaaaaaaa04");
             //yield return StartCoroutine(FadeIn(1));
+
 
         }
 
@@ -160,43 +176,18 @@ public class NpcEvent : MonoBehaviour
         MainControl.GetComponent<MainControl>().isControllEnabled = true;
 
     }
-
-    //---------------------------------------------------------------------------------------------------
-    // イベント
-    //---------------------------------------------------------------------------------------------------
-    private IEnumerator Porter1_FirstVillage()
-    {
-        string DistName = "Porter1_SecondTown";
-        GameObject DistObject = SearchNpc(DistName);
-
-        //MessageWindow.GetComponent<MessageWindow>().MessageText = this.gameObject.GetComponent<Text>().text;
-
-        yield return null;
-        MainControl.GetComponent<MainControl>().isControllEnabled = false;
-        MessageWindow.GetComponent<MessageWindow>().isActive = true;
-
-        MessageWindow.GetComponent<MessageWindow>().MessageText = "Second Town へ移動します。\nよろしいですか？";
-
-        GameObject SelectWindowObject = Instantiate(SelectWindow, UiObject.transform, false);
-        yield return StartCoroutine(SelectWindowObject.GetComponent<SelectWindow>().YesNoWindow());
-        int ReturnIndex = SelectWindowObject.GetComponent<SelectWindow>().ReturnIndex;
-        Destroy(SelectWindowObject);
-
-        if (ReturnIndex == 0)
-        {
-            //yield return StartCoroutine(FadeOut(1));
-            MainControl.GetComponent<MainControl>().LoadMap(DistObject.transform.parent.transform.parent.name);
-            Player.transform.position = DistObject.transform.position + new Vector3(0, 0, -1);
-            //yield return StartCoroutine(FadeIn(1));
-
-        }
+    //private IEnumerator LoadMap(string pMapName )
+    //{
+    //    Debug.Log(pMapName);
+    //    MainControl.GetComponent<MainControl>().LoadMap(pMapName);
+    //    yield return null;
+    //}
 
 
-        MessageWindow.GetComponent<MessageWindow>().isActive = false;
-        isEventInProgress = false;
-        MainControl.GetComponent<MainControl>().isControllEnabled = true;
 
-    }
+
+    
+
 
 
 

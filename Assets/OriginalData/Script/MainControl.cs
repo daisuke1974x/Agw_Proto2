@@ -615,7 +615,7 @@ public class MainControl : MonoBehaviour
     //*******************************************************************************************************************************************
     // オブジェクトを着地させる
     //*******************************************************************************************************************************************
-    void Landing(GameObject obj)
+    public void Landing(GameObject obj)
     {
         Vector3 startVec = obj.transform.position;
         Vector3 endVec = obj.transform.position;
@@ -951,7 +951,7 @@ public class MainControl : MonoBehaviour
                 SaveFieldData.MapName = CurrentMapName;
 
                 string FragmentName = DistObject.name;
-                FragmentName = FragmentName.Substring(0, FragmentName.Length - "(Clone)".Length);
+                //FragmentName = FragmentName.Substring(0, FragmentName.Length - "(Clone)".Length);
                 SaveFieldData.FragmentName = FragmentName;
                 SaveFieldData.BlockX = Mathf.RoundToInt(DistObject.transform.position.x / 10f);
                 SaveFieldData.BlockY = Mathf.RoundToInt(DistObject.transform.position.y / 10f);
