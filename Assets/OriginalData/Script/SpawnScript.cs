@@ -8,12 +8,31 @@ public class SpawnScript : MonoBehaviour
     public float SpawnInterval;
     public float SpawnDistance;
 
+    public float[] DropRate;
+    public enumItemType[] ItemType;
+    public string[] ItemName;
+
     private GameObject SpawnedEnemy;
     private float SpawnIntervalCounter;
     private GameObject PlayerObject;
 
     private GameObject[] EnemyPrefab;
     public bool SpawnEnebled = true;//一度範囲外に出ないと再ポップしないようにするためのフラグ
+
+    //public struct stDropItem
+    //{
+    //    float DropRate;
+    //    enumItemType ItemType;
+    //    string ItemName;
+    //}
+
+    public enum enumItemType
+    {
+        Fragment,
+        Money,
+        Item
+
+    }
 
     // Start is called before the first frame update
     void Start()
