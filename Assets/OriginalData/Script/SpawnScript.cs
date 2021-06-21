@@ -23,7 +23,7 @@ public class SpawnScript : MonoBehaviour
     //public GameObject objDropItem;
 
     private GameObject objChestPrefab;
-    private GameObject Hierarchy_TargetObject;
+    private GameObject CurrentNpcObject;
 
     //public struct stDropItem
     //{
@@ -36,7 +36,7 @@ public class SpawnScript : MonoBehaviour
     {
         Fragment,
         Money,
-        Item
+        Potion
 
     }
 
@@ -52,7 +52,7 @@ public class SpawnScript : MonoBehaviour
         //ドロップアイテムのプレファブの読み込み
         objDropItemPrefab = Resources.LoadAll<GameObject>("DropItems");
         objChestPrefab = objDropItemPrefab[1];
-        Hierarchy_TargetObject = GameObject.Find("CurrentNpc");
+        CurrentNpcObject = GameObject.Find("CurrentNpc");
     }
 
     // Update is called once per frame
@@ -162,6 +162,12 @@ public class SpawnScript : MonoBehaviour
         {
             case enumItemType.Money:
                 DropMoney(ItemName[GetIndex], SpawnedEnemy.transform.position);
+                break;
+            case enumItemType.Potion:
+                DropPotion(SpawnedEnemy.transform.position);
+                break;
+            case enumItemType.Fragment:
+                DropChest(SpawnedEnemy.transform.position);
                 break;
 
 
@@ -279,8 +285,8 @@ public class SpawnScript : MonoBehaviour
     //*******************************************************************************************************************************************
     private void DropPotion(Vector3 pPos)
     {
-        GameObject objInstanceItem = Instantiate(objDropItemPrefab[2], SpawnedEnemy.transform, false);
-        Vector3 pos = this.transform.position;
+        GameObject objInstanceItem = Instantiate(objDropItemPrefab[2], this.transform.parent, false);
+        Vector3 pos = pPos;
         pos.y += 0.3f;
         objInstanceItem.transform.position = pos;
         Destroy(objInstanceItem, 15f);
@@ -292,9 +298,10 @@ public class SpawnScript : MonoBehaviour
     private void DropChest(Vector3 pPos)
     {
 
-        GameObject objChest = Instantiate(objChestPrefab, Hierarchy_TargetObject.transform, false);
-        Vector3 pos = this.transform.position;
-        objChest.transform.position = pos;
+        GameObject objChest = Instantiate(objChestPrefab, CurrentNpcObject.transform, false);
+        objChest.name = objChestPrefab.name;
+        //Vector3 pos = pPos;
+        objChest.transform.position = pPos;
 
         GameObject objPlayer = GameObject.Find("Player");
         objChest.transform.LookAt(objPlayer.transform);
