@@ -17,7 +17,7 @@ public class SpawnScript : MonoBehaviour
     private GameObject PlayerObject;
 
     private GameObject[] EnemyPrefab;
-    public bool SpawnEnebled = true;//一度範囲外に出ないと再ポップしないようにするためのフラグ
+    public bool SpawnEnabled = true;//一度範囲外に出ないと再ポップしないようにするためのフラグ
 
     private GameObject[] objDropItemPrefab;
     //public GameObject objDropItem;
@@ -66,16 +66,16 @@ public class SpawnScript : MonoBehaviour
                 float dist = Vector3.Distance(PlayerObject.transform.position, this.transform.position);
                 if (dist < SpawnDistance)
                 {
-                    if (SpawnEnebled == true)
+                    if (SpawnEnabled == true)
                     {
                         SpawnedEnemy = Spawn(EnemyName, this.transform.position);
-                        SpawnEnebled = false;
+                        SpawnEnabled = false;
                         SpawnIntervalCounter = SpawnInterval;
                     }
                 }
                 else
                 {
-                    SpawnEnebled = true;
+                    SpawnEnabled = true;
                 }
 
 
@@ -87,7 +87,7 @@ public class SpawnScript : MonoBehaviour
             if (dist > 20f)
             {
                 Destroy(SpawnedEnemy);
-                SpawnEnebled = false;
+                SpawnEnabled = false;
             }
 
         }
@@ -105,8 +105,8 @@ public class SpawnScript : MonoBehaviour
             if (objI.name == pEnemyName)
             {
                 GameObject objInstance = Instantiate(objI, pPos, new Quaternion(), this.transform);
-                //objInstance.transform.position = pPos;
-
+                objInstance.transform.position = pPos;
+                objInstance.name = pEnemyName;
                 Vector3 startVec = objInstance.transform.position;
                 Vector3 endVec = objInstance.transform.position;
                 startVec.y = 9999;
@@ -170,8 +170,6 @@ public class SpawnScript : MonoBehaviour
         }
 
 
-        //if (GetIndex == 0) DropMoney(1, SpawnedEnemy.transform.position);
-        //if (GetIndex == 1) DropMoney(5, SpawnedEnemy.transform.position);
         return;
 
 
@@ -220,7 +218,7 @@ public class SpawnScript : MonoBehaviour
         GameObject objInstanceItem = Instantiate(objDropItemPrefab[0], this.transform.parent, false);
         objInstanceItem.name = objDropItemPrefab[0].name;
 
-        Vector3 pos = this.transform.position;
+        Vector3 pos = pPos;
         pos.y += 0.3f;
         objInstanceItem.transform.position = pos;
 
