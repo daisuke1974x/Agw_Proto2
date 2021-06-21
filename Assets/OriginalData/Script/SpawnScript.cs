@@ -161,13 +161,13 @@ public class SpawnScript : MonoBehaviour
         switch (ItemType[GetIndex])
         {
             case enumItemType.Money:
-                DropMoney(ItemName[GetIndex], SpawnedEnemy.transform.position);
+                DropMoney( SpawnedEnemy.transform.position, ItemName[GetIndex]);
                 break;
             case enumItemType.Potion:
                 DropPotion(SpawnedEnemy.transform.position);
                 break;
             case enumItemType.Fragment:
-                DropChest(SpawnedEnemy.transform.position);
+                DropChest(SpawnedEnemy.transform.position, ItemName[GetIndex]);
                 break;
 
 
@@ -179,33 +179,33 @@ public class SpawnScript : MonoBehaviour
         return;
 
 
-        //ドロップアイテム
-        int Rnd = Random.Range(0, 100);
-        if (0 <= Rnd && Rnd < 0)
-        {
-            //ドロップなし
+        ////ドロップアイテム
+        //int Rnd = Random.Range(0, 100);
+        //if (0 <= Rnd && Rnd < 0)
+        //{
+        //    //ドロップなし
 
-        }
-        if (0 <= Rnd && Rnd < 100)
-        {
-            int Rnd2 = Random.Range(0, 100);
-            if (0 <= Rnd2 && Rnd2 < 0)
-            {
-                DropMoney("1", SpawnedEnemy.transform.position);
-            }
-            if (30 <= Rnd2 && Rnd2 < 0)
-            {
-                DropMoney("10", SpawnedEnemy.transform.position);
-            }
-            if (0 <= Rnd2 && Rnd2 < 100)
-            {
-                DropChest(SpawnedEnemy.transform.position);
-            }
-            if (00 <= Rnd2 && Rnd2 < 0)
-            {
-                DropPotion(SpawnedEnemy.transform.position);
-            }
-        }
+        //}
+        //if (0 <= Rnd && Rnd < 100)
+        //{
+        //    int Rnd2 = Random.Range(0, 100);
+        //    if (0 <= Rnd2 && Rnd2 < 0)
+        //    {
+        //        DropMoney("1", SpawnedEnemy.transform.position);
+        //    }
+        //    if (30 <= Rnd2 && Rnd2 < 0)
+        //    {
+        //        DropMoney("10", SpawnedEnemy.transform.position);
+        //    }
+        //    if (0 <= Rnd2 && Rnd2 < 100)
+        //    {
+        //        DropChest(SpawnedEnemy.transform.position);
+        //    }
+        //    if (00 <= Rnd2 && Rnd2 < 0)
+        //    {
+        //        DropPotion(SpawnedEnemy.transform.position);
+        //    }
+        //}
 
 
         //int rnd = Random.Range(3, 7);
@@ -219,7 +219,7 @@ public class SpawnScript : MonoBehaviour
     //*******************************************************************************************************************************************
     // お金をドロップさせる
     //*******************************************************************************************************************************************
-    private void DropMoney(string pMoneyValue, Vector3 pPos)
+    private void DropMoney(Vector3 pPos,string pMoneyValue )
     {
         GameObject objInstanceItem = Instantiate(objDropItemPrefab[0], this.transform.parent, false);
         objInstanceItem.name = objDropItemPrefab[0].name;
@@ -295,13 +295,14 @@ public class SpawnScript : MonoBehaviour
     //*******************************************************************************************************************************************
     // 宝箱をドロップさせる
     //*******************************************************************************************************************************************
-    private void DropChest(Vector3 pPos)
+    private void DropChest(Vector3 pPos, string pFragmentStockName)
     {
 
         GameObject objChest = Instantiate(objChestPrefab, CurrentNpcObject.transform, false);
         objChest.name = objChestPrefab.name;
         //Vector3 pos = pPos;
         objChest.transform.position = pPos;
+        objChest.GetComponent<Chest>().FragmentStockName = pFragmentStockName;
 
         GameObject objPlayer = GameObject.Find("Player");
         objChest.transform.LookAt(objPlayer.transform);

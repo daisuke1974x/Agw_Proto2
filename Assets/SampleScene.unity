@@ -2485,19 +2485,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8852951649462989637, guid: 9f2c7764ac38a5d4ab5986f8487f1dad, type: 3}
       propertyPath: DropRate.Array.data[0]
-      value: 0.9
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8852951649462989637, guid: 9f2c7764ac38a5d4ab5986f8487f1dad, type: 3}
       propertyPath: DropRate.Array.data[1]
-      value: 0.1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8852951649462989637, guid: 9f2c7764ac38a5d4ab5986f8487f1dad, type: 3}
       propertyPath: ItemName.Array.data[0]
-      value: 20
+      value: 1x1_Green
       objectReference: {fileID: 0}
     - target: {fileID: 8852951649462989637, guid: 9f2c7764ac38a5d4ab5986f8487f1dad, type: 3}
       propertyPath: ItemName.Array.data[1]
-      value: 
+      value: 1x2_Green
       objectReference: {fileID: 0}
     - target: {fileID: 8852951649462989637, guid: 9f2c7764ac38a5d4ab5986f8487f1dad, type: 3}
       propertyPath: ItemType.Array.data[0]
@@ -2505,7 +2505,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8852951649462989637, guid: 9f2c7764ac38a5d4ab5986f8487f1dad, type: 3}
       propertyPath: ItemType.Array.data[1]
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9f2c7764ac38a5d4ab5986f8487f1dad, type: 3}

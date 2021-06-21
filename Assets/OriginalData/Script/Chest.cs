@@ -25,6 +25,7 @@ public class Chest : MonoBehaviour
     public GameObject objField;
     public GameObject FragmentCapsule;
 
+    public string FragmentStockName;
 
     private FragmentList FragmentListScript;
 
@@ -114,10 +115,7 @@ public class Chest : MonoBehaviour
         Rnd= Random.Range(0, 100);
         FragmentListScript.Chest = this.gameObject;
 
-
-        MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road2", 0, 0, 0, 0);
-        MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road1", 1, 0, 0, 1);
-        FragmentListScript.AddList(StockName);
+        MakeFragmentStock(FragmentStockName, StockName);
         return;
 
 
@@ -368,4 +366,58 @@ public class Chest : MonoBehaviour
 
 
     }
+
+    private void MakeFragmentStock(string pFragmentStockName,string pStockName)
+    {
+        switch (pFragmentStockName)
+        {
+            case "1x1_Green":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 0, 0, 0, 0);
+                break;
+
+            case "1x2_Green":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 0, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 1, 0, 0, 0);
+                break;
+
+            case "1x3_Green":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 0, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 1, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", -1, 0, 0, 0);
+                break;
+
+            case "1x3_Green_L":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 0, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 1, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 0, 0, 1, 0);
+                break;
+
+            case "1x4_Green":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 0, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 1, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 0, 0, 1, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 0, 0, 2, 0);
+                break;
+
+            case "2x2_Green":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 0, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", -1, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 0, 0, 1, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 0, 0, 2, 0);
+                break;
+
+            case "2x2_Green_L":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 0, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 1, 0, 1, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 0, 0, 1, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 1, 0, 0, 0);
+                break;
+
+        }
+
+        FragmentListScript.AddList(pStockName);
+        return;
+
+    }
+
 }
