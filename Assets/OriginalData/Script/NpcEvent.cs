@@ -19,6 +19,7 @@ public class NpcEvent : MonoBehaviour
     private GameObject SelectWindow;
     private GameObject UiObject;
     private GameObject WorldMapObject;
+    private GameObject MainCameraObject;
 
     //public bool isPorter = false;
     public GameObject PortDistination;
@@ -44,6 +45,7 @@ public class NpcEvent : MonoBehaviour
 
         MainControl = GameObject.Find("MainControl");
         TargetCursor = GameObject.Find("TargetCursor");
+        MainCameraObject = GameObject.Find("MainCamera");
 
         WorldMapObject = GameObject.Find("WorldMap");
 
@@ -171,11 +173,15 @@ public class NpcEvent : MonoBehaviour
             yield return StartCoroutine(FadeOut(1));//フェードアウト
             MainControl.GetComponent<MainControl>().LoadMap(PortDistination.transform.parent.transform.parent.name, this.gameObject);//2021．6.20第二パラメータを追加。自分自身のオブジェクトは後でDestroyするよう修正。これをしないと、この後のコルーチンが正常に動作しなくなるため。
 
-            Debug.Log("PlayerPos:" + Player.transform.position.ToString());
-            Debug.Log("DistPos:"+DistPos.ToString());
-            Player.transform.position = DistPos + new Vector3(0, 1000, -2);//うまくいくときといかないときがあるバグ◆◆◆◆◆◆◆◆◆◆◆
+            // プレイヤーの位置の移動（ワープ）
+            //  2021.6.23 うまく移動できるときとそうでないときがあって悩んだが、ググったら原因が判明。enabled = false
+            //  https://gametukurikata.com/basic/pitfallsofcharactercontroller
+            Player.GetComponent<CharacterController>().enabled = false;
+            Player.transform.position = DistPos + new Vector3(0, 0, -2);
             MainControl.GetComponent<MainControl>().Landing(Player);
-            Debug.Log("PlayerPos:" + Player.transform.position.ToString());
+            Player.GetComponent<CharacterController>().enabled = true;
+
+            MainCameraObject.GetComponent<MainCamera>().SetHomePosition();
 
             MessageWindow.GetComponent<MessageWindow>().isActive = false;//ウィンドウを消す
             this.gameObject.transform.position = new Vector3(10000f, 10000f, 10000f);//このイベントオブジェクトを見えない位置に移動する

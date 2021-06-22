@@ -22,10 +22,7 @@ public class MainCamera : MonoBehaviour
     void Start()
     {
         //カメラ初期位置
-        this.transform.position = objPlayer.transform.position;
-        this.transform.rotation = objPlayer.transform.rotation;
-        this.transform.position += this.transform.forward * -CameraDistance;
-        this.transform.RotateAround(objPlayer.transform.position, objPlayer.transform.TransformDirection(Vector3.left), -30);
+        SetHomePosition();
 
         //カメラリンクオブジェクトの生成
         objCameraLink = new GameObject("CameraLink");  //GameObject objCameraLink = new GameObject("CameraLink");  とすると、UpdateでNullになる謎。2021/5/23
@@ -33,6 +30,17 @@ public class MainCamera : MonoBehaviour
         objCameraLink.transform.rotation = objPlayer.transform.rotation;
 
     }
+
+    //カメラ初期位置
+    public void SetHomePosition()
+    {
+        this.transform.position = objPlayer.transform.position;
+        this.transform.rotation = objPlayer.transform.rotation;
+        this.transform.position += this.transform.forward * -CameraDistance;
+        this.transform.RotateAround(objPlayer.transform.position, objPlayer.transform.TransformDirection(Vector3.left), -30);
+
+    }
+
 
     // Update is called once per frame
     void Update()
