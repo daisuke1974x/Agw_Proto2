@@ -119,252 +119,6 @@ public class Chest : MonoBehaviour
         return;
 
 
-
-        //óŒínån
-        if (0<= Rnd && Rnd < 60)
-        {
-            Rnd = Random.Range(0, 100);
-            if (0<=Rnd&&Rnd < 50)
-            {
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 0, 0, 0, 0);
-                FragmentListScript.AddList(StockName);
-                return;
-            }
-            if (50 <= Rnd && Rnd < 70)
-            {
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 0, 0, 0, 0);
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 1, 0, 0, 0);
-                FragmentListScript.AddList(StockName);
-                return;
-            }
-            if (70 <= Rnd && Rnd < 80)
-            {
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 0, 0, 0, 0);
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 1, 0, 0, 0);
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", -1, 0, 0, 0);
-                FragmentListScript.AddList(StockName);
-                return;
-            }
-            if (80 <= Rnd && Rnd < 85)
-            {
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 0, 0, 0, 0);
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 1, 0, 0, 0);
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 0, 0, 1, 0);
-                FragmentListScript.AddList(StockName);
-                return;
-            }
-            if (85 <= Rnd && Rnd < 88)
-            {
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 0, 0, 0, 0);
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 1, 0, 0, 0);
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 0, 0, 1, 0);
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 0, 0, 2, 0);
-                FragmentListScript.AddList(StockName);
-                return;
-            }
-            if (88 <= Rnd && Rnd < 91)
-            {
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 0, 0, 0, 0);
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", -1, 0, 0, 0);
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 0, 0, 1, 0);
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 0, 0, 2, 0);
-                FragmentListScript.AddList(StockName);
-                return;
-            }
-            if (91 <= Rnd && Rnd < 100)
-            {
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 0, 0, 0, 0);
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 1, 0, 1, 0);
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 0, 0, 1, 0);
-                MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Green", 1, 0, 0, 0);
-                FragmentListScript.AddList(StockName);
-                return;
-            }
-
-
-        }
-
-        //ìπòHån
-        if (60 <= Rnd && Rnd < 90)
-        {
-            Rnd = Random.Range(0, 100);
-            if (0 <= Rnd && Rnd < 70)
-            {
-                Rnd = Random.Range(0, 100);
-                if (0 <= Rnd && Rnd < 50)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road1", 0, 0, 0, 0);
-                    FragmentListScript.AddList(StockName);
-                    return;
-                }
-                if (50 <= Rnd && Rnd < 60)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road0", 0, 0, 0, 0);
-                    FragmentListScript.AddList(StockName);
-                    return;
-                }
-                if (60 <= Rnd && Rnd < 80)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road2", 0, 0, 0, 0);
-                    FragmentListScript.AddList(StockName);
-                    return;
-                }
-                if (80 <= Rnd && Rnd < 95)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road3", 0, 0, 0, 0);
-                    FragmentListScript.AddList(StockName);
-                    return;
-                }
-                if (95 <= Rnd && Rnd < 100)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road4", 0, 0, 0, 0);
-                    FragmentListScript.AddList(StockName);
-                    return;
-                }
-
-            }
-            if (70 <= Rnd && Rnd < 100)
-            {
-                if (0 <= Rnd && Rnd < 50)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road1", 0, 0, 0, 0);
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road1", 1, 0, 0, 0);
-                    FragmentListScript.AddList(StockName);
-                    return;
-                }
-                if (50 <= Rnd && Rnd < 70)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road2", 0, 0, 0, 0);
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road1", 1, 0, 0, 1);
-                    FragmentListScript.AddList(StockName);
-                    return;
-                }
-                if (70 <= Rnd && Rnd < 90)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road2", 0, 0, 0, 2);
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road1", -1, 0, 0,1);
-                    FragmentListScript.AddList(StockName);
-                    return;
-                }
-                if (90 <= Rnd && Rnd < 94)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road3", 0, 0, 0, 0);
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road1", -1, 0, 0, 1);
-                    FragmentListScript.AddList(StockName);
-                    return;
-                }
-                if (94 <= Rnd && Rnd < 98)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road3", 0, 0, 0, 0);
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road1", 1, 0, 0, 1);
-                    FragmentListScript.AddList(StockName);
-                    return;
-                }
-                if (98 <= Rnd && Rnd < 100)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road3", 0, 0, 0, 0);
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "Road1", 0, 0, 1, 0);
-                    FragmentListScript.AddList(StockName);
-                    return;
-                }
-            }
-
-
-        }
-
-        //âÕêÏån
-        if (90 <= Rnd && Rnd < 100)
-        {
-            Rnd = Random.Range(0, 100);
-            if (0 <= Rnd && Rnd < 60)
-            {
-                Rnd = Random.Range(0, 100);
-                if (0 <= Rnd && Rnd < 60)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "River1", 0, 0, 0, 0);
-                    FragmentListScript.AddList(StockName);
-                    return;
-
-                }
-                if (60 <= Rnd && Rnd < 80)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "River2", 0, 0, 0, 0);
-                    FragmentListScript.AddList(StockName);
-                    return;
-
-                }
-                if (80 <= Rnd && Rnd < 90)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "RiverBridge", 0, 0, 0, 0);
-                    FragmentListScript.AddList(StockName);
-                    return;
-
-                }
-                if (90 <= Rnd && Rnd < 100)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "River3", 0, 0, 0, 0);
-                    FragmentListScript.AddList(StockName);
-                    return;
-
-                }
-
-            }
-            if (60 <= Rnd && Rnd < 100)
-            {
-                Rnd = Random.Range(0, 100);
-                if (0 <= Rnd && Rnd < 60)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "River1", 0, 0, 0, 0);
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "River1", 0, 0, 1, 0);
-                    FragmentListScript.AddList(StockName);
-                    return;
-                }
-                if (60 <= Rnd && Rnd < 80)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "River1", 0, 0, 1, 0);
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "River2", 0, 0, 0, 3);
-                    FragmentListScript.AddList(StockName);
-                    return;
-
-                }
-                if (80 <= Rnd && Rnd < 90)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "River1", 0, 0, 1, 0);
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "River2", 0, 0, 0, 2);
-                    FragmentListScript.AddList(StockName);
-                    return;
-                }
-                if (90 <= Rnd && Rnd < 94)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "River3", 0, 0, 0, 0);
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "River1", -1, 0, 0, 0);
-                    FragmentListScript.AddList(StockName);
-                    return;
-                }
-                if (94 <= Rnd && Rnd < 98)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "River3", 0, 0, 0, 0);
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "River1", 1, 0, 0, 0);
-                    FragmentListScript.AddList(StockName);
-                    return;
-                }
-                if (98 <= Rnd && Rnd < 100)
-                {
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "River3", 0, 0, 0, 0);
-                    MainControl.GetComponent<MainControl>().LoadFragment(StockName, "River1", 0, 0, 1, 0);
-                    FragmentListScript.AddList(StockName);
-                    return;
-                }
-
-            }
-
-        }
-
-
-
-
-
-
     }
 
     private void MakeFragmentStock(string pFragmentStockName,string pStockName)
@@ -411,6 +165,102 @@ public class Chest : MonoBehaviour
                 MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 1, 0, 1, 0);
                 MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 0, 0, 1, 0);
                 MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Green", 1, 0, 0, 0);
+                break;
+
+            case "1x1_Road1":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Road1", 0, 0, 0, 0);
+                break;
+
+            case "1x1_Road0":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Road0", 0, 0, 0, 0);
+                break;
+
+            case "1x1_Road2":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Road2", 0, 0, 0, 0);
+                break;
+
+            case "1x1_Road3":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Road3", 0, 0, 0, 0);
+                break;
+
+            case "1x1_Road4":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Road4", 0, 0, 0, 0);
+                break;
+
+            case "1x2_Road11":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Road1", 0, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Road1", 1, 0, 0, 0);
+                break;
+
+            case "1x2_Road12_1":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Road2", 0, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Road1", 1, 0, 0, 1);
+                break;
+
+            case "1x2_Road12_2":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Road2", 0, 0, 0, 2);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Road1", -1, 0, 0, 1);
+                break;
+
+            case "1x2_Road13_1":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Road3", 0, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Road1", -1, 0, 0, 1);
+                break;
+
+            case "1x2_Road13_2":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Road3", 0, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Road1", 1, 0, 0, 1);
+                break;
+
+            case "1x2_Road13_3":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Road3", 0, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "Road1", 0, 0, 1, 0);
+                break;
+
+            case "1x1_River1":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "River1", 0, 0, 0, 0);
+                break;
+
+            case "1x1_River2":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "River2", 0, 0, 0, 0);
+                break;
+
+            case "1x1_RiverBridge":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "RiverBridge", 0, 0, 0, 0);
+                break;
+
+            case "1x1_River3":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "River3", 0, 0, 0, 0);
+                break;
+
+            case "1x2_River11":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "River1", 0, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "River1", 0, 0, 1, 0);
+                break;
+
+            case "1x2_River12_1":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "River1", 0, 0, 1, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "River2", 0, 0, 0, 3);
+                break;
+
+            case "1x2_River12_2":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "River1", 0, 0, 1, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "River2", 0, 0, 0, 2);
+                break;
+
+            case "1x2_River13_1":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "River3", 0, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "River1", -1, 0, 0, 0);
+                break;
+
+            case "1x2_River13_2":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "River3", 0, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "River1", 1, 0, 0, 0);
+                break;
+
+            case "1x2_River13_3":
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "River3", 0, 0, 0, 0);
+                MainControl.GetComponent<MainControl>().LoadFragment(pStockName, "River1", 0, 0, 1, 0);
                 break;
 
         }
