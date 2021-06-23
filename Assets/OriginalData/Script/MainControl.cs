@@ -13,8 +13,8 @@ public class MainControl : MonoBehaviour
 
 
     //プレイヤーキャラクター関連
-    public GameObject objPlayer;
-    public GameObject objPlayerAppearance;
+    public GameObject PlayerObject;
+    public GameObject PlayerAppearanceObject;
     private Animator objAnimator;
     private CharacterController objCharController;
     //private bool MoveFlag = false;
@@ -111,15 +111,15 @@ public class MainControl : MonoBehaviour
 
         //objControllerManager = gameObject.GetComponent<s_ControllerManager>();
 
-        objCharController = objPlayer.GetComponent<CharacterController>();
-        objAnimator = objPlayerAppearance.GetComponent<Animator>();
-        PlayerStatus = objPlayer.GetComponent<CharStatus>();
+        objCharController = PlayerObject.GetComponent<CharacterController>();
+        objAnimator = PlayerAppearanceObject.GetComponent<Animator>();
+        PlayerStatus = PlayerObject.GetComponent<CharStatus>();
 
         objText_Debug = objUI_Debug.GetComponent<Text>();
         objText_HP = objUI_HP.GetComponent<Text>();
 
         //着地させる
-        Landing(objPlayer.gameObject);
+        Landing(PlayerObject.gameObject);
 
         ////カメラ初期位置
         //initCamera();
@@ -256,7 +256,7 @@ public class MainControl : MonoBehaviour
         //---------------------------------------------------------------------------------------------------------------------------------------
         if ((Input.GetAxis("LstickLR") != 0 || Input.GetAxis("LstickUD") != 0) && Mode == "Main" && isControllEnabled == true)
         {
-            objPlayer.transform.rotation = Quaternion.LookRotation(moveDirection);
+            PlayerObject.transform.rotation = Quaternion.LookRotation(moveDirection);
             //垂直に向ける処理をここに入れて悩んだが、LookRotationにしたら、不要になった。
 
             if (objCharController.isGrounded)
@@ -372,8 +372,8 @@ public class MainControl : MonoBehaviour
         //坂道のとき滑らせる処理
         //---------------------------------------------------------------------------------------------------------------------------------------
         //http://hideapp.cocolog-nifty.com/blog/2015/03/unity-tips-char.html
-        Vector3 startVec = objPlayerAppearance.transform.position + objPlayer.transform.forward * 0f;
-        Vector3 endVec = objPlayerAppearance.transform.position + objPlayer.transform.forward * 0f;
+        Vector3 startVec = PlayerAppearanceObject.transform.position + PlayerObject.transform.forward * 0f;
+        Vector3 endVec = PlayerAppearanceObject.transform.position + PlayerObject.transform.forward * 0f;
         startVec.y = 9999;
         endVec.y = -9999;
         RaycastHit slideHit;
@@ -435,9 +435,9 @@ public class MainControl : MonoBehaviour
         //---------------------------------------------------------------------------------------------------------------------------------------
         //フィールドパーツの外には落ちないようにするチェック
         //---------------------------------------------------------------------------------------------------------------------------------------
-        if (CheckAbyss(objPlayer))
+        if (CheckAbyss(PlayerObject))
         {
-            Vector3 AbyssPos = objPlayer.transform.position;
+            Vector3 AbyssPos = PlayerObject.transform.position;
             AbyssPos.x = Mathf.Ceil((AbyssPos.x - 5f) / 10f) * 10f;
             AbyssPos.z = Mathf.Ceil((AbyssPos.z - 5f) / 10f) * 10f;
             AbyssPos.y = 0;
@@ -466,9 +466,9 @@ public class MainControl : MonoBehaviour
         {
             //プレイヤーがobjFieldCursor一定の距離離れたら、objFieldCursorを消す（遠くの場所に移動）
             //2021.5.28 FieldPatsをSetするときに急に変なところに移動するバグの対応のため、距離を 7f -> 9f に変更。
-            if (Vector3.Distance(objPlayer.transform.position, objFieldCursor.transform.position) > 9f)
+            if (Vector3.Distance(PlayerObject.transform.position, objFieldCursor.transform.position) > 9f)
             {
-                Vector3 AbyssPos = objPlayer.transform.position;
+                Vector3 AbyssPos = PlayerObject.transform.position;
                 AbyssPos.x = 0;
                 AbyssPos.z = 99999f;
                 AbyssPos.y = 0;
@@ -524,31 +524,31 @@ public class MainControl : MonoBehaviour
 
 
         //---------------------------------------------------------------------------------------------------------------------------------------
-        //objPlayerに合わせて、objPlayerAppearanceを追随させる
+        //PlayerObjectに合わせて、PlayerAppearanceObjectを追随させる
         //---------------------------------------------------------------------------------------------------------------------------------------
-        Vector3 tmpVector3 = objPlayerAppearance.transform.position;
-        tmpVector3.x = objPlayer.transform.position.x;
-        tmpVector3.y = objPlayer.transform.position.y - 0.5f;
-        tmpVector3.z = objPlayer.transform.position.z;
-        objPlayerAppearance.transform.position = tmpVector3;
+        Vector3 tmpVector3 = PlayerAppearanceObject.transform.position;
+        tmpVector3.x = PlayerObject.transform.position.x;
+        tmpVector3.y = PlayerObject.transform.position.y - 0.5f;
+        tmpVector3.z = PlayerObject.transform.position.z;
+        PlayerAppearanceObject.transform.position = tmpVector3;
 
 
         //  移動キーの入力があるときに、向きも追随させる
         if (Input.GetAxis("LstickUD") != 0 || Input.GetAxis("LstickLR") != 0)
         {
-            objPlayerAppearance.transform.rotation = Quaternion.RotateTowards(objPlayerAppearance.transform.rotation, objPlayer.transform.rotation, DirectionFollowSpeed * Time.deltaTime);   // 向きを q に向けてじわ～っと変化させる.
+            PlayerAppearanceObject.transform.rotation = Quaternion.RotateTowards(PlayerAppearanceObject.transform.rotation, PlayerObject.transform.rotation, DirectionFollowSpeed * Time.deltaTime);   // 向きを q に向けてじわ～っと変化させる.
         }
 
-        //垂直にする　objPlayerAppearanceだけだと変な動き。objPlayerのColliderが傾くと変な動きになるので、objPlayerも垂直にするよう追加 20210511
-        Quaternion tmpQuaternion = objPlayerAppearance.transform.rotation;
+        //垂直にする　PlayerAppearanceObjectだけだと変な動き。PlayerObjectのColliderが傾くと変な動きになるので、PlayerObjectも垂直にするよう追加 20210511
+        Quaternion tmpQuaternion = PlayerAppearanceObject.transform.rotation;
         tmpQuaternion.x = 0;
         tmpQuaternion.z = 0;
-        objPlayerAppearance.transform.rotation = tmpQuaternion;
+        PlayerAppearanceObject.transform.rotation = tmpQuaternion;
 
-        tmpQuaternion = objPlayer.transform.rotation;
+        tmpQuaternion = PlayerObject.transform.rotation;
         tmpQuaternion.x = 0;
         tmpQuaternion.z = 0;
-        objPlayer.transform.rotation = tmpQuaternion;
+        PlayerObject.transform.rotation = tmpQuaternion;
 
 
         //---------------------------------------------------------------------------------------------------------------------------------------
@@ -589,7 +589,7 @@ public class MainControl : MonoBehaviour
         //デバッグ
         //objText_Debug.text += "isGrounded:" + objCharController.isGrounded.ToString() + "\n";
         //objText_Debug.text += "moveDirection.z:" + moveDirection.ToString() + "\n";
-        //objText_Debug.text += "CheckAbyss:" + CheckAbyss(objPlayer).ToString() + "\n";
+        //objText_Debug.text += "CheckAbyss:" + CheckAbyss(PlayerObject).ToString() + "\n";
         //objText_Debug.text += "isKnockBack:" + PlayerStatus.isKnockBack.ToString() + "\n";
 
         //objText_Debug.text += "EnemyCount:" + EnemyControl.GetComponent<EnemyControl>().SpawnCount + "\n";

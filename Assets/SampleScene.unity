@@ -7353,8 +7353,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8016cceb6b83ec4c8ef81e30be9bd49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objPlayer: {fileID: 1992178735}
-  objPlayerAppearance: {fileID: 527640324}
+  PlayerObject: {fileID: 1992178735}
+  PlayerAppearanceObject: {fileID: 527640324}
   objFieldCursor: {fileID: 8569327186576743692}
   isFieldCursorSet: 0
   objSelectedFrame: {fileID: 7949973525504259027, guid: 03f6affa4385c104b8edffde93e80723, type: 3}

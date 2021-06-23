@@ -5,7 +5,7 @@
 /refout:Temp/Assembly-CSharp-Editor.dll.ref
 /deterministic
 /debug:portable
-/optimize+
+/optimize-
 /nostdlib+
 /preferreduilang:en-US
 /langversion:8.0
