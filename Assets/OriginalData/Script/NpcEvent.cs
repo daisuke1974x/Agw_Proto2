@@ -7,7 +7,7 @@ public class NpcEvent : MonoBehaviour
 {
     public enumNpcType NpcType; 
     public string NameJp;
-    public string NameEn;
+    public string NameEn;   
 
     private string EventCode;
     private bool isEventInProgress = false;
@@ -179,13 +179,14 @@ public class NpcEvent : MonoBehaviour
             // プレイヤーの位置の移動（ワープ）
             //  2021.6.23 うまく移動できるときとそうでないときがあって悩んだが、ググったら原因が判明。enabled = false
             //  https://gametukurikata.com/basic/pitfallsofcharactercontroller
-            Player.GetComponent<CharacterController>().enabled = false;
+            Player.GetComponent<CharacterController>().enabled = false;//◆CharacterController停止◆
             Player.transform.position = DistPos + new Vector3(0, 0, -2);
+            Player.transform.rotation = Quaternion.EulerAngles(new Vector3(0, 0, 0));
+            MainControl.GetComponent<MainControl>().PlayerAppearanceObject.transform.rotation = Quaternion.EulerAngles(new Vector3(0, 0, 0));
             MainControl.GetComponent<MainControl>().Landing(Player);
-            Player.GetComponent<CharacterController>().enabled = true;
+            Player.GetComponent<CharacterController>().enabled = true;//◆CharacterController再開◆
 
             MainCameraObject.GetComponent<MainCamera>().SetHomePosition();
-
             MessageWindow.GetComponent<MessageWindow>().isActive = false;//ウィンドウを消す
             this.gameObject.transform.position = new Vector3(10000f, 10000f, 10000f);//このイベントオブジェクトを見えない位置に移動する
 
