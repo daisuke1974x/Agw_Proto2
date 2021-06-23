@@ -12,89 +12,56 @@ public class MainControl : MonoBehaviour
 {
 
 
-    //プレイヤーキャラクター関連
+    //ヒエラルキーのオブジェクト参照（他スクリプトからもアクセスできるよう、共通にする）
     public GameObject PlayerObject;
     public GameObject PlayerAppearanceObject;
-    private Animator objAnimator;
-    private CharacterController objCharController;
-    //private bool MoveFlag = false;
-
-    public GameObject objFieldCursor;
-    public bool isFieldCursorSet;
-    public GameObject objSelectedFrame;
-
+    public GameObject FieldCursorObject;
+    public GameObject SelectedFramePrefab;
     public GameObject EnemyControl;
+    public GameObject MainCameraObject;
+    public GameObject TargetCursorObject;
+    public GameObject CurrentField;
+    public GameObject FragmentsListUI;
+    public GameObject FragmentStock;
+    //public GameObject objWindow_FieldPartsSelect;    //メニュー画面群
+    public GameObject HpBar;
 
+    //インスペクタでは設定しないが、他スクリプトから参照したり更新したりするもの
+    public float BlockIntervalX = 10f;//大地のかけらのスナップサイズ
+    public float BlockIntervalY = 2.5f;//大地のかけらのスナップサイズ
+    public float BlockIntervalZ = 10f;//大地のかけらのスナップサイズ
+    public bool isControllEnabled = true; //操作禁止フラグ
+    public bool isIdle = true;//アイドリング中かどうか
+    public Vector3 WaitingPlacePos = new Vector3(0, 0, 90000f);    //大地のかけらの待機場所
+    public string CurrentMapName = "";    //現在のマップ名
     public CharStatus PlayerStatus;
+    public bool isFieldCursorSet;    //フィールドカーソルが表示されているかどうか
 
-    //Unityの公式スクリプトレファンスにあるものと同じ
-    //十字キーのみで操作(矢印キー＝前後左右移動)
-    //CharacterControllerが必要
 
-    //（Public＝インスペクタで調整可能）
+    private Animator AnimatorObject;
+    private CharacterController CharControllerObject;
+
     private float walkSpeed = 5.0f;  //歩行速度
     private float jumpSpeed = 8f;  //ジャンプ力
     private float gravity = 20.0f;  //重力の大きさ
-
-
     private bool jumpFlag = false; //連続ジャンプ禁止フラグ
-    //private float LastAttackTime = -0.5f;//前回攻撃操作をした時刻
-
-    //private float AttackFreezeTime = 0.5f;//攻撃操作で移動やジャンプを禁止する時間
-
-    //private bool runFlag = false; //アニメーショントリガーを何度も引かないようにするためのフラグ
-    //private bool idleFlag = true; //アニメーショントリガーを何度も引かないようにするためのフラグ
     private bool buttonFlag_Skill1 = false; //連続操作禁止フラグ
     private bool autoRunFlag = false; //オートラン
-
     static bool isSliding = false;
 
-    public float DirectionFollowSpeed = 1200.0f;   // 移動方向に対してキャラクターの向きが追随するときの速度
-
+    private float DirectionFollowSpeed = 1200.0f;   // 移動方向に対してキャラクターの向きが追随するときの速度
     private Vector3 moveDirection = Vector3.zero;   //  移動する方向とベクトルの変数（最初は初期化しておく）
     private Vector3 charDirection = Vector3.zero;   //  キャラクターの向き（最初は初期化しておく）
     private Vector3 moveDirection_Past = Vector3.zero;
     private Vector3 moveDirection_autoRun = Vector3.zero;
 
-
-    //カメラ関連
-    public GameObject objCamera;
-
-    //ターゲットカーソル
-    public GameObject objTargetCursor;
-
-    //UI、デバッグ関連
-    public GameObject objUI_Debug;
-    private Text objText_Debug;
-    public GameObject objUI_HP;
-    private Text objText_HP;
-
-    public float BlockIntervalX = 10f;
-    public float BlockIntervalY = 2.5f;
-    public float BlockIntervalZ = 10f;
-
-    //操作禁止フラグ（別スクリプトから操作する）
-    public bool isControllEnabled = true;
-    public bool isIdle = true;
-
-    //フィールド関連
-    public GameObject CurrentField;
+    //大地のかけらのprefabをfrefabからロードしておくもの
     private GameObject[] FragmentPrefabs;
 
-    private Vector3 WaitingPlacePos = new Vector3(0, 0, 90000f);
 
-    //public GameObject CurrentWorld;
-    public GameObject FragmentsListUI;
-    public string CurrentMapName = "";
-    public GameObject FragmentStock;
-
-    //モード
+    //モード  これはいずれ廃止する◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆
     public string Mode = "Main";
 
-    //メニュー画面群
-    public GameObject objWindow_FieldPartsSelect;
-
-    public GameObject HpBar;
 
 
     //セーブデータ関連
@@ -111,12 +78,10 @@ public class MainControl : MonoBehaviour
 
         //objControllerManager = gameObject.GetComponent<s_ControllerManager>();
 
-        objCharController = PlayerObject.GetComponent<CharacterController>();
-        objAnimator = PlayerAppearanceObject.GetComponent<Animator>();
+        CharControllerObject = PlayerObject.GetComponent<CharacterController>();
+        AnimatorObject = PlayerAppearanceObject.GetComponent<Animator>();
         PlayerStatus = PlayerObject.GetComponent<CharStatus>();
 
-        objText_Debug = objUI_Debug.GetComponent<Text>();
-        objText_HP = objUI_HP.GetComponent<Text>();
 
         //着地させる
         Landing(PlayerObject.gameObject);
@@ -173,7 +138,7 @@ public class MainControl : MonoBehaviour
         HpBar.GetComponent<HpBar>().ResetBar(PlayerStatus.HP, PlayerStatus.HP_Max_Calced);
 
         //FieldPartsSelect画面はいったん非表示
-        objWindow_FieldPartsSelect.SetActive(false);
+        //objWindow_FieldPartsSelect.SetActive(false);
 
         //StockListの更新（あとでサブルーチン化する）
         //List<stStockList> FieldPartsStockList = new List<stStockList>(); //ここでnew すると、他のスクリプトで参照したとき、0件になるので、newしないこと
@@ -222,29 +187,25 @@ public class MainControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        objText_Debug.text = "";
-
-
-
 
         //---------------------------------------------------------------------------------------------------------------------------------------
         // 移動入力(WASD,左スティック）に応じて、移動方向＋量(moveDirection）を設定
         //---------------------------------------------------------------------------------------------------------------------------------------
         moveDirection_Past = moveDirection;
-        var cameraForward = Vector3.Scale(objCamera.transform.forward, new Vector3(1, 0, 1)).normalized;  //  カメラに向かって水平の単位ベクトルを求める。
-        if (isSliding == false && objCharController.isGrounded && isControllEnabled == true)
+        var cameraForward = Vector3.Scale(MainCameraObject.transform.forward, new Vector3(1, 0, 1)).normalized;  //  カメラに向かって水平の単位ベクトルを求める。
+        if (isSliding == false && CharControllerObject.isGrounded && isControllEnabled == true)
         {
             if (Mode == "Main")
             {
 
                 moveDirection = walkSpeed * cameraForward * -Input.GetAxis("LstickUD"); //カメラの前後に対して上下キーの入力成分を加算
-                moveDirection += walkSpeed * objCamera.transform.right * Input.GetAxis("LstickLR");//カメラから直角の方向に対して左右の入力成分を加算（多分、カメラが傾いていないことが前提）
+                moveDirection += walkSpeed * MainCameraObject.transform.right * Input.GetAxis("LstickLR");//カメラから直角の方向に対して左右の入力成分を加算（多分、カメラが傾いていないことが前提）
             }
             else
             {
                 moveDirection = new Vector3(0, 0, 0);
                 //moveDirection = walkSpeed * cameraForward * 0; //カメラの前後に対して上下キーの入力成分を加算
-                //moveDirection += walkSpeed * objCamera.transform.right *0;//カメラから直角の方向に対して左右の入力成分を加算（多分、カメラが傾いていないことが前提）
+                //moveDirection += walkSpeed * MainCameraObject.transform.right *0;//カメラから直角の方向に対して左右の入力成分を加算（多分、カメラが傾いていないことが前提）
 
             }
 
@@ -259,12 +220,12 @@ public class MainControl : MonoBehaviour
             PlayerObject.transform.rotation = Quaternion.LookRotation(moveDirection);
             //垂直に向ける処理をここに入れて悩んだが、LookRotationにしたら、不要になった。
 
-            if (objCharController.isGrounded)
+            if (CharControllerObject.isGrounded)
             {
                 //攻撃中はアニメーションを遷移させない
                 if (PlayerStatus.isAttack == false)
                 {
-                    objAnimator.SetBool("idle", false);
+                    AnimatorObject.SetBool("idle", false);
 
                 }
 
@@ -273,10 +234,10 @@ public class MainControl : MonoBehaviour
         }
         else
         {
-            if (objCharController.isGrounded)
+            if (CharControllerObject.isGrounded)
             {
-                objAnimator.SetBool("idle", true);
-                //objAnimator.SetBool("run", false);
+                AnimatorObject.SetBool("idle", true);
+                //AnimatorObject.SetBool("run", false);
             }
         }
 
@@ -291,14 +252,14 @@ public class MainControl : MonoBehaviour
         // ジャンプ処理
         //---------------------------------------------------------------------------------------------------------------------------------------
         //着地したとき
-        if (objCharController.isGrounded)
+        if (CharControllerObject.isGrounded)
         {
             moveDirection.y = 0f;
         }
 
         if (Input.GetButton("Triangle") == true && Mode== "Main" && isControllEnabled == true)
         {
-            if (objCharController.isGrounded && (isSliding == false))
+            if (CharControllerObject.isGrounded && (isSliding == false))
             {
                 if (jumpFlag == false)
                 {
@@ -310,7 +271,7 @@ public class MainControl : MonoBehaviour
                         moveDirection.y = jumpSpeed;
 
                         //アニメーション切り替え
-                        objAnimator.SetTrigger("jump");
+                        AnimatorObject.SetTrigger("jump");
 
                         //連続ジャンプ禁止フラグをON
                         jumpFlag = true;
@@ -343,11 +304,11 @@ public class MainControl : MonoBehaviour
                 if (PlayerStatus.isAttack == false)
                 {
                     //着地中であること
-                    if (objCharController.isGrounded)
+                    if (CharControllerObject.isGrounded)
                     {
                         //Debug.Log("攻撃");
-                        objAnimator.SetBool("idle", true);
-                        objAnimator.SetTrigger("attack");
+                        AnimatorObject.SetBool("idle", true);
+                        AnimatorObject.SetTrigger("attack");
                         buttonFlag_Skill1 = true;
                         PlayerStatus.startAttack(1f);
 
@@ -380,7 +341,7 @@ public class MainControl : MonoBehaviour
         if (Physics.Linecast(startVec, endVec, out slideHit))
         {
             //衝突した際の面の角度が滑らせたい角度以上かどうか
-            if (Vector3.Angle(slideHit.normal, Vector3.up) > objCharController.slopeLimit)
+            if (Vector3.Angle(slideHit.normal, Vector3.up) > CharControllerObject.slopeLimit)
             {
                 isSliding = true;
             }
@@ -393,7 +354,7 @@ public class MainControl : MonoBehaviour
         //txtDebug.text = "Angle:" + Vector3.Angle(slideHit.normal, Vector3.up) + ", isSliding:" + isSliding;
 
         //滑るフラグが立っていて、かつ着地しているとき、滑らせる
-        if (isSliding && objCharController.isGrounded)
+        if (isSliding && CharControllerObject.isGrounded)
         {
             float slideSpeed = 10f;
             Vector3 hitNormal = slideHit.normal;
@@ -414,18 +375,18 @@ public class MainControl : MonoBehaviour
         {
             if (autoRunFlag == false)
             {
-                objCharController.Move(moveDirection * Time.deltaTime);
+                CharControllerObject.Move(moveDirection * Time.deltaTime);
             }
             else
             {
-                objCharController.Move(moveDirection_autoRun * Time.deltaTime);
+                CharControllerObject.Move(moveDirection_autoRun * Time.deltaTime);
             }
         }
         else
         {
             Vector3 direction = PlayerStatus.KnockBackDirection;
             direction.y -= gravity * Time.deltaTime;
-            objCharController.Move(direction * Time.deltaTime * 1f);
+            CharControllerObject.Move(direction * Time.deltaTime * 1f);
             PlayerStatus.KnockBackDirection *= 0.98f;//だんだんゆっくり
 
 
@@ -441,14 +402,14 @@ public class MainControl : MonoBehaviour
             AbyssPos.x = Mathf.Ceil((AbyssPos.x - 5f) / 10f) * 10f;
             AbyssPos.z = Mathf.Ceil((AbyssPos.z - 5f) / 10f) * 10f;
             AbyssPos.y = 0;
-            objFieldCursor.transform.position = AbyssPos;
+            FieldCursorObject.transform.position = AbyssPos;
             isFieldCursorSet = true;
-            objFieldCursor.GetComponent<FieldCursor>().Appear();
+            FieldCursorObject.GetComponent<FieldCursor>().Appear();
 
             if (PlayerStatus.isKnockBack == false)
             {
                 moveDirection.y = 0;
-                objCharController.Move(moveDirection * -Time.deltaTime * 2);
+                CharControllerObject.Move(moveDirection * -Time.deltaTime * 2);
                 moveDirection.x = 0;
                 moveDirection.z = 0;
             }
@@ -456,7 +417,7 @@ public class MainControl : MonoBehaviour
             {
                 Vector3 direction = PlayerStatus.KnockBackDirection;
                 direction.y = 0;
-                objCharController.Move(direction * -Time.deltaTime * 2);
+                CharControllerObject.Move(direction * -Time.deltaTime * 2);
             }
 
 
@@ -464,17 +425,17 @@ public class MainControl : MonoBehaviour
         }
         else
         {
-            //プレイヤーがobjFieldCursor一定の距離離れたら、objFieldCursorを消す（遠くの場所に移動）
+            //プレイヤーがFieldCursorObject一定の距離離れたら、FieldCursorObjectを消す（遠くの場所に移動）
             //2021.5.28 FieldPatsをSetするときに急に変なところに移動するバグの対応のため、距離を 7f -> 9f に変更。
-            if (Vector3.Distance(PlayerObject.transform.position, objFieldCursor.transform.position) > 9f)
+            if (Vector3.Distance(PlayerObject.transform.position, FieldCursorObject.transform.position) > 9f)
             {
                 Vector3 AbyssPos = PlayerObject.transform.position;
                 AbyssPos.x = 0;
                 AbyssPos.z = 99999f;
                 AbyssPos.y = 0;
-                //objFieldCursor.transform.position = AbyssPos;
+                //FieldCursorObject.transform.position = AbyssPos;
                 isFieldCursorSet = false;
-                objFieldCursor.GetComponent<FieldCursor>().Disappear();
+                FieldCursorObject.GetComponent<FieldCursor>().Disappear();
             }
 
         }
@@ -484,7 +445,7 @@ public class MainControl : MonoBehaviour
         //---------------------------------------------------------------------------------------------------------------------------------------
         //if (Input.GetButtonDown("Circle") == true && Mode == "Main" && moveDirection.x == 0 && moveDirection.z == 0)
         //{
-        //    if (objTargetCursor.GetComponent<s_TargetCursor>().objTarget is null)
+        //    if (TargetCursorObject.GetComponent<s_TargetCursor>().objTarget is null)
         //    {
         //        if (isFieldCursorSet == true)
         //        {
@@ -498,7 +459,7 @@ public class MainControl : MonoBehaviour
         //if (Mode == "Main" && moveDirection.x == 0 && moveDirection.z == 0)
         //{
         //}
-        if (objTargetCursor.GetComponent<TargetCursor>().objTarget is null)
+        if (TargetCursorObject.GetComponent<TargetCursor>().objTarget is null)
         {
             if (Mode == "Main" && isFieldCursorSet == true)
             {
@@ -555,7 +516,7 @@ public class MainControl : MonoBehaviour
         // 
         //---------------------------------------------------------------------------------------------------------------------------------------
         int motionIdol = Animator.StringToHash("Base Layer.idle");
-        if (objAnimator.GetCurrentAnimatorStateInfo(0).nameHash == motionIdol)
+        if (AnimatorObject.GetCurrentAnimatorStateInfo(0).nameHash == motionIdol)
         {
             isIdle = true;
         }
@@ -582,29 +543,9 @@ public class MainControl : MonoBehaviour
         //---------------------------------------------------------------------------------------------------------------------------------------
 
         // HP
-        objText_HP.text = "";
-        objText_HP.text = "HP:" + PlayerStatus.HP.ToString() + "/" + PlayerStatus.HP_Max_Calced.ToString();
         HpBar.GetComponent<HpBar>().SetValue(PlayerStatus.HP);
 
-        //デバッグ
-        //objText_Debug.text += "isGrounded:" + objCharController.isGrounded.ToString() + "\n";
-        //objText_Debug.text += "moveDirection.z:" + moveDirection.ToString() + "\n";
-        //objText_Debug.text += "CheckAbyss:" + CheckAbyss(PlayerObject).ToString() + "\n";
-        //objText_Debug.text += "isKnockBack:" + PlayerStatus.isKnockBack.ToString() + "\n";
 
-        //objText_Debug.text += "EnemyCount:" + EnemyControl.GetComponent<EnemyControl>().SpawnCount + "\n";
-
-        //objText_Debug.text += "LstickUD:" + Input.GetAxis("LstickUD").ToString() + "\n";
-        //objText_Debug.text += "LstickLR:" + Input.GetAxis("LstickLR").ToString() + "\n";
-        //objText_Debug.text += "RstickUD:" + Input.GetAxis("RstickUD").ToString() + "\n";
-        //objText_Debug.text += "RstickLR:" + Input.GetAxis("RstickLR").ToString() + "\n";
-        //objText_Debug.text += "HatUD:" + Input.GetAxis("HatUD").ToString() + "\n";
-        //objText_Debug.text += "HatLR:" + Input.GetAxis("HatLR").ToString() + "\n";
-        //objText_Debug.text += "Circle:" + Input.GetButton("Circle").ToString() + "\n";
-        //objText_Debug.text += "Cross:" + Input.GetButton("Cross").ToString() + "\n";
-        //objText_Debug.text += "Square:" + Input.GetButton("Square").ToString() + "\n";
-        //objText_Debug.text += "Triangle:" + Input.GetButton("Triangle").ToString() + "\n";
-        //objText_Debug.text += "moveDirection:" + moveDirection.ToString() + "\n";
 
     }
 
@@ -709,7 +650,7 @@ public class MainControl : MonoBehaviour
                 //ストックのときは、赤枠を付与して、待機場所に移動させる
                 if (pCollectionName.Substring(0, 5) == "Stock")
                 {
-                    GameObject objInstanceF = Instantiate(objSelectedFrame, objCollection.transform);
+                    GameObject objInstanceF = Instantiate(SelectedFramePrefab, objCollection.transform);
                     objInstanceF.transform.localPosition = pos;
                     //objCollection.transform.position += WaitingPlacePos;
                 }
@@ -736,7 +677,7 @@ public class MainControl : MonoBehaviour
         //        //ストックのときは、赤枠を付与して、待機場所に移動させる
         //        if (pCollectionName.Substring(0, 5) == "Stock")
         //        {
-        //            GameObject objInstanceF = Instantiate(objSelectedFrame, objCollection.transform);
+        //            GameObject objInstanceF = Instantiate(SelectedFramePrefab, objCollection.transform);
         //            objInstanceF.transform.position = pos;
         //            objCollection.transform.position = WaitingPlacePos;
         //        }

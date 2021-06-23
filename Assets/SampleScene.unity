@@ -7355,14 +7355,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerObject: {fileID: 1992178735}
   PlayerAppearanceObject: {fileID: 527640324}
-  objFieldCursor: {fileID: 8569327186576743692}
-  isFieldCursorSet: 0
-  objSelectedFrame: {fileID: 7949973525504259027, guid: 03f6affa4385c104b8edffde93e80723, type: 3}
+  FieldCursorObject: {fileID: 8569327186576743692}
+  SelectedFramePrefab: {fileID: 7949973525504259027, guid: 03f6affa4385c104b8edffde93e80723, type: 3}
   EnemyControl: {fileID: 262797006}
+  MainCameraObject: {fileID: 963194225}
+  TargetCursorObject: {fileID: 659780049}
   PlayerStatus: {fileID: 1992178739}
-  DirectionFollowSpeed: 1200
-  objCamera: {fileID: 963194225}
-  objTargetCursor: {fileID: 659780049}
+  isFieldCursorSet: 0
   objUI_Debug: {fileID: 1058606380}
   objUI_HP: {fileID: 1430964877}
   BlockIntervalX: 10

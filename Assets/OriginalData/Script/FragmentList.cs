@@ -369,9 +369,9 @@ public class FragmentList : MonoBehaviour
                     CameraPositionBackUp = MainCamera.transform.position;
 
                     GameObject tempGameObject = new GameObject();
-                    tempGameObject.transform.position = MainControl.GetComponent<MainControl>().objFieldCursor.transform.position + new Vector3(0, 50, 0);
-                    tempGameObject.transform.LookAt(MainControl.GetComponent<MainControl>().objFieldCursor.transform.position);
-                    tempGameObject.transform.RotateAround(MainControl.GetComponent<MainControl>().objFieldCursor.transform.position, Vector3.right, -20f);
+                    tempGameObject.transform.position = MainControl.GetComponent<MainControl>().FieldCursorObject.transform.position + new Vector3(0, 50, 0);
+                    tempGameObject.transform.LookAt(MainControl.GetComponent<MainControl>().FieldCursorObject.transform.position);
+                    tempGameObject.transform.RotateAround(MainControl.GetComponent<MainControl>().FieldCursorObject.transform.position, Vector3.right, -20f);
                     RotateIndexWorld = 0;
 
                     CameraRotation = tempGameObject.transform.rotation.eulerAngles;
@@ -381,7 +381,7 @@ public class FragmentList : MonoBehaviour
                     CameraRotationHomePosition = CameraRotation;
 
                     FragmentPositionBackUp = StockList[StockListCursorIndex].Stock.transform.position;
-                    StockList[StockListCursorIndex].Stock.transform.position = MainControl.GetComponent<MainControl>().objFieldCursor.transform.position + new Vector3(0, FloatHeight, 0);
+                    StockList[StockListCursorIndex].Stock.transform.position = MainControl.GetComponent<MainControl>().FieldCursorObject.transform.position + new Vector3(0, FloatHeight, 0);
                     StockList[StockListCursorIndex].Stock.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
 
                     MainControl.GetComponent<MainControl>().isControllEnabled = false;
@@ -475,8 +475,8 @@ public class FragmentList : MonoBehaviour
             bool isMoveOk = false;
             int Dir = (4 + SlideDirection - RotateIndexWorld) % 4;
             Vector3 Compare1 = new Vector3();
-            Compare1.x = -DirectionIndexX[Dir] + Mathf.RoundToInt(MainControl.GetComponent<MainControl>().objFieldCursor.transform.position.x / 10);
-            Compare1.z = -DirectionIndexZ[Dir] + Mathf.RoundToInt(MainControl.GetComponent<MainControl>().objFieldCursor.transform.position.z / 10);
+            Compare1.x = -DirectionIndexX[Dir] + Mathf.RoundToInt(MainControl.GetComponent<MainControl>().FieldCursorObject.transform.position.x / 10);
+            Compare1.z = -DirectionIndexZ[Dir] + Mathf.RoundToInt(MainControl.GetComponent<MainControl>().FieldCursorObject.transform.position.z / 10);
             for (int i = 0; i < StockList[StockListCursorIndex].Stock.transform.GetChildCount(); i++)
             {
                 var obj = StockList[StockListCursorIndex].Stock.transform.GetChild(i);
@@ -521,7 +521,7 @@ public class FragmentList : MonoBehaviour
         //DebugText.text = "";
         //DebugText.text += "SlideDirection:" + SlideDirection.ToString() + "\n";
         //DebugText.text += "RotateIndex:" + RotateIndex.ToString() + "\n";
-        //DebugText.text += "objFieldCursor:" + MainScript.objFieldCursor.transform.position.ToString() + "\n";
+        //DebugText.text += "FieldCursorObject:" + MainScript.FieldCursorObject.transform.position.ToString() + "\n";
         //DebugText.text += "Stock.position:" + StockList[StockListCursorIndex].Stock.transform.position.ToString() + "\n";
         //DebugText.text += "Stock.rotation:" + StockList[StockListCursorIndex].Stock.transform.rotation.eulerAngles.ToString() + "\n";
         //DebugText.text += "SlideIndexX:" + SlideIndexX.ToString() + "\n";
@@ -813,7 +813,7 @@ public class FragmentList : MonoBehaviour
         int dir = (8 + SlideDirection  - RotateIndex - RotateIndexWorld) % 4;
         int dir2 = (8 + SlideDirection - RotateIndexWorld) % 4;
         Vector3 pos = StockList[StockListCursorIndex].Stock.transform.position;
-        Vector3 cpos = MainControl.GetComponent<MainControl>().objFieldCursor.transform.position;
+        Vector3 cpos = MainControl.GetComponent<MainControl>().FieldCursorObject.transform.position;
         pos.x = cpos.x + SlideIndexX * BlockIntervalX + (BlockIntervalX * DirectionIndexX[dir2]) * (TimerCounter / TimeStep1);
         pos.z = cpos.z + SlideIndexZ * BlockIntervalZ + (BlockIntervalZ * DirectionIndexZ[dir2]) * (TimerCounter / TimeStep1);
 
@@ -857,7 +857,7 @@ public class FragmentList : MonoBehaviour
             Mode = EnumMode.LargeStockHandle;
         }
 
-        Vector3 RotateCenter = MainControl.GetComponent<MainControl>().objFieldCursor.transform.position;//âÒì]ÇÃíÜêSÇÃéwíË
+        Vector3 RotateCenter = MainControl.GetComponent<MainControl>().FieldCursorObject.transform.position;//âÒì]ÇÃíÜêSÇÃéwíË
         StockList[StockListCursorIndex].Stock.transform.rotation = Quaternion.Euler(RotationBackUp);//Ç¢Ç¡ÇΩÇÒñﬂÇ∑
         StockList[StockListCursorIndex].Stock.transform.position = PositionBackUp;//Ç¢Ç¡ÇΩÇÒñﬂÇ∑
 
@@ -897,7 +897,7 @@ public class FragmentList : MonoBehaviour
 
         MainCamera.transform.position = CameraPositionHomePosition;
         MainCamera.transform.rotation = Quaternion.Euler(CameraRotationHomePosition);
-        Vector3 StockSelectCameraPos = MainControl.GetComponent<MainControl>().objFieldCursor.transform.position;
+        Vector3 StockSelectCameraPos = MainControl.GetComponent<MainControl>().FieldCursorObject.transform.position;
         StockSelectCameraPos.y = MainCamera.transform.position.y;
         MainCamera.transform.RotateAround(StockSelectCameraPos, Vector3.up, - RotateIndexWorld * 90 - Angle);
 
@@ -921,9 +921,9 @@ public class FragmentList : MonoBehaviour
 
         if (TimeStep1 < TimerCounter)
         {
-            MainControl.GetComponent<MainControl>().objFieldCursor.GetComponent<FieldCursor>().Disappear();
+            MainControl.GetComponent<MainControl>().FieldCursorObject.GetComponent<FieldCursor>().Disappear();
 
-            //MainScript.objFieldCursor.transform.position = FragmentsListPos;
+            //MainScript.FieldCursorObject.transform.position = FragmentsListPos;
 
             //ê‘ògÇÃèúãéÇ∆ParentÇÃïtÇØë÷Ç¶
             for (int Index = 0; Index < StockList[StockListCursorIndex].Stock.transform.GetChildCount(); Index++)
