@@ -129,7 +129,10 @@ public class NpcEvent : MonoBehaviour
         Destroy(SelectWindowObject);
 
         if (ReturnIndex == 0){
-            MessageWindow.GetComponent<MessageWindow>().MessageText = "í[ññÇãNìÆÇµÇΩÅB";
+            GameObject TerminalWindowObject = Instantiate(SelectWindow, UiObject.transform, false);
+            yield return StartCoroutine(SelectWindowObject.GetComponent<SelectWindow>().Terminal());
+            int ReturnIndex2 = SelectWindowObject.GetComponent<SelectWindow>().ReturnIndex;
+            Destroy(SelectWindowObject);
         }
         else
         {

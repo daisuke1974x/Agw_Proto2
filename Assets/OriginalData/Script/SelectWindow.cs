@@ -66,6 +66,20 @@ public class SelectWindow : MonoBehaviour
 
     }
 
+    public IEnumerator Terminal()
+    {
+        SelectItem.Clear();
+        SelectItem.Add("セーブ");
+        SelectItem.Add("このエリアの情報を知る");
+        SelectItem.Add("このエリアの進行をすべて破棄する");
+        SelectItem.Add("タイトルに戻る");
+        SelectItem.Add("ウィンドウを閉じる");
+        Vector3 WindowPosition = new Vector3(100, -200);
+        yield return StartCoroutine(OpenSelectWindow("", WindowPosition, SelectItem, 1, 2, 0));
+
+    }
+
+
     // Update is called once per frame
     void Update()
     {
