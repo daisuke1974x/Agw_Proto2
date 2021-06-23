@@ -170,7 +170,10 @@ public class NpcEvent : MonoBehaviour
         if (ReturnIndex == 0)
         {
             GameObject Player = GameObject.Find("Player");
+            //--------------------------------------------------------
             yield return StartCoroutine(FadeOut(1));//フェードアウト
+            //--------------------------------------------------------
+            //マップデータ読み込み
             MainControl.GetComponent<MainControl>().LoadMap(PortDistination.transform.parent.transform.parent.name, this.gameObject);//2021．6.20第二パラメータを追加。自分自身のオブジェクトは後でDestroyするよう修正。これをしないと、この後のコルーチンが正常に動作しなくなるため。
 
             // プレイヤーの位置の移動（ワープ）
@@ -185,8 +188,10 @@ public class NpcEvent : MonoBehaviour
 
             MessageWindow.GetComponent<MessageWindow>().isActive = false;//ウィンドウを消す
             this.gameObject.transform.position = new Vector3(10000f, 10000f, 10000f);//このイベントオブジェクトを見えない位置に移動する
+
+            //--------------------------------------------------------
             yield return StartCoroutine(FadeIn(1));//フェードイン
-            isEventInProgress = false;
+            //--------------------------------------------------------            isEventInProgress = false;
             MainControl.GetComponent<MainControl>().isControllEnabled = true;
             Destroy(this.gameObject);
             yield break;
