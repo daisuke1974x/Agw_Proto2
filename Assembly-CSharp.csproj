@@ -128,6 +128,22 @@
     <Compile Include="Assets\OriginalData\Script\FieldCursor.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventCheck.cs" />
     <Compile Include="Assets\Follow.cs" />
+    <Compile Include="Assets\FromStore\Kevin Iglesias\Throwing Animations\Scripts\IdleThrowTrick.cs" />
+    <Compile Include="Assets\FromStore\Kevin Iglesias\Throwing Animations\Scripts\ThrowMultipleProps.cs" />
+    <Compile Include="Assets\FromStore\Kevin Iglesias\Caster Mage Animations\Scripts\CastSpells.cs" />
+    <Compile Include="Assets\FromStore\Kevin Iglesias\Caster Mage Animations\Scripts\AddCastEffect.cs" />
+    <Compile Include="Assets\FromStore\Kevin Iglesias\Caster Mage Animations\Scripts\ThrowShockwave.cs" />
+    <Compile Include="Assets\FromStore\Kevin Iglesias\Soldier Animations\Scripts\SoldierHandsIK\SoldierHandsIK.cs" />
+    <Compile Include="Assets\FromStore\Kevin Iglesias\Melee Warrior Animations\Scripts\MeleeWarriorShieldRotator.cs" />
+    <Compile Include="Assets\FromStore\Kevin Iglesias\Villager Animations\Scripts\VillagerHandsIK.cs" />
+    <Compile Include="Assets\FromStore\Kevin Iglesias\Melee Warrior Animations\Scripts\MeleeWarriorLeftHandIK.cs" />
+    <Compile Include="Assets\FromStore\Kevin Iglesias\Caster Mage Animations\Scripts\ThrowFireball.cs" />
+    <Compile Include="Assets\FromStore\Kevin Iglesias\Throwing Animations\Scripts\ThrowProp.cs" />
+    <Compile Include="Assets\FromStore\Kevin Iglesias\Throwing Animations\Scripts\ThrowBigAxe.cs" />
+    <Compile Include="Assets\FromStore\Kevin Iglesias\Caster Mage Animations\Scripts\ThrowNova.cs" />
+    <Compile Include="Assets\FromStore\Kevin Iglesias\Caster Mage Animations\Scripts\ThrowHealing.cs" />
+    <Compile Include="Assets\FromStore\Kevin Iglesias\Archer Animations\Scripts\BowLoadScript.cs" />
+    <Compile Include="Assets\FromStore\Kevin Iglesias\Throwing Animations\Scripts\ChangeSpear.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
