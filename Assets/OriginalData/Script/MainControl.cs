@@ -39,6 +39,7 @@ public class MainControl : MonoBehaviour
 
 
     private Animator AnimatorObject;
+
     private CharacterController CharControllerObject;
 
     private float walkSpeed = 5.0f;  //ï‡çsë¨ìx
@@ -79,9 +80,9 @@ public class MainControl : MonoBehaviour
         //objControllerManager = gameObject.GetComponent<s_ControllerManager>();
 
         CharControllerObject = PlayerObject.GetComponent<CharacterController>();
-        AnimatorObject = PlayerAppearanceObject.GetComponent<Animator>();
         PlayerStatus = PlayerObject.GetComponent<CharStatus>();
 
+        AnimatorObject = PlayerAppearanceObject.GetComponent<Animator>();
 
         //íÖínÇ≥ÇπÇÈ
         Landing(PlayerObject.gameObject);
